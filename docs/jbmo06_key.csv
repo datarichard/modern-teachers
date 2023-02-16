@@ -1,0 +1,462 @@
+code,description
+-10,Non-responding person
+-7,Not able to be determined
+-4,Refused/Not stated
+-3,Dont know
+-1,Not asked
+1000,Managers - NFI
+1100,"Chief Executives, General Managers and Legislators"
+1111,Chief Executives and Managing Directors
+1112,General Managers
+1113,Legislators
+1210,Farmers and Farm Managers
+1211,Aquaculture Farmers
+1212,Crop Farmers
+1213,Livestock Farmers
+1214,Mixed Crop and Livestock Farmers
+1300,Specialist Managers
+1311,"Advertising, Public Relations and Sales Managers"
+1320,Business Administration Managers
+1321,Corporate Services Managers
+1322,Finance Managers
+1323,Human Resource Managers
+1324,Policy and Planning Managers
+1325,Research and Development Managers
+1330,"Construction, Distribution and Production Managers"
+1331,Construction Managers
+1332,Engineering Managers
+1333,"Importers, Exporters and Wholesalers"
+1334,Manufacturers
+1335,Production Managers
+1336,Supply and Distribution Managers
+1340,"Education, Health and Welfare Services Managers"
+1341,Child Care Centre Managers
+1342,Health and Welfare Services Managers
+1343,School Principals
+1344,Other Education Managers
+1351,ICT Managers
+1390,Miscellaneous Specialist Managers
+1391,Commissioned Officers (Management)
+1392,Senior Non-commissioned Defence Force Members
+1399,Other Specialist Managers
+1400,"Hospitality, Retail and Service Managers"
+1410,Accommodation and Hospitality Managers
+1411,Cafe and Restaurant Managers
+1412,Caravan Park and Camping Ground Managers
+1413,Hotel and Motel Managers
+1414,Licensed Club Managers
+1419,Other Accommodation and Hospitality Managers
+1421,Retail Managers
+1490,"Miscellaneous Hospitality, Retail and Service Managers"
+1491,"Amusement, Fitness and Sports Centre Managers"
+1492,Call or Contact Centre and Customer Service Managers
+1493,Conference and Event Organisers
+1494,Transport Services Managers
+1499,"Other Hospitality, Retail and Service Managers"
+2000,Professionals
+2100,Arts and Media Professionals
+2110,Arts Professionals
+2111,"Actors, Dancers and Other Entertainers"
+2112,Music Professionals
+2113,Photographers
+2114,Visual Arts and Crafts Professionals
+2120,Media Professionals
+2121,"Artistic Directors, and Media Producers and Presenters"
+2122,"Authors, and Book and Script Editors"
+2123,"Film, Television, Radio and Stage Directors"
+2124,Journalists and Other Writers
+2200,"Business, Human Resource and Marketing Professionals"
+2210,"Accountants, Auditors and Company Secretaries"
+2211,Accountants
+2212,"Auditors, Company Secretaries and Corporate Treasurers"
+2220,"Financial Brokers and Dealers, and Investment Advisers"
+2221,Financial Brokers
+2222,Financial Dealers
+2223,Financial Investment Advisers and Managers
+2230,Human Resource and Training Professionals
+2231,Human Resource Professionals
+2232,ICT Trainers
+2233,Training and Development Professionals
+2240,Information and Organisation Professionals
+2241,"Actuaries, Mathematicians and Statisticians"
+2242,"Archivists, Curators and Records Managers"
+2243,Economists
+2244,Intelligence and Policy Analysts
+2245,Land Economists and Valuers
+2246,Librarians
+2247,Management and Organisation Analysts
+2249,Other Information and Organisation Professionals
+2250,"Sales, Marketing and Public Relations Professionals"
+2251,Advertising and Marketing Professionals
+2252,ICT Sales Professionals
+2253,Public Relations Professionals
+2254,Technical Sales Representatives
+2300,"Design, Engineering, Science and Transport Professionals"
+2311,Air Transport Professionals
+2312,Marine Transport Professionals
+2320,"Architects, Designers, Planners and Surveyors"
+2321,Architects and Landscape Architects
+2322,Surveyors and Spatial Scientists
+2323,"Fashion, Industrial and Jewellery Designers"
+2324,"Graphic and Web Designers, and Illustrators"
+2325,Interior Designers
+2326,Urban and Regional Planners
+2330,Engineering Professionals
+2331,Chemical and Materials Engineers
+2332,Civil Engineering Professionals
+2333,Electrical Engineers
+2334,Electronics Engineers
+2335,"Industrial, Mechanical and Production Engineers"
+2336,Mining Engineers
+2339,Other Engineering Professionals
+2340,Natural and Physical Science Professionals
+2341,Agricultural and Forestry Scientists
+2342,"Chemists, and Food and Wine Scientists"
+2343,Environmental Scientists
+2344,Geologists and Geophysicists
+2345,Life Scientists
+2346,Medical Laboratory Scientists
+2347,Veterinarians
+2349,Other Natural and Physical Science Professionals
+2400,Education Professionals
+2410,School Teacher
+2411,Early Childhood (Pre-Primary School) Teachers
+2412,Primary School Teachers
+2413,Mobile School Teachers (Aus) / Intermediate School Teachers
+2414,Secondary School Teachers
+2415,Special Education Teachers
+2420,Tertiary Education Teachers
+2421,University Lecturers and Tutors
+2422,Vocational Education Teachers (Aus) / Polytechnic Teachers (NZ)
+2490,Miscellaneous Education Professionals
+2491,Education Advisers and Reviewers
+2492,Private Tutors and Teachers
+2493,Teachers of English to Speakers of Other Languages
+2500,Health Professionals
+2511,Dietitians
+2512,Medical Imaging Professionals
+2513,Occupational and Environmental Health Professionals
+2514,Optometrists and Orthoptists
+2515,Pharmacists
+2519,Other Health Diagnostic and Promotion Professionals
+2520,Health Therapy Professionals
+2521,Chiropractors and Osteopaths
+2522,Complementary Health Therapists
+2523,Dental Practitioners
+2524,Occupational Therapists
+2525,Physiotherapists
+2526,Podiatrists
+2527,Speech Professionals and Audiologists
+2530,Medical Practitioners
+2531,Generalist Medical Practitioners
+2532,Anaesthetists
+2533,Specialist Physicians
+2534,Psychiatrists
+2535,Surgeons
+2539,Other Medical Practitioners
+2540,Midwifery and Nursing Professionals
+2541,Midwives
+2542,Nurse Educators and Researchers
+2543,Nurse Managers
+2544,Registered Nurses
+2600,ICT Professionals
+2610,"Business and Systems Analysts, and Programmers"
+2611,ICT Business and Systems Analysts
+2612,Multimedia Specialists and Web Developers
+2613,Software and Applications Programmers
+2621,"Database and Systems Administrators, and ICT Security Specialists"
+2630,ICT Network and Support Professionals
+2631,Computer Network Professionals
+2632,ICT Support and Test Engineers
+2633,Telecommunications Engineering Professionals
+2700,"Legal, Social and Welfare Professionals"
+2710,Legal Professionals
+2711,Barristers
+2712,Judicial and Other Legal Professionals
+2713,Solicitors
+2720,Social and Welfare Professionals
+2721,Counsellors
+2722,Ministers of Religion
+2723,Psychologists
+2724,Social Professionals
+2725,Social Workers
+2726,"Welfare, Recreation and Community Arts Workers"
+3000,Technicians and Trades Workers
+3100,"Engineering, ICT and Science Technicians"
+3110,"Agricultural, Medical and Science Technicians"
+3111,Agricultural Technicians
+3112,Medical Technicians
+3113,Primary Products Inspectors
+3114,Science Technicians
+3120,Building and Engineering Technicians
+3121,"Architectural, Building and Surveying Technicians"
+3122,Civil Engineering Draftspersons and Technicians
+3123,Electrical Engineering Draftspersons and Technicians
+3124,Electronic Engineering Draftspersons and Technicians
+3125,Mechanical Engineering Draftspersons and Technicians
+3126,Safety Inspectors
+3129,Other Building and Engineering Technicians
+3131,ICT Support Technicians
+3132,Telecommunications Technical Specialists
+3200,Automotive and Engineering Trades Workers
+3210,Automotive and Electricians and Mechanics
+3211,Automotive Electricians
+3212,Motor Mechanics
+3221,"Metal Casting, Forging and Finishing Trades Workers"
+3222,Sheetmetal Trades Workers
+3223,Structural Steel and Welding Trades Workers
+3230,Mechanical Engineering Trades Workers
+3231,Aircraft Maintenance Engineers
+3232,Metal Fitters and Machinists
+3233,Precision Metal Trades Workers
+3234,Toolmakers and Engineering Patternmakers
+3240,"Panelbeaters, and Vehicle Body Builders, Trimmers and Painters"
+3241,Panelbeaters
+3242,Vehicle Body Builders and Trimmers
+3243,Vehicle Painters
+3300,Construction Trades Workers
+3310,"Bricklayers, and Carpenters and Joiners"
+3311,Bricklayers and Stonemasons
+3312,Carpenters and Joiners
+3321,Floor Finishers
+3322,Painting Trades Workers
+3331,Glaziers
+3332,Plasterers
+3333,Roof Tilers
+3334,Wall and Floor Tilers
+3341,Plumbers
+3400,Electrotechnology and Telecommunications Trades Workers
+3411,Electricians
+3420,Electronics and Telecommunications Trades Workers
+3421,Airconditioning and Refrigeration Mechanics
+3422,Electrical Distribution Trades Workers
+3423,Electronics Trades Workers
+3424,Telecommunications Trades Workers
+3510,Food Trades Workers
+3511,Bakers and Pastrycooks
+3512,Butchers and Smallgoods Makers
+3513,Chefs
+3514,Cooks
+3611,Animal Attendants and Trainers
+3612,Shearers
+3613,Veterinary Nurses
+3620,Horticultural Trades Workers
+3621,Florists
+3622,Gardeners
+3623,Greenkeepers
+3624,Nurserypersons
+3900,Other Technicians and Trades Workers
+3911,Hairdressers
+3920,Printing Trades Workers
+3921,Print Finishers and Screen Printers
+3922,Graphic Pre-press Trades Workers
+3923,Printers
+3931,Canvas and Leather Goods Makers
+3932,Clothing Trades Workers
+3933,Upholsterers
+3940,Wood Trades Workers
+3941,Cabinetmakers
+3942,Wood Machinists and Other Wood Trades Workers
+3991,Boat Builders and Shipwrights
+3992,"Chemical, Gas, Petroleum and Power Generation Plant Operator"
+3993,"Gallery, Library and Museum Technicians"
+3994,Jewellers
+3995,Performing Arts Technicians
+3996,Signwriters
+3999,Other Miscellaneous Technicians and Trades Workers
+4100,Health and Welfare Support Workers
+4110,Health and Welfare Support Workers
+4111,Ambulance Officers and Paramedics
+4112,"Dental Hygienists, Technicians and Therapists"
+4113,Diversional Therapists
+4114,Enrolled and Mothercraft Nurses
+4115,Indigenous Health Workers
+4116,Massage Therapists
+4117,Welfare Support Workers
+4200,Carers and Aides
+4211,Child Carers
+4221,Education Aides
+4230,Personal Carers and Assistants
+4231,Aged and Disabled Carers
+4232,Dental Assistants
+4233,Nursing Support and Personal Care Workers
+4234,Special Care Workers
+4310,Hospitality Workers
+4311,Bar Attendants and Baristas
+4312,Cafe Workers
+4313,Gaming Workers
+4314,Hotel Service Managers
+4315,Waiters
+4319,Other Hospitality Workers
+4411,Defence Force Members - Other Ranks
+4412,Fire and Emergency Workers
+4413,Police
+4421,Prison Officers
+4422,Security Officers and Guards
+4500,Sports and Personal Service Workers
+4510,Personal Service and Travel Workers
+4511,Beauty Therapists
+4512,Driving Instructors
+4513,Funeral Workers
+4514,"Gallery, Museum and Tour Guides"
+4515,Personal Care Consultants
+4516,Tourism and Travel Advisers
+4517,Travel Attendants
+4518,Other Personal Service Workers
+4520,Sports and Fitness Workers
+4521,Fitness Instructors
+4522,Outdoor Adventure Guides
+4523,"Sports Coaches, Instructors and Officals"
+4524,Sportspersons
+5000,Clerical and Administrative Workers
+5100,Office Managers and Program Administrators
+5111,"Contract, Program and Project Administrators"
+5121,Office Managers
+5122,Practice Managers
+5210,Personal Assistants and Secretaries
+5211,Personal Assistants
+5212,Secretaries
+5300,General Clerical Workers
+5311,General Clerks
+5321,Keyboard Operators
+5410,Call or Contact Centre Information Clerks
+5411,Call or Contact Centre Workers
+5412,Inquiry Clerks
+5421,Receptionists
+5500,Numerical Clerks
+5510,Accounting Clerks and Bookkeepers
+5511,Accounting Clerks
+5512,Bookkeepers
+5513,Payroll Clerks
+5520,Financial and Insurance Clerks
+5521,Bank Workers
+5522,Credit and Loans Officers (Aus) / Finance Clerks (NZ)
+5523,"Insurance, Money Market and Statistical Clerks"
+5610,Clerical and Office Support Workers
+5611,Betting Clerks
+5612,Couriers and Postal Deliveries
+5613,Filing and Registry Clerks
+5614,Mail Sorters
+5615,Survey Interviewers
+5616,Switchboard Operators
+5619,Other Clerical and Office Support Workers
+5900,Other Clerical and Administrative Workers
+5910,Logistics Clerks
+5911,Purchasing and Supply Logistics Clerks
+5912,Transport and Despatch Clerks
+5991,Conveyancers and Legal Executives
+5992,Court and Legal Clerks
+5993,Debt Collectors
+5994,Human Resource Clerks
+5995,Inspectors and Regulatory Officers
+5996,"Insurance Investigators, Loss Adjusters and Risk Surveyors"
+5997,Library Assistants
+5999,Other Miscellaneous Clerical and Administrative Workers
+6000,Sales Workers
+6100,Sales Representatives and Agents
+6111,"Auctioneers, and Stock and Station Agents"
+6112,Insurance Agents
+6113,Sales Representatives
+6121,Real Estate Sales Agents
+6210,Sales Assistants and Salespersons
+6211,Sales Assistants (General)
+6212,ICT Sales Assistants
+6213,Motor Vehicle and Vehicle Parts Salespersons
+6214,Pharmacy Sales Assistants
+6215,Retail Supervisors
+6216,Service Station Attendants
+6217,Street Vendors and Related Salespersons
+6219,Other Sales Assistants and Salespersons
+6311,Checkout Operators and Office Cashiers
+6390,Miscellaneous Sales Support Workers
+6391,Models and Sales Demonstrators
+6392,Retail and Wool Buyers
+6393,Telemarketers
+6394,Ticket Salespersons
+6395,Visual Merchandisers
+6399,Other Sales Support Workers
+7000,Machinery Operators and Drivers
+7100,Machine and Stationary Plant Operators
+7110,Machine Operators
+7111,"Clay, Concrete, Glass and Stone Processing Machine Operators"
+7112,Industrial Spraypainters
+7113,Paper and Wood Processing Machine Operators
+7114,Photographic Developers and Printers
+7115,Plastics and Rubber Production Machine Operators
+7116,Sewing Machinists
+7117,Textile and Footwear Production Machine Operators
+7119,Other Machine Operators
+7120,Stationary Plant Operators
+7121,"Crane, Hoist and Lift Operators"
+7122,"Drillers, Miners and Shot Firers"
+7123,Engineering Production Workers
+7129,Other Stationary Plant Operators
+7210,Mobile Plant Operators
+7211,"Agricultural, Forestry and Horticultural Plant Operators"
+7212,Earthmoving Plant Operators
+7213,Forklift Drivers
+7219,Other Mobile Plant Operators
+7300,Road and Rail Drivers
+7310,"Automobile, Bus and Rail Drivers"
+7311,Automobile Drivers
+7312,Bus and Coach Drivers
+7313,Train and Tram Drivers
+7321,Delivery Drivers
+7330,Truck Drivers
+7331,Truck Drivers
+7411,Storepersons
+8000,Labourers
+8110,Cleaners and Laundry Workers
+8111,Car Detailers
+8112,Commercial Cleaners
+8113,Domestic Cleaners
+8114,Housekeepers
+8115,Laundry Workers
+8116,Other Cleaners
+8210,Construction and Mining Labourers
+8211,Building and Plumbing Labourers
+8212,Concreters
+8213,Fencers
+8214,Insulation and Home Improvement Installers
+8215,Paving and Surfacing Labourers
+8216,Railway Track Workers
+8217,Structural Steel Construction Workers
+8219,Other Construction and Mining Labourers
+8300,Factory Process Workers
+8311,Food and Drink Factory Workers
+8312,"Meat Boners and Slicers, and Slaughterers"
+8313,"Meat, Poultry and Seafood Process Workers"
+8320,Packers and Product Assemblers
+8321,Packers
+8322,Product Assemblers
+8390,Miscellaneous Factory Process Workers
+8391,Metal Engineering Process Workers
+8392,Plastics and Rubber Factory Workers
+8393,Product Quality Controllers
+8394,Timber and Wood Process Workers
+8399,Other Factory Process Workers
+8410,"Farm, Forestry and Garden Workers"
+8411,Aquaculture Workers
+8412,Crop Farm Workers
+8413,Forestry and Logging Workers
+8414,Garden and Nursery Labourers
+8415,Livestock Farm Workers
+8416,Mixed Crop and Livestock Farm Workers
+8419,"Other Farm, Forestry and Garden Workers"
+8510,Food Preparation Assistants
+8511,Fast Food Cooks
+8512,Food Trades Assistants
+8513,Kitchenhands
+8900,Other Labourers
+8910,Freight Handlers and Shelf Fillers
+8911,Freight and Furniture Handlers
+8912,Shelf Fillers
+8990,Miscellaneous Labourers
+8991,Caretakers
+8992,Deck and Fishing Hands
+8993,Handypersons
+8994,Motor Vehicle Parts and Accessories Fitters
+8995,Printing Assistants and Table Workers
+8996,Recycling and Rubbish Collectors
+8997,Vending Machine Attendants
+8999,Other Miscellaneous Labourers
