@@ -43,13 +43,13 @@ The mental health and wellbeing of teachers is an important predictor of student
 
 ### Teachers (professional codes)
 
-Teachers were defined by the ISC 4-digit codes (i.e., `jbm688`) available in the restricted dataset, based on the Australian and New Zealand Standard Classification of Occupations ([ANZSCO 2006](https://www.abs.gov.au/ausstats/abs@.nsf/0/E3031B89999B4582CA2575DF002DA702?opendocument)). The two codes for "Primary" and "Secondary" school teachers were used.  
+Teachers were defined by the ISC 4-digit codes (i.e., `jbm688`) available in the restricted HILDA dataset, based on the Australian and New Zealand Standard Classification of Occupations ([ANZSCO 2006](https://www.abs.gov.au/ausstats/abs@.nsf/0/E3031B89999B4582CA2575DF002DA702?opendocument)). The two codes for "Primary" and "Secondary" school teachers were used.  
 
 <br>
 
 ### Remoteness  
 
-The Accessibility/Remoteness Index of Australia (ARIA+) is provided in HILDA (`hhsra`) and based on the Australian Statistical Geography Standard Remoteness Area framework (Summerfield et al. 2019). We defined the remoteness of the region of each teacher and collapsed the three most remote categories into a single category to produce three levels of remoteness: Major Cities, Inner Regional and Other (*Outer regional, remote and very remote*).  
+The Accessibility/Remoteness Index of Australia (ARIA+) is provided in HILDA (`hhsra`) and based on the Australian Statistical Geography Standard Remoteness Area framework [@summerfield2021hilda]. We defined the remoteness of the region of each teacher and collapsed the three most remote categories into a single category to produce three levels of remoteness: Major Cities, Inner Regional and Other (*Outer regional, remote and very remote*).  
 
 <br>
 
