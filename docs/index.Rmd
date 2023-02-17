@@ -10,6 +10,8 @@ output:
     toc_depth: 2
     toc_float:
       collapsed: false
+bibliography: references.bib
+csl: apa-6th-edition.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -31,6 +33,79 @@ source("~/Documents/R/helpers.R")
 The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention as well as a broader indicator of our socioeconomic priorities. Recent changes and challenges to public schooling in Australia, including shifting community expectations and school lockdowns due to the global COVID-19 pandemic, have highlighted the connection between job strain and mental health. Here we describe that connection and how it has changed in the past 20 years in Australia using large nationally representative survey annual survey results from HILDA.  
 
 <br><br>
+
+# Methods  
+
+<br>
+
+## Variable definitions  
+
+<br>
+
+### Teachers (professional codes)
+
+Teachers were defined by the ISC 4-digit codes (i.e., `jbm688`) available in the restricted dataset, based on the Australian and New Zealand Standard Classification of Occupations ([ANZSCO 2006](https://www.abs.gov.au/ausstats/abs@.nsf/0/E3031B89999B4582CA2575DF002DA702?opendocument)). The two codes for "Primary" and "Secondary" school teachers were used.  
+
+<br>
+
+### Remoteness  
+
+The Accessibility/Remoteness Index of Australia (ARIA+) is provided in HILDA (`hhsra`) and based on the Australian Statistical Geography Standard Remoteness Area framework (Summerfield et al. 2019). We defined the remoteness of the region of each teacher and collapsed the three most remote categories into a single category to produce three levels of remoteness: Major Cities, Inner Regional and Other (*Outer regional, remote and very remote*).  
+
+<br>
+
+### Psychosocial characteristics of work  
+
+The psychosocial characteristics of work as defined by @butterworth2010deriving, included three psychosocial job components (factors) from 12 items in all waves as well as an additional nine items available from Wave 5 (2005). We used all available items in each wave and constructed scores for each component by calculating the average of item responses (after reverse scoring the negatively worded items). Each component and the corresponding items are shown below. Item scores range from 1 to 7.    
+
+#### Job demands & complexity
+
+| code  | description | waves |
+| ----- | ----------- | ----- |
+| `jomms` | My job is more stressful than I had ever imagined | all waves |
+| `jompi` | I fear that the amount of stress in my job will make me ill | all waves |
+| `jomcd` | My job is complex and difficult | all waves |
+| `jomns` | My job often required me to learn new skills | all waves |
+| `jomus` | I use my skills in current job | all waves |
+| `jomini`| My job requires me to take initiative | 5:20 |
+| `jomfast` | I have to work fast in my job | 5:20 |
+| `jomwi` | I have to work very intensely in my job | 5:20 |
+| `jomtime` | I don’t have enough time to do everything in my job | 5:20 |
+
+  
+#### Job control  
+
+
+| code  | description | waves |
+| ----- | ----------- | ----- |
+|`jomfd`| I have freedom to decide how I do my own work | all waves |
+|`jomls`| I have a lot of say about what happens in my job | all waves |
+|`jomfw`| I have freedom to decide when I do my work | all waves |
+|`jomdw`| I have a lot of choice in deciding what I do at work | 5:20 |
+|`jomflex`| My working times can be flexible | 5:20 |
+|`jombrk`| I can decide when to take a break | 5:20 |
+|`jomrpt`| My job requires me to do the same things over and over again | 5:20 |
+| `jomvar`| My job provides me with a variety of interesting things to do | 5:20 |
+
+
+#### Job security
+
+| code  | description | waves |
+| ----- | ----------- | ----- |
+|`jompf`| I get paid fairly for the things I do in my job | all waves |
+|`jomsf`| I have a secure future in my job | all waves |
+|`jomcsb`| Company I work for will still be in business in 5 years | all waves |
+|`jomwf`| I worry about the future of my job | all waves |
+
+<br>
+
+We also constructed a job resources score from the following items  
+
+#### Job resources  
+
+(to be done)
+
+
 
 
 ```{r import_data}
@@ -60,7 +135,7 @@ teachers <- read_rds("../data/preprocessed.rds") %>%
   filter(!is.na(profession)) 
 ```
 
-## Survey results    
+# Survey results    
 
 ##### Figure 1. Mental health has declined among teachers in city and remote regions  
 ```{r figure_1, fig.dim=c(9,11)}
@@ -521,45 +596,7 @@ Primary school teachers in the city are morely likely to have a postgraduate deg
 
 <br><br>
 
-## Psychosocial characteristics of work  
+# References  
 
-#### Job demands & complexity
-
-| code  | description | waves |
-| ----- | ----------- | ----- |
-| `jomms` | My job is more stressful than I had ever imagined | all waves |
-| `jompi` | I fear that the amount of stress in my job will make me ill | all waves |
-| `jomcd` | My job is complex and difficult | all waves |
-| `jomns` | My job often required me to learn new skills | all waves |
-| `jomus` | I use my skills in current job | all waves |
-| `jomini`| My job requires me to take initiative | 5:20 |
-| `jomfast` | I have to work fast in my job | 5:20 |
-| `jomwi` | I have to work very intensely in my job | 5:20 |
-| `jomtime` | I don’t have enough time to do everything in my job | 5:20 |
-
-  
-#### Job control  
-
-
-| code  | description | waves |
-| ----- | ----------- | ----- |
-|`jomfd`| I have freedom to decide how I do my own work | all waves |
-|`jomls`| I have a lot of say about what happens in my job | all waves |
-|`jomfw`| I have freedom to decide when I do my work | all waves |
-|`jomdw`| I have a lot of choice in deciding what I do at work | 5:20 |
-|`jomflex`| My working times can be flexible | 5:20 |
-|`jombrk`| I can decide when to take a break | 5:20 |
-|`jomrpt`| My job requires me to do the same things over and over again | 5:20 |
-| `jomvar`| My job provides me with a variety of interesting things to do | 5:20 |
-
-
-#### Job security
-
-| code  | description | waves |
-| ----- | ----------- | ----- |
-|`jompf`| I get paid fairly for the things I do in my job | all waves |
-|`jomsf`| I have a secure future in my job | all waves |
-|`jomcsb`| Company I work for will still be in business in 5 years | all waves |
-|`jomwf`| I worry about the future of my job | all waves |
 
 
