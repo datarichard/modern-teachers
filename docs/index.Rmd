@@ -1,5 +1,5 @@
 ---
-title: "Teacher mental health in 21st C"
+title: "Teacher mental health in the 21st Century"
 author: "Dr Richard W Morris"
 date: "`r format(Sys.Date(), '%b %d, %Y')`"
 output:
@@ -27,6 +27,10 @@ source("~/Documents/R/helpers.R")
 <br><br><br><br><br><br><br>
 
 # Abstract  
+
+The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention as well as a broader indicator of our socioeconomic priorities. Recent changes and challenges to public schooling in Australia, including shifting community expectations and school lockdowns due to the global COVID-19 pandemic, have highlighted the connection between job strain and mental health. Here we describe that connection and how it has changed in the past 20 years in Australia using large nationally representative survey annual survey results from HILDA.  
+
+<br><br>
 
 
 ```{r import_data}
