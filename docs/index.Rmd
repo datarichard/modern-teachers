@@ -1,6 +1,5 @@
 ---
 title: "Teacher mental health in the 21st Century"
-author: "Dr Richard W Morris"
 date: "`r format(Sys.Date(), '%b %d, %Y')`"
 output:
   html_document:
