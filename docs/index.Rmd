@@ -19,6 +19,8 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE)
 
 library(tidyverse)
+library(broom)
+library(patchwork)
 library(ggthemes)
 
 source("~/Documents/R/helpers.R")
@@ -118,7 +120,9 @@ occupation_key = c(
   .default = NA_character_
 )
 
-
+# Regions were collapsed according to this report:
+# https://www.aihw.gov.au/reports/rural-remote-australians/rural-and-remote-health
+# 
 teachers <- read_rds("../data/preprocessed.rds") %>%
   mutate(
     remoteness = fct_collapse(hhsra, 
@@ -217,7 +221,6 @@ Determining the role of job strain in the changes to mental health requires esti
 teachers %>%
   mutate(losat = c(scale(losat)),
          ghmh = c(scale(ghmh))) %>%
-  arrange(year) %>%
   group_by(year) %>%
   nest() %>%
   mutate(
@@ -228,44 +231,54 @@ teachers %>%
     losat.fit = map(data, ~lm(
       formula = losat ~ 1 + job_control + job_demand + job_security, 
       data = .)
-      ),
-    ghmh.betas = map(ghmh.fit, tidy),
-    losat.betas = map(losat.fit, tidy),
-  ) %>%
-  select(year, ghmh.betas, losat.betas) -> df
+      )) -> fits
 
+fits %>%
+  transmute(
+    ghmh.betas = map(ghmh.fit, tidy),
+    losat.betas = map(losat.fit, tidy)
+    ) -> df
+
+# Plot betas and r-squared
 bind_rows(
-  select(df, year, ghmh.betas) %>%
-    unnest(ghmh.betas) %>%
-    mutate(model = "Mental health"),
-  select(df, year, losat.betas) %>%
-    unnest(losat.betas) %>%
-    mutate(model = "Life satisfaction")
+  `Mental health` = select(df, year, ghmh.betas) %>%
+    unnest(ghmh.betas),
+  `Life satisfaction` = select(df, year, losat.betas) %>%
+    unnest(losat.betas),
+  .id = "model"
+) %>%
+  bind_rows(
+    fits %>%
+      transmute(
+        term = "r-squared",
+        `Mental health` = map_dbl(ghmh.fit, ~glance(.) %>% pull(r.squared)),
+        `Life satisfaction` = map_dbl(losat.fit, ~glance(.) %>% pull(r.squared))
+      ) %>%
+      gather("model", "estimate", `Mental health`:`Life satisfaction`)
   ) %>%
-  mutate(model = fct_relevel(model, "Mental health")) %>%
   filter(term %notin% "(Intercept)") %>%
-  ggplot(aes(x = year, y = estimate, color = term, alpha = model)) +
-    geom_hline(aes(yintercept = -0.1), color = "#d5e4eb", size = 0) +
+  mutate(model = fct_relevel(model, "Mental health"),
+         term = if_else(str_detect(term, "job"), paste(term, "(\u03B2)"), term)) %>%
+  # filter(year > 2010) %>%
+  ggplot(aes(x = year, y = estimate, color = term)) +
     geom_hline(aes(yintercept = 0), color = "white", size = 1.25) +
-    geom_hline(aes(yintercept = 0.1), color = "#d5e4eb", size = 0) +
     geom_line() +
     geom_pointrange(aes(ymin = estimate - std.error, 
                         ymax = estimate + std.error)) +
     facet_grid(term~model, scales = "free_y") +
-    labs(title = "Effects (betas) of job characteristics on mental health 
+    labs(title = "Effect of job characteristics on mental health 
 and life satisfaction in each year\n", 
          x = "", y = "") +
     theme_economist() +
-    scale_color_wsj() +
+    scale_color_manual(values = c("#c72e29", "#016392", "#be9c2e", "grey50")) +
+    # scale_color_wsj() +
     theme(legend.position = "none",
-          panel.grid.major.y = element_line(size = 0)) +
-    scale_alpha_manual(values = c(1, 0.85))
-
+          panel.grid.major.y = element_line(size = 0)) 
 ```
 
 <br>
 
-Mental health seems to be increasingly dependent on job control and job demands in the last five years, as the beta estimates get further from zero between 2015 to 2020. The dependence of life satisfaction on job characteristics has remained  relatively steady over the same time period.  
+Mental health seems to be increasingly dependent on job control and job demands in the last ten years, as the beta estimates and model r-squared values get further from zero between 2011 to 2020. The dependence of life satisfaction on job characteristics has remained  relatively steady over the same time period.  
 
 <br><br>
 
@@ -279,14 +292,14 @@ teachers %>%
   nest() %>%
   mutate(
     fit = map(data, ~lm(
-      formula = ghmh ~ 1 + job_control:remoteness + job_demand:remoteness + 
+      formula = ghmh ~ 1 + remoteness + job_control:remoteness + job_demand:remoteness + 
         job_security:remoteness,
       data = .)),
     betas = map(fit, tidy)
   ) %>%
   select(year, betas) %>%
   unnest(betas) %>%
-  filter(term %notin% "(Intercept)") %>%
+  filter(str_detect(term, ":")) %>%
   mutate(
     region = case_when(
       str_detect(term, "City") ~ "City",
@@ -392,6 +405,7 @@ t1 <- teachers %>%
          Coupled = coupled, 
          `New parent` = new_parent, # child under 4
          Edu = edu, 
+         `Tenure (years)` = jbempt,
          Region = remoteness,
          `Real household income ($000s)` = income, # OECD adjusted
          `Mental health` = ghmh,
@@ -420,6 +434,7 @@ t2 <- teachers %>%
          Coupled = coupled, 
          `New parent` = new_parent, # child under 4
          Edu = edu, 
+         `Tenure (years)` = jbempt,
          Region = remoteness,
          `Real household income ($000s)` = income, # OECD adjusted
          `Mental health` = ghmh,
@@ -465,6 +480,7 @@ t1 <- teachers %>%
          Coupled = coupled, 
          `New parent` = new_parent, # child under 4
          Edu = edu, 
+         `Tenure (years)` = jbempt,
          Region = remoteness,
          `Real household income ($000s)` = income, # OECD adjusted
          `Mental health` = ghmh,
@@ -492,6 +508,7 @@ t2 <- teachers %>%
          Coupled = coupled, 
          `New parent` = new_parent, # child under 4
          Edu = edu, 
+         `Tenure (years)` = jbempt,
          Region = remoteness,
          `Real household income ($000s)` = income, # OECD adjusted
          `Mental health` = ghmh,
@@ -536,6 +553,7 @@ t1 <- teachers %>%
          Coupled = coupled, 
          `New parent` = new_parent, # child under 4
          Edu = edu, 
+         `Tenure (years)` = jbempt,
          Region = remoteness,
          `Real household income ($000s)` = income, # OECD adjusted
          `Mental health` = ghmh,
@@ -564,6 +582,7 @@ t2 <- teachers %>%
          Coupled = coupled, 
          `New parent` = new_parent, # child under 4
          Edu = edu, 
+         `Tenure (years)` = jbempt,
          Region = remoteness,
          `Real household income ($000s)` = income, # OECD adjusted
          `Mental health` = ghmh,
