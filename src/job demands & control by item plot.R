@@ -57,7 +57,7 @@ teachers %>%
 
 
 p1 + p2
-ggsave(file = "job demands & control by item.png",
+ggsave(file = "job_demands_and_control_by_item.png",
        path = "../figures/",
        device = "png",
        dpi = 100,
@@ -128,7 +128,7 @@ select(df, year, control.betas) %>%
 
 p3 + p4
 
-ggsave(file = "job demands & control by item-conditional.png",
+ggsave(file = "job demands_and_control_by_item-conditional.png",
        path = "../figures/",
        device = "png",
        dpi = 100,
