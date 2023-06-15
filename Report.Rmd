@@ -9,8 +9,17 @@ output:
     toc_depth: 2
     toc_float:
       collapsed: false
-bibliography: references.bib
-csl: apa-6th-edition.csl
+bibliography: src/references.bib
+csl: src/apa-6th-edition.csl
+
+knit: (
+  function(inputFile, encoding) {
+    rmarkdown::render(
+      inputFile, 
+      encoding = encoding, 
+      output_file = file.path(dirname(inputFile),"docs/index.html"))
+    }
+  )
 ---
 
 ```{r setup, include=FALSE}
@@ -122,8 +131,8 @@ occupation_key = c(
 
 # Regions were collapsed according to this report:
 # https://www.aihw.gov.au/reports/rural-remote-australians/rural-and-remote-health
-# 
-teachers <- read_rds("../data/preprocessed.rds") %>%
+
+teachers <- read_rds("data/preprocessed.rds") %>%
   mutate(
     remoteness = fct_collapse(hhsra, 
                               `Remote` = "Outer regional", 
@@ -135,7 +144,7 @@ teachers <- read_rds("../data/preprocessed.rds") %>%
     profession = recode_factor(occupation, !!!occupation_key),
     profession = fct_relevel(profession, "Primary")
   ) %>% 
-  filter(!is.na(profession)) 
+  filter(!is.na(profession)) # exclude any non-teaching years
 ```
 
 # Survey results    
