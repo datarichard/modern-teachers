@@ -232,6 +232,12 @@ tbl_stack(tbl$tb,
 
 <br>
 
+## Mental health  
+
+Mental health was measured by the MHi-5 score (0-100) and compared to life-satisfaction responses (multiplied by 10 to match 0-100 range).  
+
+<br>
+
 ##### Figure 1. Mean ±SE mental health (dark) and life-satisfaction (light) by profession over time  
 ```{r figure_1, fig.dim=c(9,6)}
 mean_se <- function(x) {
@@ -276,6 +282,12 @@ ggplot(to_plot, aes(x = year, y = val, color = outcome)) +
 
 <br>
 
+## Psychosocial characteristics of work  
+
+Job demands, job control and job security components were calculated from the averages of the items in each respective table (shown above).    
+
+<br>
+
 ##### Figure 2. Mean ±SE psychosocial job components by profession over time
 ```{r figure_2, fig.dim=c(9,11)}
 psychosocial = c("job_control", "job_demand", "job_security")
@@ -299,6 +311,14 @@ occupations %>%
 ```
 
 <br>
+
+<br>
+
+## Job strain  
+
+Job strain represents the co-occurrence of high job demands and low job control. Thresholds for high and low scores were determined by quartile of each component in the entire employed sample of HILDA (all twenty waves). Thus a common threshold value was used for all professions.  
+
+The universal threshold for low job control was a score < 3.25, and the universal threshold for high job demand was a score > 4.55.  
 
 <br>
 
@@ -342,6 +362,14 @@ df %>%
 <br>
 
 # Model results  
+
+Models regressing mental health (MHi-5 scores) in each profession onto the psychosocial job components (job demand, job control, job security) were estimated, using non-linear terms representing the temporal trend of each component in a generalized additive model (GAM):  
+
+$$
+\text{MHi-5}_{it} \sim \beta_0 + f_0(\text{year}) + f_1(\text{year}_t, \ \text{job demand}_{it}) + f_2(\text{year}_t, \ \text{job control}_{it}) + f_3(\text{year}_t, \ \text{job security}_{it}) + \epsilon
+$$
+
+Where $i$ is the individual and $t$ is the year, and each smooth term $f$ represents the temporal interaction between each job component and time.  
 
 <br>
 
