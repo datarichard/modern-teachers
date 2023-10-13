@@ -6,11 +6,11 @@
 #### Setup ####
 library(tidyverse)
 library(haven)
-home <- "~/Work/Happy teachers/"
+home <- "~/Work/HILDA (restricted release)/"
 
 #### Import data ####
 path_to_hilda <- list.files(
-  path = '~/Work/Happy teachers/data',
+  path = paste0(home, "data"),
   pattern = '^Combined.*.dta$',
   full.names = TRUE
 )
@@ -24,12 +24,8 @@ for (pathtofile in path_to_hilda) {
 
 # Helper functions
 source('~/Dropbox (Sydney Uni)/HILDA/src/gather_hilda.R')
+source("~/Documents/R/helpers.R")
 
-extract_numeric <- function (x) {
-  as.numeric(gsub("[^0-9.-]+", "", as.character(x)))
-}
-
-`%notin%` <- Negate(`%in%`)
 
 
 #### Preprocessing ####
@@ -112,7 +108,7 @@ occupations <- gather_hilda(hilda, c("jbm688")) %>%
   select(-code) %>%
   arrange(xwaveid, year)
 
-# Collect teachers
+# Collect teachers from each year
 teachers <- occupations %>%
   filter(val %in% teacher_codes) %>%
   rename(occupation = val)
@@ -346,8 +342,10 @@ job_other <- c(
   "jbhruc", # Hours per week usually worked in all jobs
   "jbmhruc", # Hours per week usually worked in main job
   "jbhrqf", # Data Quality Flag: hours of work main job vs all jobs
-  "jbmploj", # Percent chance of losing job in the next 12 months [0:100, all waves]
-  "jbmpgj"	# Percent chance will find and accept job at least as good as current job
+  "jbmploj", # Percent chance of losing job in next 12 months [0:100, all waves]
+  "jbmpgj",	# Percent chance will find a job at least as good as current job
+  "jbempt", # Tenure with current employer
+  "jbcmocc" # Occupation changed since last interview
 )
 
 
@@ -422,4 +420,7 @@ preprocessed <- teachers %>%
 
 
 
-write_rds(preprocessed, "../data/preprocessed.RDS"))
+write_rds(
+  preprocessed, 
+  "~/Dropbox (Sydney Uni)/HILDA/modern-teachers/data/teachers.RDS"
+)
