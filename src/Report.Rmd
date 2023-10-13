@@ -1,0 +1,406 @@
+---
+title: "Workplace mental health and psychosocial job characteristics"
+date: "`r format(Sys.Date(), '%b %d, %Y')`"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+bibliography: references.bib
+csl: apa-6th-edition.csl
+params:
+  key: NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+
+library(tidyverse)
+library(broom)
+library(patchwork)
+library(ggthemes)
+
+source("~/Documents/R/helpers.R")
+
+theme_set(
+  theme_minimal(base_size=12) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        # panel.grid.major.y = element_line(size = 1),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.line.x = element_line(colour = "black"),
+        axis.ticks.x = element_line(colour = "black"),
+        axis.ticks.length.x = unit(-0.25, "cm"),
+        axis.text.x = element_text(vjust = -1))
+)
+```
+
+
+***
+
+
+# Abstract  
+
+The mental health and wellbeing of various professions is an important predictor of economic outcomes, workforce retention as well as a broader indicator of our socioeconomic priorities. Recent changes and challenges to the nature of professional work in Australia, including shifting employee expectations, such as lockdowns and the rise of remote work due to the global COVID-19 pandemic, have highlighted the connection between psychosocial job characteristics and mental health. Here we describe the connection between mental health and job demands, job control and job security, and how it has changed in the past 20 years in Australia using annual nationally representative survey results from HILDA.  
+
+<br><br>
+
+# Methods  
+
+<br>
+
+## Variable definitions  
+
+<br>
+
+### Professional codes
+
+Professions were defined by the ISC 4-digit codes (i.e., `jbm688`) available in the restricted HILDA dataset, based on the Australian and New Zealand Standard Classification of Occupations ([ANZSCO 2006](https://www.abs.gov.au/ausstats/abs@.nsf/0/E3031B89999B4582CA2575DF002DA702?opendocument)).  
+
+<br>
+
+### Remoteness  
+
+The Accessibility/Remoteness Index of Australia (ARIA+) is provided in HILDA (`hhsra`) and based on the Australian Statistical Geography Standard Remoteness Area framework [@summerfield2021hilda]. We defined the remoteness of the region of each teacher and collapsed the three most remote categories into a single category to produce three levels of remoteness: Major Cities, Inner Regional and Other (*Outer regional, remote and very remote*).   
+
+<br>
+
+### Psychosocial characteristics of work  
+
+The psychosocial characteristics of work as defined by @butterworth2010deriving, included three psychosocial job components (factors) from 12 items in all waves as well as an additional nine items available from Wave 5 (2005). We used all available items in each wave and constructed scores for each component by calculating the average of item responses (after reverse scoring the negatively worded items). Each component and the corresponding items are shown below. Item scores range from 1 to 7.   
+
+<br>
+
+#### Job demands & complexity
+
+| code  | description | waves |
+| ----- | ----------- | ----- |
+| `jomms` | My job is more stressful than I had ever imagined | all waves |
+| `jompi` | I fear that the amount of stress in my job will make me ill | all waves |
+| `jomcd` | My job is complex and difficult | all waves |
+| `jomns` | My job often required me to learn new skills | all waves |
+| `jomus` | I use my skills in current job | all waves |
+| `jomini`| My job requires me to take initiative | 5:20 |
+| `jomfast` | I have to work fast in my job | 5:20 |
+| `jomwi` | I have to work very intensely in my job | 5:20 |
+| `jomtime` | I don’t have enough time to do everything in my job | 5:20 |
+
+  
+#### Job control  
+
+
+| code  | description | waves |
+| ----- | ----------- | ----- |
+|`jomfd`| I have freedom to decide how I do my own work | all waves |
+|`jomls`| I have a lot of say about what happens in my job | all waves |
+|`jomfw`| I have freedom to decide when I do my work | all waves |
+|`jomdw`| I have a lot of choice in deciding what I do at work | 5:20 |
+|`jomflex`| My working times can be flexible | 5:20 |
+|`jombrk`| I can decide when to take a break | 5:20 |
+|`jomrpt`| My job requires me to do the same things over and over again | 5:20 |
+| `jomvar`| My job provides me with a variety of interesting things to do | 5:20 |
+
+
+#### Job security
+
+| code  | description | waves |
+| ----- | ----------- | ----- |
+|`jompf`| I get paid fairly for the things I do in my job | all waves |
+|`jomsf`| I have a secure future in my job | all waves |
+|`jomcsb`| Company I work for will still be in business in 5 years | all waves |
+|`jomwf`| I worry about the future of my job | all waves |
+
+<br>
+
+<br>
+
+```{r import_data}
+occupation_key <- params$key
+
+occupations <- read_rds("../data/occupations.rds") %>% 
+  filter(occupation %in% names(occupation_key)) %>%
+  mutate(
+    remoteness = fct_collapse(hhsra, 
+                              `Remote` = "Outer regional", 
+                              `Remote` = "Remote", 
+                              `Remote` =  "Very remote"),
+    remoteness = fct_recode(remoteness, `City` = "Major city", 
+                                        `Regional` = "Inner regional"),
+    remoteness = fct_relevel(remoteness, "City"),
+    profession = recode_factor(occupation, !!!occupation_key)
+  ) %>% 
+  filter(!is.na(profession)) # exclude any non-teaching years
+
+if (length(unique(occupations$profession)) > 3) {
+  occupations <- occupations %>% #count(profession)
+    mutate(profession = fct_lump_n(profession, n = 2),
+           profession = fct_relevel(profession, !!!unname(occupation_key))) 
+}
+```
+
+# Check sample  
+
+```{r by_profession, echo=T}
+# Count by profession
+occupations %>%
+  count(year, profession) %>%
+  spread(profession, n, fill = 0) %>%
+  mutate(Total = rowSums(select(., -year)))
+```
+
+<br>
+
+```{r by_region, echo=T}
+# Count by region
+occupations %>%
+  count(year, hhsra) %>%
+  mutate(hhsra = fct_relevel(hhsra, "Major city")) %>%
+  spread(hhsra, n, fill = 0) %>%
+  mutate(Total = rowSums(select(., -year), na.rm=T))
+```
+
+
+
+<br>
+
+<br>
+
+# Survey results    
+
+<br>
+
+##### Table 1. Change in demographics between 2001 and 2020
+```{r table_1}
+library(gtsummary)
+library(flextable)
+
+theme_gtsummary_compact(set_theme = TRUE, font_size = NULL)
+
+create_table <- function(.df) {
+  
+  .df %>% 
+    mutate(income = hh_disp_inc_eq/1000) %>%
+    mutate(Total = 1) %>%
+    select(xwaveid, year, 
+           Total,
+           Female, 
+           Age = age, 
+           Coupled = coupled, 
+           `New parent` = new_parent, # child under 4
+           Edu = edu, 
+           `Tenure (years)` = jbempt,
+           Region = remoteness,
+           `Real household income ($000s)` = income, # OECD adjusted
+           `Mental health` = ghmh,
+           `Life satisfaction` = losat
+    ) %>%
+    distinct() %>%
+    select(-xwaveid) %>%
+    tbl_summary(
+      by = year,
+      statistic = Total ~ "N = {N}",
+      type = list(`Life satisfaction` ~ "continuous"),
+      missing = "no"
+    ) %>%
+    modify_header(all_stat_cols() ~ "**{level}**") %>%
+    add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+          include = -Total)
+  
+}
+
+tbl <- occupations %>%
+  filter(year %in% c(2001, 2020)) %>%
+  group_by(profession) %>%
+  nest() %>%
+  mutate(tb = map(data, ~create_table(.x)))
+
+tbl_stack(tbl$tb,
+          group_header = tbl$profession) %>%
+  as_flex_table() %>%
+  align(j = 3:5, align = "right", part = "all") %>%
+  autofit()
+```
+
+<br>
+
+<br>
+
+##### Figure 1. Mean ±SE mental health (dark) and life-satisfaction (light) by profession over time  
+```{r figure_1, fig.dim=c(9,6)}
+mean_se <- function(x) {
+  
+  x = na.omit(x)
+  m = mean(x)
+  se = sd(x) / sqrt(length(x))
+  
+  out <- data.frame(
+    ymin = m - se,
+    y = m,
+    ymax = m + se
+  )
+  
+  return(out)
+  
+}
+
+to_plot <- occupations %>%
+  select(xwaveid, year, profession, 
+         `Mental health` = ghmh, 
+         `Life satisfaction` = losat) %>%
+  mutate(`Life satisfaction` = `Life satisfaction` * 10) %>%
+  gather("outcome", "val", `Mental health`, `Life satisfaction`) %>%
+  na.omit() 
+
+ggplot(to_plot, aes(x = year, y = val, color = outcome)) +
+  stat_summary(fun.data = mean_se) +
+  geom_smooth(se = F, size = .75, method = 'gam', 
+              formula = y ~ s(x, bs = "cs")) +
+  scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+  facet_wrap(~profession, ncol = 3) +
+  labs(x = "", y = "") +
+  theme(legend.position = "bottom",
+        legend.title = element_blank()) +
+  scale_color_grey(start = 0.8, end = 0.2) +
+  theme(legend.position = "bottom")
+```
+
+
+<br>
+
+<br>
+
+##### Figure 2. Mean ±SE psychosocial job components by profession over time
+```{r figure_2, fig.dim=c(9,11)}
+psychosocial = c("job_control", "job_demand", "job_security")
+
+occupations %>%
+  select(xwaveid, year, profession, all_of(psychosocial)) %>%
+  gather("outcome", "val", !!!psychosocial) %>%
+  mutate(outcome = str_replace(outcome, "_", " "),
+         outcome = str_to_title(outcome)) %>%
+  na.omit() %>%
+  ggplot(aes(x = year, y = val)) +
+    stat_summary(fun.data = mean_se) +
+    stat_smooth(formula = 'y ~ x', method = "loess", se=F, span=1.5,
+                geom = "line", size = .75) +
+    scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+    facet_grid(outcome~profession, scales = "free_y") +
+    labs(x = "", y = "") +
+    scale_color_grey(start = 0, end = .8) +
+    theme(panel.background = element_rect(fill = "grey95", color = "white"),
+        panel.grid.major.y = element_line(color = "white"))
+```
+
+<br>
+
+<br>
+
+##### Figure 3. The proportion of professionals suffering job strain over time
+```{r figure_3, fig.dim=c(9,6)}
+ctrl_t <- 3.25 # with(occupations, summary(job_control))[2]
+dmnd_t <- 4.556 # with(occupations, summary(job_demand))[5]
+
+df <- occupations %>%
+  # select(xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
+  mutate(
+    job_strain = case_when(
+      job_control < ctrl_t & job_demand > dmnd_t ~ "Job strain",
+      job_control < ctrl_t ~ "Low control",
+      job_demand > dmnd_t ~ "High demand",
+      TRUE ~ "Unstressed"),
+    job_strain = fct_relevel(job_strain, "Job strain")
+  )
+
+# Proportion of professionals who meet criteria for job strain in each year
+df %>%
+  percent(profession, year, job_strain) %>%
+  mutate(job_strain = fct_rev(job_strain)) %>%
+  ggplot(aes(x = year, y = proportion, fill = job_strain)) +
+    geom_area(alpha = 0.9, size = .5, color = "white") +
+    scale_x_continuous(expand = c(0.01, 0.1), 
+                       breaks = c(2001, 2005, 2010, 2015, 2020)) +
+    scale_y_continuous(expand = c(0.01, 0.01),
+                       breaks = c(0.25, 0.50, 0.75, 1.0)) +
+    scale_fill_grey(start = .97, end = 0.2) +
+    facet_wrap(~profession) +
+    theme_void() +
+    theme(legend.title = element_blank(),
+          legend.position = "bottom",
+          axis.text = element_text(color = "black"))
+```
+
+
+<br>
+
+<br>
+
+# Model results  
+
+<br>
+
+##### Figure 4. Smooth effect of each job component on mental health over time
+```{r prep_4, include=F}
+library(mgcv)
+
+smooth_data <- function(.fit, i = 1) {
+  
+  plot_obj <- plot(.fit, seWithMean = T, pages=1)
+  
+  as.data.frame(plot_obj[[i]][c("x", "se", "fit")]) %>%
+    as_tibble()
+  
+}
+
+results <- occupations %>%
+  group_by(profession) %>%
+  nest() %>%
+  mutate(
+    fit = map(data, ~gam(ghmh ~ 1 + job_control + job_demand + job_security + 
+                           s(year) + s(year, by = job_demand) + 
+                           s(year, by = job_control) + 
+                           s(year, by = job_security), 
+                         data = .x)),
+    demand_smooths = map(fit, ~smooth_data(.x, 2)),
+    control_smooths = map(fit,  ~smooth_data(.x, 3)),
+    security_smooths = map(fit,  ~smooth_data(.x, 4))
+  )
+
+job_smooths <- bind_rows(
+  `Job demand` = select(results, profession, demand_smooths) %>%
+    unnest(demand_smooths),
+  `Job control` = select(results, profession, control_smooths) %>%
+    unnest(control_smooths),
+  `Job security` = select(results, profession, security_smooths) %>%
+    unnest(security_smooths),
+  .id = "term"
+)
+```
+
+```{r figure_4, fig.dim = c(9, 9)}
+ggplot(job_smooths, aes(x = x - 2000, y = fit)) +
+  geom_hline(aes(yintercept = 0), color = "white", size = 1) +
+  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
+              fill = "grey80") +
+  geom_line() +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  facet_grid(term ~ profession, scales = "free_y") +
+  labs(x = "", y = "") +
+  theme(panel.background = element_rect(fill = "grey95", color = "white"),
+        panel.grid.major.y = element_line(color = "white"))
+```
+
+<br>
+
+<br>
+
+# References  
+
+
+
