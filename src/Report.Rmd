@@ -13,6 +13,8 @@ bibliography: references.bib
 csl: apa-6th-edition.csl
 params:
   key: NULL
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -121,11 +123,14 @@ The psychosocial characteristics of work as defined by @butterworth2010deriving,
 
 <br>
 
-```{r import_data}
+```{r import_params}
 occupation_key <- params$key
+```
 
+```{r import_data}
 occupations <- read_rds("../data/occupations.rds") %>% 
   filter(occupation %in% names(occupation_key)) %>%
+  filter(wave %in% letters[5:20]) %>%
   mutate(
     remoteness = fct_collapse(hhsra, 
                               `Remote` = "Outer regional", 
@@ -176,7 +181,7 @@ occupations %>%
 
 <br>
 
-##### Table 1. Change in demographics between 2001 and 2020
+##### Table 1. Change in demographics between 2005 and 2020
 ```{r table_1}
 library(gtsummary)
 library(flextable)
@@ -216,7 +221,7 @@ create_table <- function(.df) {
 }
 
 tbl <- occupations %>%
-  filter(year %in% c(2001, 2020)) %>%
+  filter(year %in% c(2005, 2020)) %>%
   group_by(profession) %>%
   nest() %>%
   mutate(tb = map(data, ~create_table(.x)))
@@ -289,7 +294,7 @@ Job demands, job control and job security components were calculated from the av
 <br>
 
 ##### Figure 2. Mean ±SE psychosocial job components by profession over time
-```{r figure_2, fig.dim=c(9,11)}
+```{r figure_2, fig.dim=c(9,9)}
 psychosocial = c("job_control", "job_demand", "job_security")
 
 occupations %>%
@@ -324,8 +329,8 @@ The universal threshold for low job control was a score < 3.25, and the universa
 
 ##### Figure 3. The proportion of professionals suffering job strain over time
 ```{r figure_3, fig.dim=c(9,6)}
-ctrl_t <- 3.25 # with(occupations, summary(job_control))[2]
-dmnd_t <- 4.556 # with(occupations, summary(job_demand))[5]
+ctrl_t <- 3.25 # with(read_rds("../data/occupations.rds"), summary(job_control))
+dmnd_t <- 4.556 # with(read_rds("../data/occupations.rds"), summary(job_demand))
 
 df <- occupations %>%
   # select(xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
@@ -334,7 +339,7 @@ df <- occupations %>%
       job_control < ctrl_t & job_demand > dmnd_t ~ "Job strain",
       job_control < ctrl_t ~ "Low control",
       job_demand > dmnd_t ~ "High demand",
-      TRUE ~ "Unstressed"),
+      TRUE ~ "Low strain"),
     job_strain = fct_relevel(job_strain, "Job strain")
   )
 
@@ -363,7 +368,109 @@ df %>%
 
 # Model results  
 
-Models regressing mental health (MHi-5 scores) in each profession onto the psychosocial job components (job demand, job control, job security) were estimated, using non-linear terms representing the temporal trend of each component in a generalized additive model (GAM):  
+We modelled mental health (MHi-5 scores) as a function of time ($f(year)$) to determine whether the mental health trend was decreasing for each profession. We also tested whether trends in psychosocial job components ($f(job \ demands) + f(job \ control) + f(job \ security)$) explained the trends in mental health. Predicted mental health trends were compared before and after adding the psychosocial job trends as explanatory variables. Any changes in the mental health trend after adding the explanatory variables represent the residual trend once the psychosocial job trends are accounted for, and thus indicates their impact on changes in mental health over the period.    
+
+Models regressing mental health (MHi-5 scores) in each profession onto each psychosocial job component (job demand, job control, job security) were estimated, using non-linear, smooth interaction terms representing the temporal trend of each component in a generalized additive model (GAM):  
+
+$$
+\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job control}_{it}) + \epsilon
+$$  
+
+$$
+\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job demand}_{it}) + \epsilon
+$$  
+
+$$
+\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job security}_{it}) + \epsilon
+$$  
+
+
+Where $i$ is the individual and $t$ is the year, and each smooth term $f$ represents the temporal interaction between each job component and time.  
+
+<br>
+
+
+
+<br>
+
+##### Figure 4. Predicted mental health trends over years (top row), and residual mental health trends after removing the effects of psychosocial job components
+```{r include=F}
+library(mgcv)
+
+smooth_data <- function(.fit, i = 1) {
+  
+  plot_obj <- plot(.fit, seWithMean = T, pages=1)
+  
+  as.data.frame(plot_obj[[i]][c("x", "se", "fit")]) %>%
+    as_tibble()
+  
+}
+
+fits <- occupations %>%
+  select(profession, xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
+  group_by(profession) %>%
+  nest() %>%
+  mutate(
+    fit_year = map(data, ~gam(ghmh ~ 1 + s(year), data = .x)),
+    fit_yr_dmnd = map(data, ~gam(ghmh ~ 1 + s(year) + s(year, by = job_demand),
+                                     data = .x)),
+    fit_yr_cntl = map(data, ~gam(ghmh ~ 1 + s(year) + s(year, by = job_control),
+                                     data = .x)),
+    fit_yr_scty = map(data, ~gam(ghmh ~ 1 + s(year) + s(year, by = job_security),
+                                     data = .x)))
+  
+smooths <- fits %>%
+  transmute(
+    smooth_year = map(fit_year, ~smooth_data(.x)),
+    smooth_yr_dmnd = map(fit_yr_dmnd, ~smooth_data(.x)),
+    smooth_yr_cntl = map(fit_yr_cntl, ~smooth_data(.x)),
+    smooth_yr_scty = map(fit_yr_scty, ~smooth_data(.x))
+  )
+
+
+smooth_year <- smooths %>%
+  select(profession, smooth_year) %>%
+  unnest(smooth_year)
+
+smooth_yr_dmnd <- smooths %>%
+  select(profession, smooth_yr_dmnd) %>%
+  unnest(smooth_yr_dmnd)
+
+smooth_yr_cntl <- smooths %>%
+  select(profession, smooth_yr_cntl) %>%
+  unnest(smooth_yr_cntl)
+
+smooth_yr_scty <- smooths %>%
+  select(profession, smooth_yr_scty) %>%
+  unnest(smooth_yr_scty)
+
+year_smooths <- bind_rows(
+  `f(Year)` = smooth_year,
+  `f(Year) + f(Job demand)` = smooth_yr_dmnd,
+  `f(Year) + f(Job control)` = smooth_yr_cntl,
+  `f(Year) + f(Job security)` = smooth_yr_scty,
+  .id = "model"
+) 
+```
+
+```{r figure_4, fig.dim = c(9, 11)}
+ggplot(year_smooths, aes(x = x - 2000, y = fit)) +
+  geom_hline(aes(yintercept = 0), color = "grey50", linetype = "dashed") +
+  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
+              alpha = 0.2) +
+  geom_line(aes()) +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  facet_grid(model~profession, scales = "free_y") +
+  labs(x = "", y = "") +
+  theme(legend.position = "none")
+```
+
+
+<br>
+
+<br>
+
+The importance of each psychosocial job component was estimated in a model regressing mental health (MHi-5 scores) on the three psychosocial job components (job demand, job control, job security) using non-linear interaction terms in a generalized additive model (GAM):   
 
 $$
 \text{MHi-5}_{it} \sim \beta_0 + f_0(\text{year}) + f_1(\text{year}_t, \ \text{job demand}_{it}) + f_2(\text{year}_t, \ \text{job control}_{it}) + f_3(\text{year}_t, \ \text{job security}_{it}) + \epsilon
@@ -371,10 +478,13 @@ $$
 
 Where $i$ is the individual and $t$ is the year, and each smooth term $f$ represents the temporal interaction between each job component and time.  
 
+The resulting smooths for each component represent the conditional importance of each for mental health over time.  
+
 <br>
 
-##### Figure 4. Smooth effect of each job component on mental health over time
-```{r prep_4, include=F}
+
+##### Figure 5. Smooth effect of each psyschosocial job component on mental health  
+```{r prep_5, include=F}
 library(mgcv)
 
 smooth_data <- function(.fit, i = 1) {
@@ -411,7 +521,7 @@ job_smooths <- bind_rows(
 )
 ```
 
-```{r figure_4, fig.dim = c(9, 9)}
+```{r figure_5, fig.dim = c(9, 9)}
 ggplot(job_smooths, aes(x = x - 2000, y = fit)) +
   geom_hline(aes(yintercept = 0), color = "white", size = 1) +
   geom_ribbon(aes(ymin = fit - se, ymax = fit + se),

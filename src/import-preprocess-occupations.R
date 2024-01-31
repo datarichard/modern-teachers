@@ -80,14 +80,6 @@ occupations <- gather_hilda(hilda, c("jbm688")) %>%
   filter(val > 0) %>%
   rename(occupation = val)
 
-# Collect teachers from each year
-# teachers <- occupations %>%
-#   filter(val %in% teacher_codes) %>%
-#   rename(occupation = val)
-
-
-
-
 
 
 #### Regions ####
@@ -237,17 +229,20 @@ job_control <- c(
   "jomvar" # My job provides me with a variety of interesting things to do
 )
 
-# Job demands & complexity
+# Job demands (Waves 5:20) & Job complexity (Waves 1:20)
 job_demands <- c(
-  "jomcd", # My job is complex and difficult 
-  "jomms",	# My job is more stressful than I had ever imagined	
-  "jompi", #	I fear that the amount of stress in my job will make me physically ill
-  "jomns", # My job often required me to learn new skills
-  "jomus", # I use my skills in current job
   "jomini", # My job requires me to take initiative
   "jomfast", # I have to work fast in my job
-  "jomwi", # I have to work very intensely in my job
+  "jomwi",  # I have to work very intensely in my job
   "jomtime" # I don’t have enough time to do everthing in my job
+)
+
+job_complexity <- c(
+  "jomms",	# My job is more stressful than I had ever imagined	
+  "jompi",  # I fear that the amount of stress in my job will make me phys. ill
+  "jomcd",  # My job is complex and difficult 
+  "jomns",  # My job often required me to learn new skills
+  "jomus"   # I use my skills in current job*
 )
 
 job_other <- c(
@@ -261,54 +256,60 @@ job_other <- c(
   "jbcmocc" # Occupation changed since last interview
   )
 
+combine_scores <- function(.df, .varnames) {
+  
+  # All items are 7-point Likert scale (Agreement)
+  reversed_items <- c('jomwf', 'jomrpt', 'jomus')
+  
+  gather_hilda(.df, .varnames) %>%
+    spread(code, val) %>%
+    mutate_if(is.double, ~ ifelse(. < 0, NA_real_, .)) %>%
+    # reverse score
+    mutate(across(any_of(reversed_items), ~ 8 - .)) %>%
+    # component score (impute by mean)
+    gather(code, val, -xwaveid, -wave) %>%
+    group_by(xwaveid, wave) %>%
+    transmute(combined = mean(val, na.rm=T)) %>% # NaN if missing for all values
+    ungroup() %>%
+    distinct() %>%
+    # remove NaN
+    na.omit() 
+  
+}
 
-# All items are 7-point Likert scale (Agreement)
-reversed_items <- c('jomwf', 'jomrpt', 'jomus')
+security <- combine_scores(hilda, job_security) %>%
+  rename(job_security = combined)
 
+control <- combine_scores(hilda, job_control) %>%
+  rename(job_control = combined)
 
-security <- gather_hilda(hilda, job_security) %>%
-  spread(code, val) %>%
-  mutate_if(is.double, ~ ifelse(. < 0, NA_real_, .)) %>%
-  # reverse score
-  mutate(across(any_of(reversed_items), ~ 8 - .)) %>%
-  # component score (impute by mean)
-  gather(code, val, -xwaveid, -wave) %>%
-  group_by(xwaveid, wave) %>%
-  transmute(job_security = mean(val, na.rm=T)) %>% # NaN if missing for all values
-  ungroup() %>%
-  distinct() %>%
-  na.omit() 
+# Waves 5:20
+demand5 <- combine_scores(hilda, job_demands) %>% 
+  rename(job_demand5 = combined)
 
-control <- gather_hilda(hilda, job_control) %>%
-  spread(code, val) %>%
-  mutate_if(is.double, ~ ifelse(. < 0, NA_real_, .)) %>%
-  # reverse score
-  mutate(across(any_of(reversed_items), ~ 8 - .)) %>%
-  # component score (impute by mean)
-  gather(code, val, -xwaveid, -wave) %>%
-  group_by(xwaveid, wave) %>%
-  transmute(job_control = mean(val, na.rm=T)) %>% # NaN if missing for all values
-  ungroup() %>%
-  distinct() %>%
-  na.omit() 
+complexity <- combine_scores(hilda, job_complexity) %>%
+  rename(job_complexity = combined)
 
-demands <- gather_hilda(hilda, job_demands) %>%
-  spread(code, val) %>%
-  mutate_if(is.double, ~ ifelse(. < 0, NA_real_, .)) %>%
-  # reverse score
-  mutate(across(any_of(reversed_items), ~ 8 - .)) %>%
-  # component score (impute by mean)
-  gather(code, val, -xwaveid, -wave) %>%
-  group_by(xwaveid, wave) %>%
-  transmute(job_demand = mean(val, na.rm=T)) %>% # NaN if missing for all values
-  ungroup() %>%
-  distinct() %>%
-  na.omit() 
-
-psychosocial_components <- full_join(demands, security) %>%
-  full_join(control)
+# Waves 1:20
+demand <- combine_scores(hilda, c(job_complexity, job_demands)) %>%
+  rename(job_demand = combined)
 
 
+psychosocial_components <- full_join(demand, control) %>%
+  full_join(security) %>%
+  full_join(complexity) %>%
+  full_join(demand5)
+
+# Check the join
+# psychosocial_components %>%
+#   group_by(wave) %>%
+#   summarize(
+#     demand_missing = sum(is.na(job_demand)),
+#     control_missing = sum(is.na(job_control)),
+#     security_missing = sum(is.na(job_security)),
+#     complexity_missing = sum(is.na(job_complexity)),
+#     demand5_missing = sum(is.na(job_demand5))
+#   )
 
 
 #### Other employment variables ####
