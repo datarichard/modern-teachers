@@ -1,0 +1,1224 @@
+---
+title: "The growing effect of job strain on teacher mental health"
+date: "`r format(Sys.Date(), '%b %d, %Y')`"
+output: word_document
+bibliography: references.bib
+csl: apa-6th-edition.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      ft.align = "left"
+                      )
+
+library(tidyverse)
+library(mgcv)
+library(broom)
+library(patchwork)
+library(gtsummary)
+library(flextable)
+
+source("~/Documents/R/helpers.R")
+
+gtsummary::theme_gtsummary_compact(font_size = 9)
+
+theme_set(
+  theme_minimal(base_size=18) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        # panel.grid.major.y = element_line(size = 1),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.line.x = element_line(colour = "black"),
+        axis.ticks.x = element_line(colour = "black"),
+        axis.ticks.length.x = unit(-0.25, "cm"),
+        axis.text.x = element_text(vjust = .8, hjust = 0.8, angle = 30))
+)
+```
+
+
+Richard W. Morris^a,b^, Lisa E. Kim^c^, Alyssa Milton^a,b^, Nick Glozier^a,b^  
+
+a.  ARC Centre of Excellence for Children and Families over the Life Course, Australia
+b.  Central Clinical School, Faculty of Medicine and Health, University of Sydney, NSW, Australia
+c.  Department of Education, University of York, UK
+
+
+<br>
+
+<br>
+
+*Richard W. Morris    
+
+**Email:**  richard.morris@sydney.edu.au  
+
+<br><br>
+
+**Author Contributions:** RWM designed and performed the analysis, interpreted the results, and wrote the paper; LK, AM & NG conceived the study, designed the study, interpreted the results and wrote the paper.  
+
+**Competing Interest Statement:** No competing interests.  
+
+**Classification:** Social Sciences/Demography.  
+
+**Keywords:** teacher mental health, job strain, job demands, job control, HILDA.  
+
+<br>
+
+<br>
+
+**This file includes:**  
+
+- Main text, references and appendix
+- Figures 1 to 5
+- Tables 1  
+
+\newpage
+
+# Abstract  
+
+The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention, as well as a broader indicator of our socioeconomic priorities. Recent changes and challenges to public schooling in Australia, including shifting community expectations and school lockdowns due to the global COVID-19 pandemic, have highlighted the connection between job strain and mental health. Here we describe the connection between teachers' mental health and job strain and how it has changed between 2005 to 2020 in Australia using data from the Household, Income and Labour Dynamics in Australia (HILDA) survey, a large nationally representative annual survey. We find the mental health of teachers has declined across Australia since 2011, and this is largely due to increasing job demands rather than changes in the age and gender composition of the workforce as in other professions. The results indicate that reducing job demands (rather than improving job control or security) is the most likely strategy to mitigate the decline in teacher mental health. Further research understanding the source(s) of the increased job demands on teachers is warranted.  
+ 
+
+\newpage
+
+The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention, as well as a broader indicator of our socioeconomic priorities [@mccallum2017teacher; @braun2020effects; @dreer2023outcomes; @skaalvik2018job; @pap2023happy]. Recent changes and challenges to public schooling in Australia, including shifting community expectations and school lockdowns due to the global COVID-19 pandemic, have highlighted the connection between job strain and mental health in teachers (as well as in other public services such as hospitals and nurses). Since the pandemic, there have been reports that teachers mental health has been declining in Australia and elsewhere [@hoang2023]. However whether that decline is the result of changes in _workplace_ characteristics such as increasing job demands; or due to changes in the _workforce_ such as increased psychological vulnerability is currently unclear. Any proposal to arrest or reverse the decline will need to address this distinction in order to be effective.    
+
+Prior to COVID, cross-sectional comparisons of teachers with other professional groups in large population-based surveys did not reveal consistent deficits in mental health. @jerrim2020 compared primary and secondary school teachers with up to 2000 other professional occupations across 11 different representative surveys, such as the annual population survey (APS) and the labour force survey (LFS) from the Office of National Statistics in the UK. Comparison occupations were matched for age, gender, education, whether working full or part time, ethnicity and marital status, and represented reasonable alternative career choices that teachers could have made. They were also diverse in terms of being office jobs (e.g. accountants, HR workers, civil servants), or stressful-yet-rewarding public sector jobs like teaching (e.g. nurses, social workers). Yet across surveys, the percentage of anxious or unhappy teachers, or the percentage reporting chronic mental illness (e.g., depression) was not worse than average. And the (unadjusted) percentage of teachers reporting low self-esteem or self-worth was _lower_ rather than higher than average, indicating different measures of subjective wellbeing give divergent results. Primary and secondary teachers did report their job made them ill at higher rates than other occupations, suggesting there may be changes over time which are not detected by cross-sectional comparisons.  
+
+Longitudinal comparisons of mental health among occupations have revealed declining mental health among teachers. @hoang2023 compared trends in mental health between six different professional groups from 2015 to 2020, in a large representative survey of Australian households (HILDA). Among the five distinct occupations (doctors, engineers, accountants, lawyers, teachers), accountants had the lowest average levels of mental health while the mental health of teachers fell above that and were similar to nurses, as well as the much larger and non-distinct employee category. However teachers were the only distinct occupation whose mental health significantly declined over the period (as did the mental health of the non-distinct employee category). These declines are consistent with a general deterioration in mental health in Australia over the same period [@butterworth2022; @botha2023generational], so it is difficult to determine whether teachers' mental health decline is specific to their work (due to conditions or people) or represents a decline common to the wider population due to non-work related factors.  
+
+The psychosocial characteristics of work are an important determinant of mental (and physical) health. Combinations of adverse job conditions are associated with poor physical health, greater depression, anxiety and more frequent visits to a general practitioner [Broom, 2006; Chandola, Brunner & Marmot 2006; Griffin et al 2007; Stansfeld & Candy, 2006); cited in @butterworth2010deriving]. There are different models of psychosocial job quality however an influential model has been the demand/control/support (DCS) model [@karasek1998job]. This model proposes that job strain results from the co-occurence of high job demands and low job control, and this in particular has been shown to be a good predictor of adverse physical and mental health problems such as coronary heart disease, depression, and anxiety. Others have identified job insecurity as an important element of work stress and linked with psychological stress (De Witte & Naswall 2003), so it was also included in the present study.   
+
+Our aim was to determine whether the decline in teacher mental health (that has been previously observed in this Australian dataset, and also found in other regions), is due to the deteriorating psychosocial job characteristics of teaching OR a change in the dependency of mental health on those job characteristics among teachers. That is, has the teaching job got worse or have teachers become more vulnerable or affected by the job?
+
+Here we focus on mental health as it is unclear whether the observed decline in teacher mental health is greater than expected in Australia, or related to job strain or work-related factors. A major aim of the present report is to determine whether the changes in work-related factors such as job strain have had any impact on teacher mental health over the last two decades.  We examine this trend among teachers and contrast it to two distinct occupations chosen for their comparable levels of mental health (accountants) or psychosocial job characteristics (nurses & midwives).  
+
+
+\newpage
+
+# Methods  
+
+<br>
+
+The Household, Income and Labour Dynamics in Australia (HILDA) Survey, funded by the Australian government, was collected yearly between 2001 to 2020. The sampling frame is a nationally representative probabilistic sample of Australian households which collects information on a wide range of aspects of life in Australia, including health and wellbeing [@wilkins2019household]. The longitudinal design includes the same households and individuals each year and adds children (15-years and above) born to sample members and people who joined or shared a household with a sample member.  
+
+<br>
+
+## Variable definitions  
+
+<br>
+
+### Occupation (professional codes)
+
+Occupation was ascertained by the current occupation response and coded to the Australian and New Zealand Standard Classification of Occupations ([ANZSCO 2006](https://www.abs.gov.au/ausstats/abs@.nsf/0/E3031B89999B4582CA2575DF002DA702?opendocument)) 4-digit codes. The two codes for "Primary" and "Secondary" school teachers were used.  
+
+For the sake of comparison, we also included the codes for two other well-defined professions: the code for accountants and the code for nurses & midwives. Accountants were chosen because they exhibited lower levels of mental health and life satisfaction than any other professional group in our earlier study [@hoang2023]. Nurses & midwives (hereon _nurses_) were included because they exhibited comparable levels of mental health as teachers, along with comparable levels of job demands and job control - two important prerequisites for job strain.  
+
+<br>
+
+### Mental health and life satisfaction  
+
+The mental health inventory (MHI-5) is a subscale of five items assessing positive and negative aspects of mental health [@ware2000sfu; @ware1992mos]. It is well-validated as a screening instrument or a proxy of common mental disorders in population research [@cuijpers2009screening; @hoeymans2004measuring; @rumpf2001screening], including in Australia [@batterham2018assessing]. Respondents were asked to state how often they have experienced each of the following during the past four weeks:  
+
+1. "Been a nervous person"
+2. "Felt so down in the dumps nothing could cheer you up"
+3. "Felt calm and peaceful"
+4. "Felt down"
+5. "Been a happy person"  
+
+The response to each item was selected from a 6-point scale "All of the time", "Most of the time", "A good bit of the time", "Some of the time", "A little of the time", "None of the time". The scale was created according to Ware et al [@ware2000sfu]. Each response was scored 0 to 5, and items were recoded so that higher scores indicated better mental health. Raw scores were summed across the items and then linearly transformed to a 0-100 scale. In accordance with the manual instructions a person-specific score was estimated in any year on which there were valid responses on three or more items, the average being calculated and applied to missing items.  
+
+Life satisfaction was derived from a single item response to the question "In general, how satisfied are you with your life right now?". Responses were provided on a 0-10 scale where higher responses indicated more satisfaction.       
+
+<br>
+
+### Psychosocial characteristics of work  
+
+The psychosocial characteristics of work as defined by @karasek1998job were derived from a set of 21 questions, subdivided into three subsets representing the three psychosocial job components [i.e., factors; @butterworth2010deriving], namely _job demands & complexity_ (hereon "job demands"), _job control_ and _job security_. The subset of items contributing to each component are shown in the Appendix (Tables A1 to A3). We constructed a score for each component for each person for each year by calculating the (within-person) average of the component subset items (after reverse scoring the negatively worded items). Missing responses were implicitly imputed by this mean estimation procedure. Item responses were scored from 1 to 7, and so the psychosocial job component scores ranged from 1 to 7 as well. All 21 items were only available from Wave 5 onwards in HILDA and thus our analysis covered the period from 2005 to 2020.     
+
+<br>
+
+### Job strain  
+
+Following Karasek, job strain was defined as the co-occurrence of high job demands and low job control [@karasek1998job]. Thresholds for high and low scores were determined by the response quartile of each component in the entire employed sample of HILDA (all occupations in all sixteen waves). Thus a common threshold value was used for each profession here. We identified in each year the four groups of professionals experiencing different levels of job demands and job control. The four groups were 1) Job strain group, which reported both high job demands (i.e., > 3rd quartile of all job demand responses) and low job control (< 1st quartile of all job control responses); 2) high job demand only group, 3) low job control only group, and 4) low job strain group who reported _both_ no high job demand and no low job control (i.e., < 3rd quartile of all job demand responses & > 1st quartile of all job control responses). The relative proportions of each group in each year over 2005 to 2020 was compared.  
+
+<br>
+
+## Modelling  
+
+We aimed to determine whether and how changes in the psychosocial job components over time have impacted teachers' mental health. We modelled the linear and non-linear trends in mental health among teachers between 2005 to 2020, and tested whether each of the psychosocial job components (job demands, job control and job security) explained the trends in mental health. We also determined whether the importance of each psychosocial job component for mental health was changing over time. Finally we determined how much variance ($R^2$) in mental health was explained by the psychosocial job components in each year by Ordinary Least Squares (OLS).  
+
+Trends in mental health among teachers between 2005 to 2020 were modelled using a penalized, non-linear spline function over time (years) in a generalized additive model [GAM;  @wood2004stable; @wood2006low; @wood2011fast]. Both linear and non-linear effects of time were included and the resulting (centered) _smooth_ trend represents the teachers' total mental health trend over time.   
+
+We compared the total mental health trend with residual mental health trends after adding the (smooth) effects of each psychosocial job component to the model. Adding each component to the model will produce a residual smooth trend for mental health, which represents the mental health trend remaining after the effects of each psychosocial job component is taken out (i.e., accounted for or explained). Comparison with the total mental health trend will reveal whether any single component was _mediating_ the decline in mental health.  
+
+Each model described above included the linear effects of age and tenure as controls. Tenure was determined from the HILDA variable derived from time with current employer cross-referenced against any occupation changes since last interview. Sensitivity analyses indicated the controls were not consequential for teacher mental health trends, but were important when estimating the mental health trends of accountants and nurses (see Figure 1).    
+
+We also determined the importance of each psychosocial job component for the trend in mental health. Again we modelled the trend in mental health using a GAM, with linear and smooth effects of time. We also included the smooth effect of all three psychosocial job components in the same model. The penalized smooth for each psychosocial job component in this model represents the unique effect of each job component on mental health over time from the other two components. The penalty ensures the slope does not deviate too far from the linear slope due to variation in any particular year. The confidence intervals (shaded area) around each trend include the uncertainty around the linear effect as well as the smooth trend itself [@wood2013simple; @wood2013p; @wood2016smoothing]. This results in confidence intervals with close to nominal (frequentist) coverage properties [@marra2012coverage; @nychka1988bayesian]. We standardized the estimates to allow comparison between the three job component smooths, and so the greater the smooth deviates from zero (y = 0), the greater the importance of that component on mental health.   
+
+
+
+<br>
+
+<br>
+
+
+```{r import_data}
+occupation_key = c(
+  `2320` = "Teachers", # Secondary
+  `2331` = "Teachers", # Primary
+  `2230` = "Nurses",
+  `2411` = "Accountants",
+  .default = NA_character_
+)
+
+# Regions were collapsed according to this report:
+# https://www.aihw.gov.au/reports/rural-remote-australians/rural-and-remote-health
+
+occupations <- read_rds("../data/occupations.rds") %>% 
+  filter(occupation %in% names(occupation_key)) %>%
+  filter(wave %in% letters[5:20]) %>%
+  mutate(
+    remoteness = fct_collapse(hhsra, 
+                              `Remote` = "Outer regional", 
+                              `Remote` = "Remote", 
+                              `Remote` =  "Very remote"),
+    remoteness = fct_recode(remoteness, `City` = "Major city", 
+                                        `Regional` = "Inner regional"),
+    remoteness = fct_relevel(remoteness, "City"),
+    profession = recode_factor(occupation, !!!occupation_key),
+    profession = fct_relevel(profession, "Teachers")
+  ) %>% 
+  filter(!is.na(profession)) # exclude any non-teaching years
+```
+
+\newpage
+
+# Results  
+
+<br>
+
+## Survey results    
+
+#### Table 1. Change in teacher demographics between 2005 and 2020
+
+```{r table_1}
+theme_gtsummary_compact(set_theme = TRUE, font_size = NULL)
+
+create_table <- function(.df) {
+  
+  .df %>% 
+    mutate(income = hh_disp_inc_eq/1000) %>%
+    mutate(Total = 1) %>%
+    select(xwaveid, year, 
+           Total,
+           Female, 
+           Age = age, 
+           Coupled = coupled, 
+           `New parent` = new_parent, # child under 4
+           Edu = edu, 
+           `Tenure (years)` = jbempt,
+           Region = remoteness,
+           `Real household income ($000s)` = income, # OECD adjusted
+           `Mental health` = ghmh,
+           `Life satisfaction` = losat
+    ) %>%
+    distinct() %>%
+    select(-xwaveid) %>%
+    tbl_summary(
+      by = year,
+      statistic = Total ~ "N = {N}",
+      type = list(`Life satisfaction` ~ "continuous"),
+      missing = "no"
+    ) %>%
+    modify_header(all_stat_cols() ~ "**{level}**") %>%
+    add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+          include = -Total)
+  
+}
+
+tbl <- occupations %>%
+  filter(year %in% c(2005, 2020)) %>%
+  group_by(profession) %>%
+  nest() %>%
+  mutate(tb = map(data, ~create_table(.x)))
+
+tbl_stack(tbl$tb,
+          group_header = tbl$profession) %>%
+  as_flex_table() %>%
+  align(j = 3:5, align = "right", part = "all") %>%
+  hrule(rule = "exact", part = "all") %>%
+  height_all(height = 0.2) %>% 
+  width(j = 1, width = 0.9) %>%
+  width(j = 2, width = 2.2) %>%
+  width(j = 3:4, width = 1.2) %>%
+  width(j = 5, width = 0.75)
+```
+
+```{r, eval=F}
+theme_gtsummary_compact(set_theme = TRUE, font_size = NULL)
+
+t1 <- teachers %>% 
+  filter(profession == "Primary", year %in% c(2005, 2020)) %>%
+  mutate(income = hh_disp_inc_eq/1000) %>%
+  mutate(Total = 1) %>%
+  select(xwaveid, year, 
+         Total,
+         Female, 
+         Age = age, 
+         Coupled = coupled, 
+         `New parent` = new_parent, # child under 4
+         Edu = edu, 
+         `Tenure (years)` = jbempt,
+         Region = remoteness,
+         `Real household income ($000s)` = income, # OECD adjusted
+         `Mental health` = ghmh,
+         `Life satisfaction` = losat
+  ) %>%
+  distinct() %>%
+  select(-xwaveid) %>%
+  tbl_summary(
+    by = year,
+    statistic = Total ~ "N = {N}",
+    type = list(`Life satisfaction` ~ "continuous"),
+    missing = "no"
+  ) %>%
+  modify_header(all_stat_cols() ~ "**{level}**") %>%
+  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+        include = -Total)
+
+t2 <- teachers %>% 
+  filter(profession == "Secondary", year %in% c(2005, 2020)) %>%
+  mutate(income = hh_disp_inc_eq/1000) %>%
+  mutate(Total = 1) %>%
+  select(xwaveid, year, 
+         Total,
+         Female, 
+         Age = age, 
+         Coupled = coupled, 
+         `New parent` = new_parent, # child under 4
+         Edu = edu, 
+         `Tenure (years)` = jbempt,
+         Region = remoteness,
+         `Real household income ($000s)` = income, # OECD adjusted
+         `Mental health` = ghmh,
+         `Life satisfaction` = losat
+  ) %>%
+  distinct() %>%
+  select(-xwaveid) %>%
+  tbl_summary(
+    by = year,
+    statistic = Total ~ "N = {N}",
+    type = list(`Life satisfaction` ~ "continuous"),
+    missing = "no"
+  ) %>%
+  modify_header(all_stat_cols() ~ "**{level}**") %>%
+  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+        include = -Total)
+
+tbl_stack(list(t1, t2),
+          group_header = c("Primary", "Secondary")) %>%
+  as_flex_table() %>%
+  fontsize(size = 9, part = "all") %>%
+  align(j = 3:5, align = "right", part = "all") %>%
+  hrule(rule = "exact", part = "all") %>%
+  height_all(height = 0.2) %>% 
+  width(j = 1, width = 0.9) %>%
+  width(j = 2, width = 2.2) %>%
+  width(j = 3:4, width = 1.2) %>%
+  width(j = 5, width = 0.75)
+```
+
+
+<br>
+
+Teachers had significant changes in mean age, education levels, income and mental health between 2005 and 2020. The increasing prevalence of degree requirements across the States and Territories increased the proportion of teachers with a bachelors degree by 2020, and this has been reflected by increased compensation (real household income).  
+
+Nurses experienced similar levels and changes in education, income, and mental health between 2005 and 2020 as teachers, however mean life satisfaction levels also significantly increased. Accountants had higher median levels of education and income than teachers (and nurses), but experienced less change in median income and steeper declines in mental health.   
+
+<br>
+
+<br>
+
+## Trends in mental health    
+
+We examine in greater detail the decline in mental health of teachers, nurses and accountants observed between 2005 and 2020. We estimated the total smooth trend in mental health over the period, as well as an adjusted trend after taking into account changes in composition of age, job tenure and gender ratio over the period as controls. These controls were included because we know that mental health scores of the general population change with age and gender in this data [@botha2023generational], and job tenure is also a likely predictor of mental health changes.   
+
+```{r model_funs}
+# Function to extract the smooth trends
+smooth_data <- function(.fit, i = 1) {
+  
+  plot_obj <- plot(.fit, seWithMean = T, pages=1)
+  
+  as.data.frame(plot_obj[[i]][c("x", "se", "fit")]) %>%
+    as_tibble()
+  
+}
+
+fit_ghmh <- function(.df, .prof = "Teachers", .f) {
+  
+  # select the data we need
+  df <- filter(.df, profession == .prof) 
+  
+  
+  # Estimate the linear and non-linear trends of year (with controls)
+  fit <- gam(formula = .f, 
+                data = df)
+  
+  return(fit)
+  
+}
+```
+
+##### Figure 1. Mean (±SEM) levels and estimated smooth mental health trends (95%CI) between 2005 to 2020
+```{r ghmh_trends_prep, include=F}
+# estimate fits with and without controls
+wc <- as.formula(ghmh ~ s(year) + year + age + age:year + jbempt + jbempt:year +
+                  Female + Female:year)
+nc <- as.formula(ghmh ~ s(year))
+
+fit_t_nc <- fit_ghmh(occupations, "Teachers",    nc)
+fit_t_wc <- fit_ghmh(occupations, "Teachers",    wc)
+fit_n_nc <- fit_ghmh(occupations, "Nurses",      nc)
+fit_n_wc <- fit_ghmh(occupations, "Nurses",      wc)
+fit_a_nc <- fit_ghmh(occupations, "Accountants", nc)
+fit_a_wc <- fit_ghmh(occupations, "Accountants", wc)
+
+smooths <- bind_rows(
+  `Teachers_estimated` = smooth_data(fit_t_nc),
+  `Teachers_adjusted` = smooth_data(fit_t_wc),
+  `Nurses_estimated` = smooth_data(fit_n_nc),
+  `Nurses_adjusted` = smooth_data(fit_n_wc),
+  `Accountants_estimated` = smooth_data(fit_a_nc),
+  `Accountants_adjusted` = smooth_data(fit_a_wc),
+  .id = "model"
+) %>%
+  separate(model, into = c("profession", "ctl"), sep = "_") %>%
+  mutate(profession = fct_rev(profession))
+
+# summarise mean and se
+mean_se <- function(x, mult = 1) {
+  
+  x = na.omit(x)
+  m = mean(x)
+  se = sd(x) / sqrt(length(x))
+  
+  out <- data.frame(
+    fit = m,
+    se = se*mult
+  )
+  
+  return(out)
+}
+
+obs <- occupations %>%
+  select(xwaveid, x = year, profession, ghmh) %>%
+  group_by(profession, x) %>%
+  summarize(mse = mean_se(ghmh)) %>%
+  unnest(mse) %>%
+  mutate(ctl = "observed")
+
+# fit a linear model for comparison
+# lm_a <- lmerTest::lmer(ghmh ~ year + age + age:year + jbempt + jbempt:year +
+#                   Female + Female:year + (year|xwaveid),
+#             data = filter(occupations, profession == "Accountants") %>%
+#               mutate(year = year - 2012.5,
+#                      ghmh = c(scale(ghmh, scale=F))))
+```
+```{r ghmh_trends, fig.dim = c(9, 9)}
+# add to plot data
+to_plot <- bind_rows(smooths, obs) %>%
+  mutate(ctl = fct_rev(ctl))
+
+to_plot1 <- filter(to_plot, ctl != "observed")
+to_plot2 <- filter(to_plot, ctl == "observed")
+
+ggplot(to_plot1, aes(x = x - 2000, y = fit, ymin = fit - se, ymax = fit + se)) +
+  geom_hline(aes(yintercept = 0), color = "grey50", linetype = "dashed") +
+  geom_ribbon(alpha = 0.2) +
+  geom_line() +
+  geom_pointrange(data = to_plot2, aes(x = x - 2000, y = fit)) +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  facet_grid(ctl~profession, scales = "free_y") +
+  labs(x = "", y = "") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+```
+
+<br>
+
+Figure 1 top row shows the observed mean levels of mental health (MHi-5 units) of teachers, nurses and accountants declined over the period, however teachers showed a rapid decline after peaking in 2011. The middle and bottom rows of Figure 1 show the centred smooth trends for mental health. The estimated smooth mental health trend of teachers exhibits the same sudden decline after 2011 while the other two professions exhibit a more linear decline over the period. However the bottom row of Figure 1 shows that once the mental health trends are adjusted for changes in age, gender composition and job tenure, only the mental health trend of teachers significantly declined over the period.   
+
+Tests of the non-linear changes revealed the estimated trend of teachers declined non-linearly ($F_{3.78} = 12.21$, $p < .001$), even after adjustment ($F_{3.88} = 6.97$, $p < .001$). There was no evidence of non-linear changes in the estimated trend of nurses and accountants after adjustment ($F_{1} = 0.19$, $p = .66$, and $F_{2.63} = 0.98$, $p = .53$, respectively), and a follow-up linear mixed model with random intercepts and effects of time for each participant confirmed the (fixed) linear effect of time was also non-significant for the $\beta_{time}$ of nurses as well as accountants ($t_{479.8} = -0.86$, $p = .39$ and $t_{411.5} = 0.78$, $p = .43$, respectively).  
+
+Consequently, we focus the remainder of the paper on decomposing the causal role of the different psychosocial job components on teachers' mental health decline.  
+
+<br>
+
+<br>
+
+## Trends in the psychosocial characteristics of work  
+
+The mean levels of each psychosocial job component (calculated from teachers' self-reports) for each year, along with a locally weighted loess trend line for illustrative purposes are shown below. 
+
+<br>
+
+##### Figure 2. Mean (±SEM) levels of the psychosocial job components between 2005 to 2020
+```{r figure_2, fig.dim=c(9,6)}
+psychosocial = c("job_control", "job_demand", "job_security")
+
+occupations %>%
+  filter(profession == "Teachers") %>%
+  select(xwaveid, year, all_of(psychosocial)) %>%
+  gather("outcome", "val", !!!psychosocial) %>%
+  mutate(outcome = str_replace(outcome, "_", " "),
+         outcome = str_to_title(outcome),
+         outcome = fct_relevel(outcome, "Job Demand")) %>%
+  na.omit() %>%
+  ggplot(aes(x = year, y = val)) +
+    stat_summary(fun.data = ggplot2::mean_se) +
+    stat_smooth(method = "gam", #se=F, span=1.5,
+                geom = "line", size = .75) +
+    scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+    facet_wrap(~outcome, scales = "free_y") +
+    labs(x = "", y = "") +
+    theme(legend.position = "bottom")
+```
+
+<br>
+
+Figure 2 shows that teachers' job demands have increased over time while job control has decreased, however the mean levels of job security have varied around 5.5. Job strain occurs with low job control and high job demands, suggesting that job strain may have been increasing over time among teachers, which we examine further below.       
+
+<br>
+
+<br>
+
+
+## Modelling results    
+
+We compared the total mental health trend after adding the smooth effects of each psychosocial job component to the trend model. The changes to the residual mental health trend after adding each component, relative to the total trend, reveal whether any single component was _mediating_ the decline in mental health.  
+
+Figure 3 below shows that teachers' total mental health trend showed a rapid decline except after the effect of job demands was explained (added).  
+
+<br>
+
+
+##### Figure 3. Total (left) and residual mental health trends over time after adding each psychosocial job components   
+
+```{r smooth_est_prep, include=F}
+# Plot to compare how the year smooth changes with the addition of the job 
+# variables (similar to a mediation analysis)
+
+year_f <- formula(ghmh ~ s(year) + year + 
+                     age + age:year + jbempt + jbempt:year)
+
+demand_f <- formula(ghmh ~ s(year) + year + 
+                      s(year, by = job_demand) + job_demand +
+                       age + age:year + jbempt + jbempt:year)
+
+control_f <- formula(ghmh ~ s(year) + year +
+                       s(year, by = job_control) + job_control +
+                       age + age:year + jbempt + jbempt:year)
+
+security_f <- formula(ghmh ~ s(year) + year +
+                        s(year, by = job_security) + job_security +
+                       age + age:year + jbempt + jbempt:year)
+
+fit_t_year <- fit_ghmh(occupations, .f = year_f)
+fit_t_demand <- fit_ghmh(occupations, .f = demand_f)
+fit_t_control <- fit_ghmh(occupations, .f = control_f)
+fit_t_security <- fit_ghmh(occupations, .f = security_f)
+
+smooths <- bind_rows(
+  `f(Year)` = smooth_data(fit_t_year),
+  `f(Year) + f(demand)` = smooth_data(fit_t_demand),
+  `f(Year) + f(control)` = smooth_data(fit_t_control),
+  `f(Year) + f(security)` = smooth_data(fit_t_security),
+  .id = "model"
+) %>% 
+  mutate(model = fct_relevel(model, "f(Year)", "f(Year) + f(demand)"))
+```
+
+```{r smooth_est, fig.dim = c(9, 6)}
+ggplot(smooths, aes(x = x - 2000, y = fit)) +
+  geom_hline(aes(yintercept = 0), color = "grey50", linetype = "dashed") +
+  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
+              alpha = 0.2) +
+  geom_line(aes()) +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  facet_wrap(~model, nrow = 1) +
+  labs(x = "", y = "") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+```
+
+<br>
+
+Figure 3 legend. Centered smooth mental health trends of teachers between 2005 to 2020 under different models.  
+
+The left panel of Figure 3 ($f(Year)$) shows the total smooth trend in teachers' mental health, unadjusted for any psychosocial job components, and previously shown in Figure 1 which declined sharply after 2011. The second panel ($f(Year) + f(demand)$) shows that once the impact of job demands is explained, the negative decline in mental health is completely reversed and mental health rises over the period. The third and fourth panels ($f(Year) + f(control)$ and $f(Year) + f(security)$) shows the impact of job control and job security on the decline is minimal at best, as the mental health trend declines at a similar rate with or without the job component in the model (the benefit of job control may alleviate some of the decline since the residual smooth mental health trend seems to decline more steeply when the variance due to job control is removed). Overall this result represents clear evidence the decline in teachers' mental health is (entirely?) explained by changes in the effect of job demands on teachers.    
+
+Testing the non-linear changes revealed there was no evidence the increase in mental health after including job demand was non-linear ($F_{3.29} = 1.65$, $p = .16$), however the linear change was positive and significant ($t_{415} = 67.47$, $p < .001$). By comparison the non-linear and linear changes in mental health remained significant after job control and job security were included (all $ps < .001$).  
+
+<br>
+
+Understanding the drivers of mental health trends also requires we understand how those drivers are changing over time themselves. We present the changes in the dependency of each psychosocial job component on teachers' mental health in Figure 4 below as smooth trends. Each smooth trend represents the penalized effect of the job component on mental health over time. Superimposed on the smooth effects of each psychosocial job component is the linear effect (i..e, $\beta$ or slope) of each component estimated by OLS for each year, as points and vertical ranges ($\beta ± SEM$). This allows us to compare the penalized smooth trend to the unpenalized (and therefore overfit) estimates.  
+
+<br>
+
+##### Figure 4. Standardized effects (smooths and betas) of each component on mental health over time  
+
+```{r smooth_psc_prep, include=F}
+#### Smooth fits ####
+df <- occupations %>%
+  filter(profession == "Teachers") %>%
+  select(xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
+  mutate(year = year - 2000,
+         ghmh = c(scale(ghmh)))
+
+fit_year_psc_int <- gam(ghmh ~ 1 + job_control + job_demand + job_security + 
+                          s(year) + s(year, by = job_demand) + 
+                          s(year, by = job_control) + 
+                          s(year, by = job_security), 
+                        data = df)
+
+job_smooths <- bind_rows(
+  `Job demand` = smooth_data(fit_year_psc_int, 2),
+  `Job control` = smooth_data(fit_year_psc_int, 3),
+  `Job security` = smooth_data(fit_year_psc_int, 4),
+  .id = "term"
+) %>%
+  mutate(term = fct_relevel(term, "Job demand"))
+
+#### Linear fits ####
+lm_fits <- df %>%
+  group_by(year) %>%
+  nest() %>%
+  mutate(
+    ghmh.fit = map(data, ~lm(
+      formula = ghmh ~ 1 + job_control + job_demand + job_security, 
+      data = .)
+      ))
+
+lm_betas <- lm_fits %>%
+  transmute(
+    betas = map(ghmh.fit, tidy)) %>%
+  unnest(betas)
+```
+
+```{r smooth_psc, fig.dim = c(9, 6)}
+# Plot betas and smooths
+job_betas <- lm_betas %>%
+  filter(term %notin% c("(Intercept)", "age", "jbempt")) %>%
+  mutate(term = str_replace(term, "_", " "),
+         term = str_to_sentence(term)) %>%
+  mutate(estimate = case_when(
+    str_detect(term, "demand") ~ estimate + 0.05,
+    str_detect(term, "security") ~ estimate - 0.085,
+    TRUE ~ estimate)) %>%
+  select(term, x = year, se = std.error, fit = estimate) %>%
+  mutate(term = fct_relevel(term, "Job demand"))
+
+ggplot(job_smooths, aes(x = x, y = fit)) +
+  geom_hline(aes(yintercept = 0), color = "red", linetype = 2) +
+  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
+              alpha = 0.2) +
+  geom_pointrange(data = job_betas, 
+                  aes(ymin = fit - se, ymax = fit + se)) +
+  geom_line() +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  facet_wrap(~term, ncol = 3, scales = "free_y") +
+  labs(x = "", y = "") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+```
+
+
+<br>
+
+Figure 4 shows the unique importance of each psychosocial job component, as indicated by the deviation from y = 0 in each smooth trend and beta over time. The location of the the smooths and $\beta$s with respect to zero indicates the direction of the effect. Job demand has a negative effect on mental health while job control and job security have positive effects. The deviance of the smooth trend (and shaded confidence interval) from zero shows that job demands and job control became more important for explaining differences in teachers' mental health each year after 2011. The importance of job security on teachers' mental health was relatively stable over the same period. The magnitude of the deviation (from zero) indicates changes in job demands produced almost three times as much variation in teachers mental health than job control by the end of the period (2020).   
+
+Along with the increasing importance of job demands and job control over time, we also determined how much variance ($R^2$) in mental health was explained by the psychosocial job components by OLS in each year. An OLS fit ($R^2$) of mental health each year improved from $R^2 = .0594$ in 2011 to $R^2 = .191$ in 2020 (see Figure A1 in Appendix for values in each year). The improvement in the $R^2$ suggests that the three psychosocial job components may explain as much as 20 percent of the variation in teachers' mental health by 2020.    
+
+<br>
+
+<br>
+
+## Job strain  
+
+Job strain was defined as the co-occurrence of high job demands and low job control. The universal threshold for low job control was a job control score below the first quartile of all responses in the HILDA data (i.e., < 3.25), and the universal threshold for high job demand was a job demand score above the third quartile (> 4.55).  
+
+<br>
+
+##### Figure 5. The proportion of professionals reporting job strain over time
+```{r job_strain, fig.dim=c(9,6)}
+ctrl_t <- 3.25 # with(read_rds("../data/occupations.rds"), summary(job_control))
+dmnd_t <- 4.556 # with(read_rds("../data/occupations.rds"), summary(job_demand))
+
+df <- occupations %>%
+  # select(xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
+  mutate(
+    job_strain = case_when(
+      job_control < ctrl_t & job_demand > dmnd_t ~ "Job strain",
+      job_control < ctrl_t ~ "Low control",
+      job_demand > dmnd_t ~ "High demand",
+      TRUE ~ "Low strain"),
+    job_strain = fct_relevel(job_strain, "Job strain")
+  )
+
+# Proportion of professionals who meet criteria for job strain in each year
+df %>%
+  percent(profession, year, job_strain) %>%
+  mutate(job_strain = fct_rev(job_strain)) %>% 
+  ggplot(aes(x = year, y = proportion, fill = job_strain)) +
+    geom_area(alpha = 0.9, size = .5, color = "white") +
+    scale_x_continuous(expand = c(0.01, 0.1), 
+                       breaks = c(2001, 2005, 2010, 2015, 2020)) +
+    scale_y_continuous(expand = c(0.01, 0.01),
+                       breaks = c(0.25, 0.50, 0.75, 1.0)) +
+    scale_fill_grey(start = .97, end = 0.2) +
+    facet_wrap(~profession) +
+    theme_void() +
+    theme(legend.title = element_blank(),
+          legend.position = "bottom",
+          axis.text = element_text(color = "black"))
+```
+
+<br>
+
+The proportion of teachers meeting our job strain criteria (high job demands and low job control) has increased from less than twenty percent (18%) to almost 30 percent (29%) between 2005 to 2020 (+11%). By comparison, the proportion of nurses identified with job strain has increased from 13 to 20 percent (+7%), while among accountants job strain has been relatively steady at two percent.       
+
+<br>
+
+<br>
+
+# Discussion  
+
+_Brief discussion points for consideration_  
+
+Mental health of teachers has rapidly declined since 2011 and seems to be increasingly dependent on job demands (and job control) in the last ten years  
+
+- Job demands have increased linearly since 2005, however their importance for mental health has increased rapidly since 2011
+- Job control has steadily decreased between 2005 to 2020, and its importance for mental health has also increased since 2011
+- The proportion of teachers reporting high job demands and low job control has increased over the period (i.e., job strain)
+- Residual analysis shows mental health reverses when job demands are controlled or explained
+- The psychosocial job components may explain almost as much as 20 percent of variation ($R^2$) in teachers mental health  
+
+In general, we find converging evidence that increasing job demands (and lack of job control) was driving poorer mental health among teachers in the last decade, indicative of job strain.   
+
+Teachers have become more qualified and better compensated in the past two decades, however job demands and control have also changed.  
+
+Life satisfaction has remained steady over the same period, however mental health levels have declined sharply, sometime after 2011. In contrast to mental health, the dependence of life satisfaction on psychosocial job components remained relatively steady between 2001 and 2020 (not shown but available to be added on request).  
+
+The decline in mental health is largely explained by these changes in job demands, especially since 2011 as teachers mental health has become more dependent on this psychosocial job characteristic.  
+
+The effects on teacher mental health are widespread, appearing in both primary and secondary teachers, and in cities and remote schools (less apparent in regional schools). Teacher age or time in job (i.e., tenure) does not explain these effects.   
+
+_Importance_. Skaalvik and Skaalvik (2018) argue that teacher subjective wellbeing, which may be considered a type of job resource, predicts higher job engagement and satisfaction and lower motivation to leave the profession [@skaalvik2018job]. Multiple studies have found positive relationships between teacher subjective wellbeing and student achievement, albeit mostly correlational [@mccallum2017teacher; @braun2020effects; @dreer2023outcomes]; while others have linked teacher subjective wellbeing with student physical and mental wellbeing [@braun2020effects; @pap2023happy], thus expanding the role of teachers beyond merely developing knowledge to contributing to the development of student social and emotional wellbeing, including mental health [@jennings2009prosocial].  
+
+_Context_. In contrast to mental health, teachers generally report higher levels of life satisfaction and self-worth than other occupations [@hoang2023; @jerrim2020]. Both mental health and life satisfaction are important but distinct components of subjective wellbeing, sometimes distinguished as affective versus cognitive wellbeing [@diener2017; @diener2018; @kettlewell2020]. Affective wellbeing reflects the immediate emotional responses to the person's environment and life events, including joy as well as sadness, and we have previously measured it using the five-item Mental Health Inventory (MHI-5). On the other hand, life satisfaction is the product of a cognitive evaluation of one's achievements and success (or failure) over the lifespan, and can be relative to social level or stage of life. Conflicting findings in the literature may be a result of comparing or confounding these different constructs.  
+
+_Strengths_. Many surveys of occupational wellbeing, or items focused on work-related wellbeing tend to produce biased estimates due to self-selection of employees unhappy with their job and seeking to express their concerns or grievances in a single-issue survey response. Even large supposedly ‘representative’ samples can over-represent unhappy respondents by more than 2.5 times due to such self-selection incentives [@chauvenet2020panel; @goodwin2013reports; @harvey2021mental]. We used HILDA which does not suffer this problem due its wide topic coverage and probabilistic sampling, and also incorporates a general set of questions about life satisfaction and mental health (that are not work-related), as well as work-related sources of stress such as job demands, job control and job security.  
+
+_Weaknesses_. Despite the longitudinal data and our (make-shift) mediation analysis, our methods are ultimately based on observational data and so the results are correlational and conclusions are descriptive. However it is obviously impossible to examine our research question with an experimental design, and so while policy development must depend on studies such as ours, it should be developed with caution. HILDA also misses an important moderator of job strain which is _job resources_, such as support from colleagues/management and other psychosocial support, which may govern whether interventions are successful but we cannot draw any conclusions here.  
+
+In conclusion, as much as 20 percent of the variation in mental health may be addressed by preventing further changes to these key psychosocial job components. However improvements to teacher mental health will likely require reducing job demands before the declining trend in mental health is reversed.  
+
+\newpage
+
+# Appendix  
+
+<br>
+
+## Variable definitions  
+
+<br>
+
+#### Table A1. Job demands & complexity items 
+
+```{r}
+readr::read_delim("
+Code|Description|Waves
+jomms|My job is more stressful than I had ever imagined|1 to 20
+jompi|I fear that the amount of stress in my job will make me ill|1 to 20
+jomcd|My job is complex and difficult|1 to 20
+jomns|My job often required me to learn new skills|1 to 20
+jomus|I use my skills in current job|1 to 20
+jomini|My job requires me to take initiative|5 to 20
+jomfast|I have to work fast in my job|5 to 20
+jomwi|I have to work very intensely in my job|5 to 20
+jomtime|I don’t have enough time to do everything in my job|5 to 20", 
+delim = "|") %>%
+  flextable() %>%
+  fontsize(size = 9, part = "all") %>%
+  flextable::theme_alafoli() %>%
+  hrule(rule = "exact", part = "all") %>%
+  height_all(height = 0.2) %>% 
+  width(j = 1, width = 0.63) %>%
+  width(j = 2, width = 3.64) %>%
+  width(j = 3, width = 0.6) 
+```
+
+<br>
+
+<br>
+  
+#### Table A2. Job control items    
+
+```{r}
+readr::read_delim(
+"Code|Description|Waves
+jomfd|I have freedom to decide how I do my own work|1 to 20
+jomls|I have a lot of say about what happens in my job|1 to 20
+jomfw|I have freedom to decide when I do my work|1 to 20
+jomdw|I have a lot of choice in deciding what I do at work|5 to 20
+jomflex|My working times can be flexible|5 to 20
+jombrk|I can decide when to take a break|5 to 20
+jomrpt|My job requires me to do the same things over and over again|5 to 20
+jomvar`|My job provides me with a variety of interesting things to do|5 to 20",
+delim = "|") %>%
+  flextable() %>%
+  fontsize(size = 9, part = "all") %>%
+  flextable::theme_alafoli() %>%
+  hrule(rule = "exact", part = "all") %>%
+  height_all(height = 0.2) %>% 
+  width(j = 1, width = 0.63) %>%
+  width(j = 2, width = 3.64) %>%
+  width(j = 3, width = 0.6) 
+```
+
+<br>
+
+<br>
+
+#### Table A3. Job security items
+
+```{r}
+readr::read_delim(
+"Code|Description|Waves
+jompf|I get paid fairly for the things I do in my job|1 to 20
+jomsf|I have a secure future in my job|1 to 20
+jomcsb|Company I work for will still be in business in 5 years|1 to 20
+jomwf|I worry about the future of my job|1 to 20",
+delim = "|") %>%
+  flextable() %>%
+  fontsize(size = 9, part = "all") %>%
+  flextable::theme_alafoli() %>%
+  hrule(rule = "exact", part = "all") %>%
+  height_all(height = 0.2) %>% 
+  width(j = 1, width = 0.63) %>%
+  width(j = 2, width = 3.64) %>%
+  width(j = 3, width = 0.6) 
+```
+
+<br>
+
+<br>
+
+#### Table A4. Primary & Secondary teacher differences in 2005 & 2020
+```{r eval=F}
+t1 <- teachers %>%
+  filter(year == 2005) %>%
+  mutate(income = hh_disp_inc_eq/1000) %>%
+  mutate(Total = 1) %>%
+  select(xwaveid, profession, 
+         Total,
+         Female, 
+         Age = age, 
+         Coupled = coupled, 
+         `New parent` = new_parent, # child under 4
+         Edu = edu, 
+         `Tenure (years)` = jbempt,
+         Region = remoteness,
+         `Real household income ($000s)` = income, # OECD adjusted
+         `Mental health` = ghmh,
+         `Life satisfaction` = losat
+  ) %>%
+  distinct() %>%
+  select(-xwaveid) %>%
+  tbl_summary(
+    by = profession,
+    statistic = Total ~ "N = {N}",
+    type = list(`Life satisfaction` ~ "continuous"),
+    missing = "no"
+  ) %>%
+  modify_header(all_stat_cols() ~ "**{level}**") %>%
+  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+        include = -Total)
+
+t2 <- teachers %>% 
+  filter(year == 2020) %>%
+  mutate(income = hh_disp_inc_eq/1000) %>%
+  mutate(Total = 1) %>%
+  select(xwaveid, profession, 
+         Total,
+         Female, 
+         Age = age, 
+         Coupled = coupled, 
+         `New parent` = new_parent, # child under 4
+         Edu = edu, 
+         `Tenure (years)` = jbempt,
+         Region = remoteness,
+         `Real household income ($000s)` = income, # OECD adjusted
+         `Mental health` = ghmh,
+         `Life satisfaction` = losat
+  ) %>%
+  distinct() %>%
+  select(-xwaveid) %>%
+  tbl_summary(
+    by = profession,
+    statistic = Total ~ "N = {N}",
+    type = list(`Life satisfaction` ~ "continuous"),
+    missing = "no"
+  ) %>%
+  modify_header(all_stat_cols() ~ "**{level}**") %>%
+  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+        include = -Total)
+
+tbl_stack(list(t1, t2),
+          group_header = c("2005", "2020")) %>%
+  as_flex_table() %>%
+  fontsize(size = 9, part = "all") %>%
+  align(j = 3:5, align = "right", part = "all") %>%
+  hrule(rule = "exact", part = "all") %>%
+  height_all(height = 0.2) %>% 
+  width(j = 1, width = 0.9) %>%
+  width(j = 2, width = 2.2) %>%
+  width(j = 3:4, width = 1.2) %>%
+  width(j = 5, width = 0.75)
+```
+
+<br>
+
+Primary school teachers tended to be more female, younger, and less postgraduate qualifications than secondary teachers. This was consistent across both 2005 and 2020.  
+
+<br>
+
+<br>
+
+
+#### Table A5. Regional differences in 2020
+```{r eval=F}
+t1 <- teachers %>% 
+  filter(profession == "Primary", year == 2020) %>%
+  mutate(income = hh_disp_inc_eq/1000) %>%
+  mutate(Total = 1) %>%
+  select(xwaveid,  
+         Total,
+         Female, 
+         Age = age, 
+         Coupled = coupled, 
+         `New parent` = new_parent, # child under 4
+         Edu = edu, 
+         `Tenure (years)` = jbempt,
+         Region = remoteness,
+         `Real household income ($000s)` = income, # OECD adjusted
+         `Mental health` = ghmh,
+         `Life satisfaction` = losat
+  ) %>%
+  distinct() %>%
+  select(-xwaveid) %>%
+  tbl_summary(
+    by = Region,
+    statistic = Total ~ "N = {N}",
+    type = list(`Life satisfaction` ~ "continuous"),
+    missing = "no"
+  ) %>%
+  modify_header(all_stat_cols() ~ "**{level}**") %>%
+  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+        include = -Total)
+
+t2 <- teachers %>% 
+  filter(profession == "Secondary", year == 2020) %>%
+  mutate(income = hh_disp_inc_eq/1000) %>%
+  mutate(Total = 1) %>%
+  select(xwaveid,  
+         Total,
+         Female, 
+         Age = age, 
+         Coupled = coupled, 
+         `New parent` = new_parent, # child under 4
+         Edu = edu, 
+         `Tenure (years)` = jbempt,
+         Region = remoteness,
+         `Real household income ($000s)` = income, # OECD adjusted
+         `Mental health` = ghmh,
+         `Life satisfaction` = losat
+  ) %>%
+  distinct() %>%
+  select(-xwaveid) %>%
+  tbl_summary(
+    by = Region,
+    statistic = Total ~ "N = {N}",
+    type = list(`Life satisfaction` ~ "continuous"),
+    missing = "no"
+  ) %>%
+  modify_header(all_stat_cols() ~ "**{level}**") %>%
+  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
+        include = -Total)
+
+tbl_stack(list(t1, t2),
+          group_header = c("Primary", "Secondary")) %>%
+  as_flex_table() %>%
+  fontsize(size = 9, part = "all") %>%
+  align(j = 3:5, align = "right", part = "all") %>%
+  hrule(rule = "exact", part = "all") %>%
+  height_all(height = 0.2) %>% 
+  width(j = 1, width = 0.75) %>%
+  width(j = 2, width = 1.9) %>%
+  width(j = 3:5, width = 1.2) %>%
+  width(j = 6, width = 0.75)
+```
+
+
+<br>
+
+Primary school teachers in the city were more likely to have a postgraduate degree than regional or remote primary teachers in 2020. No other differences were significant.  
+
+<br>
+
+<br>
+
+## Model definitions  
+
+Models regressing mental health (MHi-5 scores) in each profession onto each psychosocial job component (job demand, job control, job security) were estimated, using non-linear, smooth interaction terms representing the temporal trend of each component in a generalized additive model (GAM):  
+
+$$
+\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job control}_{it}) + \epsilon
+$$  
+
+$$
+\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job demand}_{it}) + \epsilon
+$$  
+
+$$
+\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job security}_{it}) + \epsilon
+$$  
+
+
+Where $i$ is the individual and $t$ is the year, and each smooth term $f$ represents the temporal interaction between each job component and time.  
+
+
+<br>
+
+<br>
+
+##### Figure A1. Proportion of variance in mental health explained by PSC (r-squared)
+```{r r_squared, fig.dim=c(9, 6)}
+lm_fits %>%
+  transmute(
+    term = "r-squared",
+    r.squared = map_dbl(ghmh.fit, ~glance(.) %>% pull(r.squared))) %>%
+  ggplot(aes(x = year, y = r.squared)) +
+    geom_line() +
+    geom_point() +
+    scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+    labs(y = "", x = "") +
+    theme(legend.position = "none",
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+```
+
+<br>
+
+<br>
+
+
+### State-specific effects  
+
+In Australia, state and territory governments are responsible for running schools and setting local policy while the federal government provides the national strategy. For this reason, we considered whether including state effects in the trend models was warranted. State effects were included as separate penalized trends and the variation of each trend was estimated to determine whether it was significantly different from the overall trend. This is similar to deciding whether to include random effects in a mixed model by examining the variation around the random effect. The estimated smooth trends in mental health and the psychosocial job characteristics of teachers for each state and territory are shown below. 
+
+##### Figure A3. Estimated state-specific trends in teacher mental health
+
+```{r state_specific_ghmh, fig.dim = c(9, 9)}
+to_fit <- occupations %>%
+  filter(profession == "Teachers") %>% # Teachers Nurses Accountants
+  select(xwaveid, year, hhstate, ghmh) %>%
+  mutate(
+    ohhstate = ordered(hhstate, 
+      levels = c("NSW", "VIC", "QLD", "WA", "SA", "TAS", "NT", "ACT")),
+    hhstate = factor(hhstate)
+    ) %>%
+  na.omit() 
+
+states <- gam(ghmh ~ 1 + hhstate + s(year) + 
+             s(year, by = hhstate), 
+           data = to_fit)
+
+no_states <- gam(ghmh ~ 1 + hhstate + s(year),
+           data = to_fit)
+
+ggplot(to_fit, aes(x = year, y = ghmh)) +
+  stat_smooth(method = "gam", size = .3, color = "black") +
+  scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+  facet_wrap(~ohhstate, nrow = 2) +
+  labs(x = "", y = "") +
+  scale_color_grey(start = 0, end = .8) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+```
+
+<br>
+
+The state model estimated a declining mental health trend for each state or territory, except for the ACT (Australian Capital Territory), which represented less than 2 percent of our sample of teachers (*n* = 21). Examining the results of a likelihood ratio test against a null distribution of zero variance reveals there was little evidence of any state or territory specific trends (smallest _p_-value = .065 for WA).  
+
+#### Table A6. Likelihood Ratio Test results for state-specific trends in teacher mental health ($H_0 = 0$ variance)
+```{r state_specific_pvalues}
+tidy(states) %>%
+  filter(term %notin% "s(year)") %>%
+  mutate(term = str_remove_all(term, c("s\\(year\\)\\:hhstate"))) %>%
+  rename(`State/territory` = term, df = ref.df) %>%
+  flextable() %>%
+    colformat_double(digits = 2) %>%
+    colformat_double(j = "p.value", digits = 3) %>%
+    add_footer_lines("*edf: estimated degrees of freedom") %>%
+    fontsize(size = 9, part = "all") %>%
+    theme_alafoli() %>%
+    hrule(rule = "exact", part = "all") %>%
+    height_all(height = 0.2) %>%
+    autofit()
+```
+
+<br>
+
+The results of a model comparison between a state-specific model and a non-specific model confirmed there was not sufficient evidence to warrent including state-specfic effects as an explanation [shmueli2010explain]. The BIC difference between the two models was 76.8, which is a large difference [raftery1995bayesian] and consistent with the non-specific model.   
+
+```{r not_run_1, eval=F}
+to_fit <- occupations %>%
+  filter(profession == "Teachers") %>% 
+  # select ghmh job_control job_demand job_security for y below:
+  select(xwaveid, year, hhstate, y = job_security) %>% 
+  mutate(
+    ohhstate = ordered(hhstate, 
+      levels = c("NSW", "VIC", "QLD", "WA", "SA", "TAS", "NT", "ACT")),
+    hhstate = factor(hhstate)
+    ) %>%
+  na.omit() 
+
+state_specific <- gam(y ~ 1 + hhstate + s(year) + 
+             s(year, by = hhstate), 
+           data = to_fit,
+           method = "REML")
+
+tidy(state_specific)
+
+
+nonspecific <- gam(y ~ 1 + hhstate + s(year),
+           data = to_fit,
+           method = "REML")
+
+BIC(state_specific, nonspecific)
+
+psychosocial = c("job_control", "job_demand", "job_security")
+
+occupations %>%
+  filter(profession == "Teachers") %>% # Teachers Nurses Accountants
+  select(xwaveid, year, hhstate, all_of(psychosocial)) %>%
+  gather("outcome", "val", !!!psychosocial) %>%
+  mutate(outcome = str_replace(outcome, "_", " "),
+         outcome = str_to_title(outcome),
+         outcome = fct_relevel(outcome, "Job Demand"),
+         hhstate = fct_relevel(hhstate, "NSW", "VIC", "QLD", "WA", "SA")) %>%
+  na.omit() %>%
+  ggplot(aes(x = year, y = val, color = outcome)) +
+    stat_summary(fun.data = mean_se) +
+    stat_smooth(formula = 'y ~ x', method = "loess", se=F, span=1.5,
+                geom = "line", size = .75) +
+    scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+    facet_wrap(~hhstate, nrow = 2, scales = "free_y") +
+    labs(x = "", y = "") +
+    scale_color_grey(start = 0, end = .8) +
+    theme(legend.position = "bottom")
+```
+
+We also performed a similar analysis for state-specific effects in trends in each of the psychosocial job components. There was marginal evidence of a  state-specific trend in job control in VIC (p = .05), however no other state-specific trends were significantly different from zero variance and the BIC difference was 58.82 favouring a non-specific model. There was no evidence for state-specific trends in job demands (smallest p-value = .401 for NSW, BIC difference was 57.96 favoring a non-specific model) nor job security (smallest p-value = .06 for TAS, BIC difference was 89.28 favouring a non-specific model)
+
+<br>
+
+<br>
+
+# Not run
+
+##### Figure A4. Mental health (dark) but not life satisfaction (light) has declined among teachers in city and remote regions  
+```{r not_run_2, eval=F, fig.dim=c(9,11)}
+# collapse regions 
+
+to_plot <- teachers %>%
+  select(xwaveid, year, profession, remoteness, `Mental health` = ghmh, `Life satisfaction` = losat) %>%
+  mutate(`Life satisfaction` = `Life satisfaction` * 10) %>%
+  gather("outcome", "val", `Mental health`, `Life satisfaction`) %>%
+  na.omit() 
+
+p1 <- to_plot %>%
+  ggplot(aes(x = year, y = val, color = outcome)) +
+    stat_summary(fun.data = mean_se) +
+    geom_smooth(aes(y = val), method = "loess", se=F, span = 1.5, size = .5,
+                formula = 'y ~ x') +
+    facet_grid(remoteness~profession) +
+    labs(x = "", y = "") +
+    theme(legend.position = "bottom",
+          legend.title = element_blank()) +
+  scale_color_grey(start = 0.8, end = 0.2) +
+  theme(legend.position = "none")
+
+p1
+```
+
+<br>
+
+<br>
+
+##### Figure A5. Job strain from demands and control has increased across sectors and regions  
+```{r not_run_3, eval=F, fig.dim=c(9,11)}
+#### Psychosocial job components ####
+psychosocial = c("job_control", "job_demand", "job_security")
+
+teachers %>%
+  select(xwaveid, year, remoteness, profession, all_of(psychosocial)) %>%
+  gather("outcome", "val", !!!psychosocial) %>%
+  # filter(profession %in% c("Secondary", "Primary")) %>% # does not exist here!
+  mutate(outcome = str_replace(outcome, "_", " "),
+         outcome = str_to_title(outcome)) %>%
+  na.omit() %>%
+  ggplot(aes(x = year, y = val, color = remoteness)) +
+    stat_summary(fun.data = mean_se) +
+    stat_smooth(formula = 'y ~ x', method = "loess", se=F, span=1.5, 
+                geom = "line", alpha = 0.7, size = 1) +
+    facet_grid(outcome~profession, scales = "free_y") +
+    labs(x = "", y = "") +
+    scale_color_grey(start = 0, end = .8) +
+    theme(legend.position = "bottom")
+```
+
+<br>
+
+<br>
+
+
+##### Figure A6. Mental health levels (Mean ±SEM) among teachers by job strain levels over time
+```{r not_run_4, eval=F, fig.dim = c(9, 6)}
+ggplot(df, aes(x = year - 2000, y = ghmh)) +
+  stat_summary(aes(color = job_strain), fun.data = mean_se) +
+  geom_smooth(aes(color = job_strain), se=F) +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  # stat_summary(aes(color = job_strain), geom = "line", fun = mean) +
+  # stat_summary(aes(color = job_strain), geom = "point", fun = mean,
+  #              shape = 21, size = 3, fill = "white", stroke = 1) +
+  scale_color_grey() +
+  facet_wrap(~job_strain, nrow = 1) +
+  labs(x = "", y = "") 
+```
+
+
+Teachers defined as suffering job strain in each year tend to report lower mental health levels than other teachers, however the effect of high job demands and low job control on mental health appears to be additive and does not interact.   
+
+\newpage
+
+# References  
+
+
+
