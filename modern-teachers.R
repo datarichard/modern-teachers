@@ -1,4 +1,4 @@
-home <- "~/Dropbox (Sydney Uni)/HILDA/modern-teachers"
+home <- "~/Dropbox (Sydney Uni)/modern-teachers"
 
 #### Render report ####
 occupation_key = c(
@@ -44,5 +44,5 @@ rmarkdown::render(
 #### Render docx ####
 rmarkdown::render(
   paste0(home, "/src/Word.Rmd"),
-  output_file = "modern-teachers 240126.docx",
+  output_file = "modern-teachers 240424.docx",
   output_dir = paste0(home, "/docs"))

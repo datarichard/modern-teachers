@@ -11,13 +11,13 @@ home <- "~/Work/HILDA (restricted release)/"
 #### Import data ####
 path_to_hilda <- list.files(
   path = paste0(home, "data"),
-  pattern = '^Combined.*.dta$',
+  pattern = '^Combined.*.sav$',
   full.names = TRUE
 )
 
 hilda <- list()
 for (pathtofile in path_to_hilda) {
-  df <- read_dta(pathtofile)
+  df <- read_sav(pathtofile)
   hilda <- append(hilda, list(df))
   cat('.')
 }
@@ -142,9 +142,13 @@ demographics <- gather_hilda(hilda, c(
 
 
 #### Income ####
+#
+# https://www.rba.gov.au/calculator/annualDecimal.html
 CPI = data.frame(
-  wave = letters[1:20],
-  deflator = c(1.555778894,
+  wave = letters[1:22],
+  deflator = c(1.705862647,
+               1.600335008,
+               1.555778894,
                1.510735198,
                1.470550982,
                1.436881188,
@@ -163,7 +167,7 @@ CPI = data.frame(
                1.044299528,
                1.024713151,
                1.008469055,
-               1)) #%>% mutate(inflator = rev(deflator))
+               1)) # base year 2001
 
 
 income <- gather_hilda(hilda, c(
@@ -315,7 +319,7 @@ psychosocial_components <- full_join(demand, control) %>%
 #### Other employment variables ####
 
 employment_items <- gather_hilda(hilda, job_other) %>%
-  spread(code, val) %>%
+  spread(code, val) %>% 
   mutate_if(is.double, ~ ifelse(. < 0, NA_real_, .)) %>%
   mutate(across(c(jbmploj, jbmpgj), ~replace(., . %in% c(997, 998, 999), NA)))
 
@@ -336,5 +340,5 @@ preprocessed <- occupations %>%
 
 write_rds(
   preprocessed, 
-  "~/Dropbox (Sydney Uni)/HILDA/modern-teachers/data/occupations.RDS"
+  "~/Dropbox (Sydney Uni)/modern-teachers/data/occupations.RDS"
 )
