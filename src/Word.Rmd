@@ -1,5 +1,5 @@
 ---
-title: "The growing effect of job strain on teacher mental health"
+title: "The growing effect of job demands on teacher mental health"
 date: "`r format(Sys.Date(), '%b %d, %Y')`"
 output: word_document
 bibliography: references.bib
@@ -37,7 +37,10 @@ theme_set(
         axis.line.x = element_line(colour = "black"),
         axis.ticks.x = element_line(colour = "black"),
         axis.ticks.length.x = unit(-0.25, "cm"),
-        axis.text.x = element_text(vjust = .8, hjust = 0.8, angle = 30))
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0),
+        axis.title.x = element_text(size = 14, vjust = -1)
+        # axis.text.x = element_text(vjust = .8, hjust = 0.8, angle = 30)
+        )
 )
 ```
 
@@ -81,22 +84,23 @@ c.  Department of Education, University of York, UK
 
 # Abstract  
 
-The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention, as well as a broader indicator of our socioeconomic priorities. However there have been reports that teachers’ mental health has been declining, particularly since the COVID-19 pandemic and shifting community expectations. The connection between employee mental health and the workplace has been established by multiple studies showing that the psychosocial work conditions are risk factors for poor mental health. Jobs with high demands and low control (i.e., autonomy) create job strain which leads to poor mental health. To explain the widely-reported decline in mental health among teachers, we determined whether the prevalence of psychosocial risk factors such as job demands have increased, or alternatively, whether the sensitivity to job demands among teachers has increased. That is, have teachers become more vulnerable due to increased prevalence or greater sensitivity to risk factors? We mapped the dependency between mental health and psychosocial risk factors for teachers and how it has changed between 2005 to 2022 using data from the Household, Income and Labour Dynamics in Australia (HILDA) survey, a large nationally representative annual survey. We find the mental health of teachers has declined since 2011 (which is not due to changes in workforce composition), along with increasing prevalence of risk factors such as job strain and greater sensitivity to job demands.  This has resulted in increased vulnerability to high job demands, which explains the decline in teacher mental health since 2011. Improving teacher resilience to high job demands is the most likely strategy to mitigate the decline in teacher mental health, however further research identifying the source(s) of the vulnerability is warranted. (271 words)  
+The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention, and a broader indicator of our socioeconomic priorities. There have been reports that teachers’ mental health has been declining, exacerbated by COVID-19 pandemic and shifting community expectations and work demands. Psychosocial risk factors of high job demands and low job control (i.e., autonomy) create job strain which leads to poor mental health. However the teaching profession is also predominately young and female, which are both demographic groups more likely to report lower mental health levels in general. Whether the decline among teachers is the result of changes in the _workforce composition_ due to younger, more female workforce; or chnages in the  _workplace_ such as increasing job demands; or due to changes in teachers themselves, such as increased psychological vulnerability, is currently unclear. We compared teachers to nurses (& midwives), another predominately female profession with a similar psychosocial risk profile and mental health levels, using data from the Household, Income and Labour Dynamics in Australia (HILDA) survey, a large nationally representative annual survey. We find the mental health of teachers and nurses has declined since 2011, while the prevalence of risk factors was similar in both professions and relatively stable. Mapping the dependency of mental health over time revealed the decline among nurses was explained by changes in workforce composition, while the decline among teachers was explained by increasing vulnerability to job demands. Thus, occupation-specific trends in mental health are explained by a unique combination of factors in each case. As such strategies to ameliorate the decline in teachers mental health should address not only work stressors, but what is driving this increased vulnerability to work stress.
+(282 words)  
  
 
 \newpage
 
-The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention, as well as a broader indicator of our socioeconomic priorities [@mccallum2017; @braun2020; @dreer2023; @skaalvik2018; @pap2023]. Recent changes and challenges to public schooling around the world, including shifting community expectations and school lockdowns due to the global COVID-19 pandemic, have highlighted the connection between job strain and mental health in teachers (as well as in other public services such as hospitals and nurses). Since the pandemic, there have been reports that teachers mental health has been declining in the UK, USA, Canada and Australia. However whether that decline is the result of changes in the _workplace_ such as increasing job demands; or due to changes in the _workforce_ such as increased psychological vulnerability, is currently unclear. Any proposal to arrest or reverse the decline will need to address this distinction in order to be effective.    
+The mental health and wellbeing of teachers is an important predictor of student outcomes, workforce retention, as well as a broader indicator of our socioeconomic priorities [@braun2020; @dreer2023; @mccallum2017;  @pap2023; @skaalvik2018]. Recent changes and challenges to public schooling around the world, including shifting community expectations and school lockdowns due to the global COVID-19 pandemic, have highlighted the connection between job strain and mental health in teachers, as well as in other public services such as hospitals and nurses. 
 
-Prior to COVID, cross-sectional comparisons of teachers with other professional groups in large population-based surveys did not reveal consistent deficits in mental health [@jerrim2020]. Since then a systematic review of studies conducted in 2020/2021 in China, Brazil, the United States, India, and Spain found anxiety, depression, and stress to be highly prevalent among teachers during the pandemic [@silva2021]. For instance, a repeated cross-sectional survey of over two million unique Facebook users between 2020 and 2021 revealed teachers in the United States were more likely to report anxiety symptoms than those in other professions [@kush2022]. Cross-sectional comparisons also revealed that anxiety and distress were higher than prepandemic levels or the national average among teachers in Canada [@hutchison2022].  
+Adverse working conditions, such as high stress environments, high workloads and low employee autonomy have been identified as work-related risk factors for poor physical and mental health, including depression, anxiety and cardiovascular disease [@harvey2017; @niedhammer2021; @theorell2015]. For teachers specifics can include long working hours, high teaching load and lack of teaching experience [@carroll2022; @corbett2023]. Among the most widely acknowledged summary risk factors are high job demands and low job control (autonomy), the combination of which is known as “job strain” [@karasek1998]. Their co-occurence, in particular, has been shown to lead to mental health issues, burnout and reduced job satisfaction, including among teachers [@ramberg2022; @van2017].
 
-Longitudinal comparisons of mental health have also revealed declines among teachers.  Longitudinal qualitative trajectory analysis exploring teachers’ mental health at three time points in 2020 found consistent declines in teachers’ mental health in the UK [@kim2022]. Teachers self-reported mental health also declined between 2019 and 2020, before and after the outbreak of the pandemic, in a large population-based survey of Australian households [@hoang2023]. While teachers were the only distinct occupation whose mental health significantly declined over the period (relative to doctors, engineers, accountants, nurses and lawyers), such declines are also consistent with a general deterioration in mental health in the wider population over the same period [@botha2023; butterworth2022]. So despite the widely-reported decline in teacher mental health levels, it is difficult to determine whether this is due to occupation-related factors or represents a decline common to the wider population due to non-work related factors.  
+Since the pandemic, there have been reports that teachers mental health has been declining in the UK, USA, Canada and Australia. Prior to COVID, cross-sectional comparisons of teachers with other professional groups in large population-based surveys did not reveal consistent deficits in mental health [@jerrim2020]. Since then a systematic review of studies conducted in 2020/2021 in China, Brazil, the United States, India, and Spain found anxiety, depression, and stress to be more prevalent among teachers during the pandemic [@silva2021], with suggestions that there was a comparatively increased prevalence. For instance, a repeated cross-sectional survey of over two million unique Facebook users between 2020 and 2021 revealed teachers in the United States were more likely to report anxiety symptoms than those in other professions [@kush2022]. Cross-sectional comparisons also revealed that anxiety and distress were higher than prepandemic levels or the national average among teachers in Canada [@hutchison2022].  
 
-The psychosocial characteristics of work are an important determinant of mental (and physical) health. Combinations of adverse job conditions are associated with poor physical health, greater depression, anxiety and more frequent visits to a general practitioner [Broom, 2006; Chandola, Brunner & Marmot 2006; Griffin et al 2007; Stansfeld & Candy, 2006); cited in @butterworth2010]. Among the most widely acknowledged risk factors are high job demands and low job control, as described by the job strain model [@karasek1998]. This model proposes that job strain results from the co-occurence of high job demands and low job control, and this in particular has been shown to be a good predictor of adverse physical and mental health problems such as coronary heart disease, depression, and anxiety.  
+Longitudinal comparisons of mental health have also revealed recent declines among teachers.  Longitudinal qualitative trajectory analysis exploring teachers’ mental health at three time points in 2020 found consistent declines in teachers’ mental health in the UK [@kim2022]. Teachers self-reported mental health also declined between 2015 and 2020, before and after the outbreak of the pandemic, in a large population-based survey of Australian households [@hoang2023]. While teachers were the only distinct profession whose mental health significantly declined over the pre COVID period (relative to doctors, engineers, accountants, nurses and lawyers), such declines in mental health were also seen in the wider population over the same period [@butterworth2022]. The mental health declines in the wider population make it difficult to determine whether the decline among teachers is due to work-related factors, or due to broader non-work related factors common to young people or women that have also experienced recent declines in mental health [@botha2023]. The first aim of the present study is to identify whether or not the apparent decline in the mental health of teachers is due to broader demographic changes in age or sex of the teaching workforce, rather than work-related risk factors.
+ 
+In any given population, changes in disease prevalence can result from corresponding changes in the prevalence of risk factors, as well as alterations in the population’s vulnerability to these risk factors. This means that even if the prevalence of risk factors remains constant, an increase in susceptibility to these risk factors can also lead to higher prevelance of disease. In the case of teachers’ mental health, recent declines may be due to increasing prevalence of work-related risks such as job strain, or alternatively due to increased vulnerability to these work-related risks. For instance it has been suggested that young teachers have become less resilient to the demands of the workplace since COVID due to lack of training, remote teaching, and lack of support from coworkers [@shimony2022; @fokkens2023]. The second aim of the present study is to determine whether teacher mental health trends can be attributed to changes in the prevalence of the underlying risk factors or due to increasing vulnerability of teachers. That is, has the job got worse or have teachers become less resilient to the job demands?  
 
-This report identifies whether the observed decline in teacher mental health in Australia between 2005 to 2022 is work-related, and determines whether the decline reflects an increase in the prevalence of risk factors leading to poor mental health (high job demands, low job control, or their interaction as job strain), or instead a greater sensitivity among modern teachers. I.e., Has the job got worse or have teachers become less resilient? We examine these issues among primary and secondary school teachers and contrast them to two other occupations chosen for their comparable levels of mental health (accountants) or psychosocial job characteristics (nurses & midwives).  
-
-
+We examine these issues among primary and secondary school teachers and contrast them to one other occupational group who share similar psychosocial risk factors and report comparable levels of mental health (nurses & midwives). The results will help us distinguish the possible causes underlying the decline in teacher mental health, distinguishing whether the teaching job has changed or teachers have changed. Any proposal to arrest or reverse the decline will need to address this distinction in order to be effective.  
 
 \newpage
 
@@ -112,11 +116,9 @@ The Household, Income and Labour Dynamics in Australia (HILDA) Survey, funded by
 
 <br>
 
-### Occupation (professional codes)
+### Occupational definitions by ANZSCO professional codes  
 
-Occupation was ascertained by the current occupation response and coded to the Australian and New Zealand Standard Classification of Occupations ([ANZSCO 2006](https://www.abs.gov.au/ausstats/abs@.nsf/0/E3031B89999B4582CA2575DF002DA702?opendocument)) 4-digit codes. The two codes for "Primary" and "Secondary" school teachers were used.  
-
-For the sake of comparison, we also included the codes for two other well-defined professions: the code for accountants and the code for nurses & midwives. Accountants were chosen because they exhibited lower levels of mental health and life satisfaction than any other professional group in our earlier study [@hoang2023]. Nurses & midwives (hereon _nurses_) were included because they exhibited comparable levels of mental health as teachers, along with comparable levels of job demands and job control - two important prerequisites for job strain.  
+Occupation was ascertained by the current occupation response and coded to the Australian and New Zealand Standard Classification of Occupations ([ANZSCO 2006](https://www.abs.gov.au/ausstats/abs@.nsf/0/E3031B89999B4582CA2575DF002DA702?opendocument)) 4-digit codes. The two codes for "Primary" and "Secondary" school teachers were used. For the sake of comparison, we also included the codes for nurses & midwives (hereon _nurses_), because they exhibited comparable levels of mental health as teachers, along with comparable workforce composition (predominantely young and female).  
 
 <br>
 
@@ -142,27 +144,27 @@ Trends in mental health among teachers, accountants and nurses between 2005 to 2
 
 
 
-### Psychosocial characteristics of work  
+### Psychosocial job components (work-related risk factors)  
 
-The psychosocial characteristics of work as defined by @karasek1998 were derived from a set of 17 questions representing _job demands & complexity_ (hereon "job demands") and _job control_ [@butterworth2010]. The subset of items contributing to each component are shown in the Appendix (Tables A1 to A2). We constructed a component score for each person in each year by calculating the (within-person) average of the component items (after reverse scoring the negatively worded items). Missing responses were implicitly imputed by this mean estimation procedure. A job strain component score was calculated by the product of the other two components to represent their interaction. All 17 items were only available from Wave 5 onwards in HILDA and thus our analysis covered the period from 2005 to 2022.     
+The psychosocial job characteristics of work, which at extreme levels are major risk factors for mental health [@karasek1998], were derived from a set of 17 questions representing _job demands & complexity_ (hereon "job demands") and _job control_ [@butterworth2010]. The subset of items contributing to each component are shown in the Appendix (Tables A1 to A2). We constructed a component score for each person in each year by calculating the (within-person) average of the component items (after reverse scoring the negatively worded items). Missing responses were implicitly imputed by this mean estimation procedure. A job strain component score was calculated by the product of the other two components to represent their interaction. All 17 items were only available from Wave 5 onwards in HILDA and thus our analysis covered the period from 2005 to 2022.     
 
 <br>
 
 ### Prevalence of risk factors (high job demand, low job control, job strain)  
 
-The prevalence of each risk factor was determined by the proportion of people reporting high job demand, or low job control, or both (i.e., job strain) in each year. Fixed thresholds for high and low scores were defined by the response quartile of each component in the entire employed sample of HILDA (all occupations among all employed people in all seventeen waves), so as to provide a common threshold value across the three professions examined here. Thus the fixed threshold for low job control was a job control score below the first quartile of all job control responses (i.e., < 3.25), and the fixed threshold for high job demand was a job demand score above the third quartile of all job demand responses (> 4.55). Using these thresholds we defined four mutually exclusive groups of people experiencing different risk factors: 1) Following Karasek, a job strain group was defined as people reporting the co-occurrence of high job demand and low job control [@karasek1998] (i.e., job demand score > 3rd quartile of all job demand responses _and_ job control score < 1st quartile of all job control responses); 2) a high job demand only group (job demand score > 3rd quartile of all job demand responses _and_ job control score > 1st quartile of all job control responses), 3) a low job control only group (job control score < 1st quartile of all job control responses _and_ job demand score < 3rd quartile of all job demand responses); and 4) a low job strain group who reported both no high job demand and no low job control (job demand score < 3rd quartile of all job demand responses _and_ job control score > 1st quartile of all job control responses). Mutually-exclusive categories allowed us to calculate the total prevalence of risk factors in each occupation (high job demand % + low job control % + job strain %), as well as the prevalence of each risk factor separately.  
+The prevalence of each risk factor was determined by the proportion of people reporting high job demand, or low job control, or both (i.e., job strain) in each year. Fixed thresholds for high and low component scores were defined by the response quartile of each component in the entire employed sample of HILDA (all occupations among all employed people in all seventeen waves), so as to provide a common threshold value across the two professions examined here. Thus the fixed threshold for low job control was a job control score below the first quartile of all job control responses (i.e., < 3.25), and the fixed threshold for high job demand was a job demand score above the third quartile of all job demand responses (> 4.55). Using these thresholds we defined four mutually exclusive groups of people experiencing different risk factors: 1) Following Karasek, a job strain group was defined as people reporting the co-occurrence of high job demand and low job control [@karasek1998] (i.e., job demand score > 3rd quartile of all job demand responses _and_ job control score < 1st quartile of all job control responses); 2) a high job demand only group (job demand score > 3rd quartile of all job demand responses _and_ job control score > 1st quartile of all job control responses), 3) a low job control only group (job control score < 1st quartile of all job control responses _and_ job demand score < 3rd quartile of all job demand responses); and 4) a low job strain group who reported both no high job demand and no low job control (job demand score < 3rd quartile of all job demand responses _and_ job control score > 1st quartile of all job control responses). Mutually-exclusive categories allowed us to calculate the total prevalence of risk factors in each occupation (high job demand % + low job control % + job strain %), as well as the prevalence of each risk factor separately.  
 
 <br>
 
 ### Sensitivity to psychosocial job characteristics  
 
-The sensitivity of teacher’s mental health to each psychosocial job characteristic was determined by estimating and comparing slopes between each job component and mental health. The slope between each component and mental health was modelled using a Generalized Additive Model (GAM), with a penalised smooth interaction term between time (years) and each job component score (see Appendix: Model definitions). This interaction term allows for a flexible, non-linear relationship between the job component and mental health, which is modulated by time (years). It will reveal whether the influence of each job component on mental health is not constant but varies with time. We standardized each job component to have a zero mean and unit variance over the seventeen years of data to allow comparison between the three smooth job component temporal interactions. The penalty ensures each smooth trend does not deviate too far from the linear slope due to variation in any particular year. We also estimated the uncertainty around each slope trend, which results in confidence intervals with close to nominal (frequentist) coverage properties [@marra2012; @nychka1988]. The greater the trend deviates from zero over time ($y = 0$), the greater the importance of that component on mental health and thus the greater vulnerability to that risk factor. Each model also included linear and smooth trends for changes in the mean level of mental health over time.  
+The sensitivity of teachers' mental health to each psychosocial job characteristic was determined by estimating and comparing slopes between each job component score and mental health (MHI-5 score). The slope between each component and mental health was modelled using an additive model [@wood2016; @wood2017], with a penalised smooth interaction term between time (years) and each job component score (see Appendix: Model definitions). This interaction term allows for a flexible, non-linear relationship between the job component and mental health, which is modulated by time (years). It will reveal whether the influence of each job component on mental health is not constant but varies with time. We standardized each job component to have a zero mean and unit variance over the seventeen years of data to allow comparison between the three smooth job component temporal interactions. The penalty ensures each smooth trend does not deviate too far from the linear slope due to variation in any particular year. We also estimated the uncertainty around each slope trend, which results in confidence intervals with close to nominal (frequentist) coverage properties [@marra2012; @nychka1988]. The greater the trend deviates from zero over time ($y = 0$), the greater the sensitivity of teacher mental health to the job component, and thus the greater vulnerability to that risk factor. Each model also included linear and smooth trends for changes in the mean level of mental health over time.  
 
 Along with comparing the slopes for each job component, we also determined how much variance ($R^2$) in mental health was explained by all three psychosocial job components in each year. This tells us whether the importance of the job components for mental health _in toto_ is changing over time.  
 
 <br>
 
-### Decomposition analysis  
+### Residual mental health trend analysis    
 
 To decompose whether job demands, job control, or their combination in job strain, was driving the decline in teacher mental health, we compared the total mental health trend after adding each component as an explanatory variable in a model of teacher mental health. Adding each component to the model produced a residual smooth trend for mental health, which represents the mental health trend remaining after accounting for the effect of each component. We compared the residual mental health trend with the total mental health trend to determine whether any single component was responsible for, or explained, the decline in teacher mental health after accounting for changes in prevalence and sensitivity over time.
 
@@ -175,7 +177,7 @@ occupation_key = c(
   `2320` = "Teachers", # Secondary
   `2331` = "Teachers", # Primary
   `2230` = "Nurses",
-  `2411` = "Accountants",
+  # `2411` = "Accountants",
   .default = NA_character_
 )
 
@@ -199,7 +201,7 @@ occupations <- read_rds("../data/occupations.rds") %>%
   filter(!is.na(profession)) # exclude any non-teaching years
 ```
 
-```{r model_funs}
+```{r smooth_data_fun}
 # Function to extract the smooth trends
 smooth_data <- function(.fit, i = 1) {
   
@@ -232,7 +234,7 @@ fit_ghmh <- function(.df, .prof = "Teachers", .f) {
 
 ## Survey results    
 
-#### Table 1. Change in teacher demographics between 2005 and 2022
+#### Table 1. Change in demographic composition between 2005 and 2022
 
 ```{r table_1}
 theme_gtsummary_compact(set_theme = TRUE, font_size = NULL)
@@ -295,9 +297,7 @@ tbl_stack(tbl$tb,
 
 <br>
 
-Teachers had significant changes in mean age, education levels, and income between 2005 and 2022. The increasing prevalence of degree requirements across the States and Territories increased the proportion of teachers with a bachelors degree by 2022, and this has been reflected by increased compensation (real household income). Nurses experienced similar levels and changes in education and income between 2005 and 2022 as teachers. Accountants had higher median levels of education and income than teachers (and nurses), but experienced less change in median income.   
-
-All three occupations experienced similar levels as well as declines in mental health between 2005 and 2022, however only the decline for teachers and nurses was significant. The prevalence of job strain (a major risk factor for poor mental health) increased between 2005 and 2022 for teachers and nurses, while remained relatively low and steady for accountants. We examine the changes in mental health levels and prevalence of risk factors in more detail below.  
+Teachers had significant changes in mean age, education levels, and income between 2005 and 2022. The increasing prevalence of degree requirements across the States and Territories increased the proportion of teachers with a bachelors degree by 2022, and this has been reflected by increased compensation (real household income). Nurses experienced similar levels and changes in education and income between 2005 and 2022 as teachers. Both occupations experienced similar levels as well as significant declines in mental health between 2005 and 2022. The prevalence of job strain increased between 2005 and 2022 for both teachers and nurses.  
 
 <br>
 
@@ -307,7 +307,7 @@ All three occupations experienced similar levels as well as declines in mental h
 
 We examine in greater detail the decline in mental health of teachers, nurses and accountants observed between 2005 and 2022. We estimated the total smooth trend in mental health over the period, as well as an adjusted trend after taking into account changes in composition of age, job tenure and gender ratio over the period as controls. These controls were included because we know that mental health scores of the general population change with age and gender in this data [@botha2023], and job tenure is also a likely predictor of mental health changes.   
 
-##### Figure 1. Mean (±SEM), estimated (95%CI), and adjusted (95%CI) mental health trends from 2005 to 2022
+##### Figure 1. Mental health trends from 2005 to 2022
 ```{r ghmh_trends_prep, include=F}
 # estimate fits with and without controls
 wc <- as.formula(ghmh ~ s(year) + year + age + age:year + jbempt + jbempt:year +
@@ -318,16 +318,16 @@ fit_t_nc <- fit_ghmh(occupations, "Teachers",    nc)
 fit_t_wc <- fit_ghmh(occupations, "Teachers",    wc)
 fit_n_nc <- fit_ghmh(occupations, "Nurses",      nc)
 fit_n_wc <- fit_ghmh(occupations, "Nurses",      wc)
-fit_a_nc <- fit_ghmh(occupations, "Accountants", nc)
-fit_a_wc <- fit_ghmh(occupations, "Accountants", wc)
+# fit_a_nc <- fit_ghmh(occupations, "Accountants", nc)
+# fit_a_wc <- fit_ghmh(occupations, "Accountants", wc)
 
-smooths <- bind_rows(
+fig1_smooths <- bind_rows(
   `Teachers_estimated` = smooth_data(fit_t_nc),
   `Teachers_adjusted` = smooth_data(fit_t_wc),
   `Nurses_estimated` = smooth_data(fit_n_nc),
   `Nurses_adjusted` = smooth_data(fit_n_wc),
-  `Accountants_estimated` = smooth_data(fit_a_nc),
-  `Accountants_adjusted` = smooth_data(fit_a_wc),
+  # `Accountants_estimated` = smooth_data(fit_a_nc),
+  # `Accountants_adjusted` = smooth_data(fit_a_wc),
   .id = "model"
 ) %>%
   separate(model, into = c("profession", "ctl"), sep = "_") %>%
@@ -348,7 +348,7 @@ mean_se <- function(x, mult = 1) {
   return(out)
 }
 
-obs <- occupations %>%
+fig1_mse <- occupations %>%
   select(xwaveid, x = year, profession, ghmh) %>%
   group_by(profession, x) %>%
   summarize(mse = mean_se(ghmh)) %>%
@@ -357,29 +357,33 @@ obs <- occupations %>%
 ```
 ```{r ghmh_trends, fig.dim = c(9, 9)}
 # add to plot data
-to_plot <- bind_rows(smooths, obs) %>%
-  mutate(ctl = fct_rev(ctl))
+fig1 <- bind_rows(fig1_smooths, fig1_mse) %>%
+  mutate(ctl = recode_factor(ctl, observed = "Mental health (MHI-5)",
+                                  estimated = "Estimated trend",
+                                  adjusted = "Adjusted trend"))
 
-to_plot1 <- filter(to_plot, ctl != "observed")
-to_plot2 <- filter(to_plot, ctl == "observed")
+fig1_trends <- filter(fig1, str_detect(ctl, "trend"))
+fig1_means <- filter(fig1, str_detect(ctl, "MHI-5"))
 
-ggplot(to_plot1, aes(x = x - 2000, y = fit, ymin = fit - se, ymax = fit + se)) +
+ggplot(fig1_trends, aes(x = x, y = fit, ymin = fit - se, ymax = fit + se)) +
   geom_hline(aes(yintercept = 0), color = "grey50", linetype = "dashed") +
   geom_ribbon(alpha = 0.2) +
   geom_line() +
-  geom_pointrange(data = to_plot2, aes(x = x - 2000, y = fit)) +
-  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
-  facet_grid(ctl~profession, scales = "free_y") +
-  labs(x = "", y = "") +
-  theme(legend.position = "none",
-        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+  geom_pointrange(data = fig1_means, aes(x = x, y = fit)) +
+  facet_grid(ctl~profession, scales = "free_y", switch = "y") +
+  labs(x = "Survey year", y = "") +
+  theme(strip.placement = "outside")
 ```
 
 <br>
 
-Figure 1 top row shows the observed mean levels of mental health (MHi-5 units) of teachers, nurses and accountants declined over the period, however teachers showed a rapid decline after peaking in 2011. The middle and bottom rows of Figure 1 show the centred smooth trends for mental health. The estimated smooth mental health trend of teachers exhibits the same sudden decline after 2011 while the other two professions exhibit a more linear decline over the period. However the bottom row of Figure 1 shows that once the mental health trends are adjusted for changes in age, gender composition and job tenure, only the mental health trend of teachers significantly declined over the period.   
+###### Figure 1 legend. MHI-5 scores (M±SEM) (top row); centered trends (±95%CI) (middle row), and centered trends adjusted (±95%CI) for changes in age, sex, and job tenure (bottom row).  
 
-Tests of the non-linear changes revealed the estimated trend of teachers declined non-linearly ($F_{3.78} = 12.21$, $p < .001$), even after adjustment ($F_{3.88} = 6.97$, $p < .001$). There was no evidence of non-linear changes in the estimated trend of nurses and accountants after adjustment ($F_{1} = 0.19$, $p = .66$, and $F_{2.63} = 0.98$, $p = .53$, respectively), and a follow-up linear mixed model with random intercepts and effects of time for each participant confirmed the (fixed) linear effect of time was also non-significant for the $\beta_{time}$ of nurses as well as accountants ($t_{479.8} = -0.86$, $p = .39$ and $t_{411.5} = 0.78$, $p = .43$, respectively).  
+<br>
+
+Figure 1 top row shows the observed mean levels of mental health (MHi-5 scores) of teachers and nurses declined over the period, however teachers showed a rapid decline after peaking in 2011. The middle and bottom rows of Figure 1 show the centred smooth trends for mental health. The estimated smooth mental health trend of teachers exhibits the same sudden decline after 2011 while nurses exhibit a more linear decline over the period. However the bottom row of Figure 1 shows that once the mental health trends are adjusted for changes in age, gender composition and job tenure, only the mental health trend of teachers significantly declined over the period.   
+
+Tests of the non-linear changes revealed the estimated trend of teachers declined non-linearly ($F_{3.78} = 12.21$, $p < .001$), even after adjustment ($F_{3.88} = 6.97$, $p < .001$). There was no evidence of non-linear changes in the estimated trend of nurses after adjustment ($F_{1} = 0.19$, $p = .66$), and a follow-up linear mixed model with random intercepts and effects of time for each participant confirmed the (fixed) linear effect of time was also non-significant for the $\beta_{time}$ of nurses ($t_{479.8} = -0.86$, $p = .39$).  
 
 Consequently, we focus the remainder of the paper on distinguishing the role of changes in prevalence and sensitivity to the different psychosocial risk factors on the decline in mental health of teachers.  
 
@@ -387,14 +391,14 @@ Consequently, we focus the remainder of the paper on distinguishing the role of 
 
 <br>
 
-## Prevalence of psychosocial risk factors (high job demand, low job control, job strain)  
+## Prevalence of risk factors (high job demand, low job control, job strain)  
 
-##### Figure 2. The cumulative proportion of people reporting each risk factor in each year
-```{r psc_prevalence, fig.dim=c(9,6)}
+##### Figure 2. The proportion of people reporting each risk factor from 2005 to 2022
+```{r psc_prevalence, fig.dim=c(9,9)}
 ctrl_t <- 3.25 # with(read_rds("../data/occupations.rds"), summary(job_control))
 dmnd_t <- 4.556 # with(read_rds("../data/occupations.rds"), summary(job_demand))
 
-df <- occupations %>%
+fig2 <- occupations %>%
   # select(xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
   mutate(
     job_strain = case_when(
@@ -415,7 +419,11 @@ prop.ci <-  function(n, p, a=0.05) {
   c(lower=l, upper=u)
 }
 
-df %>%
+binomial_smooth <- function(...) {
+  geom_smooth(method = "glm", method.args = list(family = "quasibinomial"), ...)
+}
+
+fig2 %>%
   percent(profession, year, job_strain) %>%
   mutate(N = sum(n)) %>%
   filter(job_strain != "Low strain") %>%
@@ -424,29 +432,35 @@ df %>%
          hi = prop.ci(N, proportion)[2]) %>% 
   ggplot(aes(x = year, y = proportion, group = job_strain)) +
     geom_pointrange(aes(ymin = lo, ymax = hi)) +
-    geom_smooth(method = "lm", formula = 'y ~ x', 
-                # adjust level for prediction intervals
-                se = T, level = .9999999, size = .5, color = "black") +
-    facet_grid(job_strain~profession) +
-    labs(x = "", y = "")
+    binomial_smooth(formula = 'y ~ x', size = .5, color = "black",
+                    # adjust level for prediction intervals
+                    level = .999999999999999) + 
+    scale_y_continuous(labels = scales::percent) +
+    facet_grid(job_strain~profession, switch = "y") +
+    labs(x = "Survey year", y = "") +
+    theme(strip.placement = "outside")
 ```
 
 <br>
 
-Among teachers, the total prevalence of psychosocial risk factors has increased from 62 percent in 2005 to 72 percent in 2022 (+10%). Nurses have experienced a steeper increase in total prevalence from 50 percent in 2005 to 71 percent in 2022 (+21%), while prevalence among accountants has held relatively low and steady (36 to 37%). Taking each risk factor separately, the prevalence of job strain among teachers was less than twenty percent (18%) in 2005 and increased to almost 30 percent (29%) in 2022 (+11%). By comparison, the prevalence of job strain among nurses has increased from 13 to 20 percent (+7%), while accountants have held steady at a relatively low two percent. The prevalence of high job demands among teachers and accountants has been relatively steady (~25% and ~30%, respectively), while it has increased for nurses from 24 to 35 percent (+10%) between 2005 to 2022. The prevalence of low job control among teachers was 13 percent in 2005 before rising recently to 22 percent in 2021 & 2022 (+9%), while among nurses and accountants the prevalence of low job control has been relatively steady (~13% and ~3%, respectively).           
+###### Figure 2 legend. The proportion of teachers and nurses reporting a psychosocial risk factor in each year (individual job component score in the most extreme quartile of the employed population).  
+
+<br>
+
+The prevalence of job strain among teachers was less than twenty percent (18%) in 2005 and increased to almost 30 percent (29%) in 2022 (+11%). By comparison, the prevalence of job strain among nurses has increased from 13 to 20 percent (+7%). The prevalence of high job demands among teachers has been relatively steady (~25%), while it has increased for nurses from 24 to 35 percent (+10%) between 2005 to 2022. The prevalence of low job control among teachers was 13 percent in 2005 before rising recently to 22 percent in 2021 & 2022 (+9%), while among nurses the prevalence of low job control has been relatively steady (~13%).           
 
 <br>
 
 <br>
 
 
-## Sensitivity to psychosocial job characteristics  
+## Sensitivity to psychosocial job components   
 
-Understanding the drivers in mental health vulnerability requires we examine how sensitivity to the various job components has changed over time, in addition to any changes in prevalence. The sensitivity (or dependency) of teachers' mental health on each psychosocial job characteristic is represented by the slope of each component as a predictor of mental health (in a regression model). We present the changes over time in the slope of each component to the mental health of teachers in Figure 3 below. Each smooth trend represents the penalized effect of the psychosocial job characteristic on mental health between 2005 to 2022. Superimposed on the penalized smooth effects is the unpenalized linear effect (i.e., beta) of each component estimated by OLS for each year, as points and vertical ranges ($\beta±SEM$). This allows us to compare the penalized esimates to the unpenalized (and therefore overfit) estimates.  
+Vulnerability to psychosocial risk factors depends on teacher sensitivity to variations in the underlying job component. That is, an increase in sensitivty to the psychosocial characteristics of work (e.g., job demands) can lead to higher vulnerability and worse mental health, even if the level of the job component is constant. Thus understanding the drivers in teacher mental health requires we examine how sensitivity to the various job components has changed over time (in addition to any changes in the level of each job component or prevalence of risk factor). The sensitivity of teachers' mental health on each psychosocial job component is represented in a regression model by the dependency of mental health on each component, or the components' slope as a predictor of mental health. We present the changes over time in the slope of each component among teachers in Figure 3 below. Each smooth trend represents the penalized effect of the psychosocial job characteristic on mental health between 2005 to 2022. Superimposed on the penalized smooth effects is the unpenalized linear effect (i.e., beta) of each component estimated by OLS for each year, as points and vertical ranges ($\beta±SEM$). This allows us to compare the penalized esimates to the unpenalized (and therefore overfit) estimates.  
 
 <br>
 
-##### Figure 3. Standardized effects (smooths and betas) of each component on mental health over time  
+##### Figure 3. Standardized effects (smooths and betas) of each job component on mental health  
 
 ```{r smooth_psc_prep, include=F}
 #### Smooth fits ####
@@ -486,9 +500,7 @@ lm_betas <- lm_fits %>%
   transmute(
     betas = map(ghmh.fit, tidy)) %>%
   unnest(betas)
-```
 
-```{r smooth_psc, fig.dim = c(9, 6)}
 job_betas <- lm_betas %>%
   filter(term %notin% c("(Intercept)", "age", "jbempt")) %>%
   mutate(term = str_replace(term, "_", " "),
@@ -496,37 +508,41 @@ job_betas <- lm_betas %>%
   select(term, x = year, se = std.error, fit = estimate) %>%
   mutate(term = fct_relevel(term, "Job demand")) %>%
   ungroup()
+```
 
+```{r smooth_psc, fig.dim = c(9, 6)}
 # Fix the stupid results so control is positive and strain is negative
 fix_key <- c(
   `Job control` = "Job strain",
   `Job strain` = "Job control"
 )
 
-job_betas <- job_betas %>%
+fig3_betas <- job_betas %>%
   mutate(term = recode_factor(term, !!!fix_key))
 
-job_smooths <- job_smooths %>%
+fig3_smooths <- job_smooths %>%
   mutate(term = recode_factor(term, !!!fix_key)) 
 
-ggplot(job_smooths, aes(x = x, y = fit)) +
+ggplot(fig3_smooths, aes(x = x + 2000, y = fit)) +
   geom_hline(aes(yintercept = 0), color = "red", linetype = 2) +
   geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
               alpha = 0.2) +
-  geom_pointrange(data = job_betas, 
+  geom_pointrange(data = fig3_betas, 
                   aes(ymin = fit - se, ymax = fit + se)) +
   geom_line() +
-  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  # scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
   facet_wrap(~term, ncol = 3, scales = "free_y") +
-  labs(x = "", y = "") +
-  theme(legend.position = "none",
-        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+  labs(x = "Survey year", y = "")
 ```
 
 
 <br>
 
-Figure 3 shows the unique importance of each psychosocial job characteristic for teacher mental health over time. Importance is indicated by the deviation from $y = 0$ in each smooth trend. The location of the smooths (beta) with respect to $y = 0$ indicates the direction of the effect. Job strain and job demand had a negative effect on mental health while job control had a positive effect. Where each trend deviates away from zero with time (and where the shaded confidence intervals exclude zero) indicates where teachers become more sensitive to that component over time. For example, job demand became more important for teachers’ mental health after 2011, while the importance of job control and job strain was relatively stable over the same period.  
+###### Figure 3 legend. Penalised and unpenalised model estimates of each psychosocial job component on teacher mental health between 2005 to 2022. Each job component score was standardized to have zero mean and unit SD over the 17 year period to allow comparison in sensitivity of teacher mental health.  
+
+<br>
+
+Figure 3 shows the sensitivity of teacher mental health to variations in each psychosocial job component over time. Sensitivity is indicated by the deviation from $y = 0$ in each penalized smooth trend or unpenalised beta. The location of each estimate with respect to $y = 0$ indicates the direction of the effect. Job strain and job demand had a negative effect on mental health while job control had a positive effect. Where each trend deviates away from zero with time (and where the shaded confidence intervals exclude zero) indicates where teachers become more sensitive to that component over time. For example, teacher mental health became more sensitive to job demands after 2011, while the sensitivity to job control and job strain was relatively stable over the same period. The increase in the sensitivity to job demands is consistent with increased vulnerability to high job demands as a risk factor.   
 
 The OLS fit ($R^2$) of all three psychosocial job characteristics on mental health each year from 2005 to 2022 improved from ~4 percent at the beginning to almost ~16 percent by the end of the period (see Figure A1 in Appendix). The improvement in the $R^2$ suggests that psychosocial job components explain an increasing proportion of the variation in the mental health of teachers in the past seventeen years, consistent with increased vulnerability to psychosocial risk factors.  
 
@@ -535,15 +551,14 @@ The OLS fit ($R^2$) of all three psychosocial job characteristics on mental heal
 <br>
 
 
-## Decomposition results  
+## Residual mental health trend results  
 
-The relative importance of job demands for the mental health of teachers increased faster than any other psychosocial job characteristic. At the same time, the prevalence of the risk factor (high job demand) was relatively stable among teachers over the same period (while the prevalence of the other risk factors increased). This makes it difficult to distinguish whether it is the increasing prevalence of any risk factor (e.g., job control or job strain), or the greater sensitivity to any risk factor (e.g., job demand) is driving the decline in teacher mental health. To decompose whether job demands, job control, or job strain was driving the decline in mental health, we compared the total mental health trend after adding each component as an explanatory variable in a model of teacher mental health. The changes to the residual mental health trend after adding each component, relative to the total trend, reveal whether any single component was mediating the decline in mental health.  
+The figure above (Figure 3) shows the sensitivity of teachers to job demands increased faster than any other psychosocial risk factor. At the same time, the prevalence of the risk factor (high job demands) was relatively stable among teachers over the same period while the prevalence of the other risk factors increased (Figure 2). This makes it difficult to distinguish whether the decline in teacher mental health is due to the increasing prevalence of low job control or job strain, or the greater vulnerability to high job demands. To decompose whether the declining mental health is due to change in prevalence or vulnerability (i.e., is the job getting worse or are teachers becoming more vulnerable to the job demands), we compared the total mental health trend after adding each component as an explanatory variable in a model of teacher mental health. The changes to the residual mental health trend after adding each component, relative to the total trend, reveal whether any single risk factor was mediating the decline in mental health.  
 
-Figure 4 below shows that teachers’ total mental health trend showed a rapid decline over time, except after the effect of job demands was explained (i.e., added to the model as a predictor).  
 
 <br>
 
-##### Figure 4. Total (left) and residual trends in mental health over time after adding different psychosocial job components
+##### Figure 4. Total (left) and residual trends in mental health after adding each psychosocial job component
 ```{r smooth_est_prep, include=F}
 # Plot to compare how the year smooth changes with the addition of the job 
 # variables (similar to a mediation analysis)
@@ -577,7 +592,7 @@ fit_t_control <- fit_ghmh(df, .f = control_f)
 fit_t_strain <- fit_ghmh(df, .f = strain_f)
 
 
-smooths <- bind_rows(
+fig4_smooths <- bind_rows(
   `f(year)` = smooth_data(fit_t_year),
   `f(year) + f(demand)` = smooth_data(fit_t_demand),
   `f(year) + f(control)` = smooth_data(fit_t_control),
@@ -588,25 +603,27 @@ smooths <- bind_rows(
 ```
 
 ```{r smooth_est, fig.dim = c(9, 6)}
-ggplot(smooths, aes(x = x - 2000, y = fit)) +
+ggplot(fig4_smooths, aes(x = x, y = fit)) +
   geom_hline(aes(yintercept = 0), color = "grey50", linetype = "dashed") +
   geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
               alpha = 0.2) +
   geom_line(aes()) +
-  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
+  # scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
   facet_wrap(~model, nrow = 1) +
-  labs(x = "", y = "") +
-  theme(legend.position = "none",
-        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+  labs(x = "Survey year", y = "")
 ```
 
 <br>
 
-Figure 4 legend. Estimated smooth mental health trends of teachers between 2005 to 2022 under different explanatory models.  
+###### Figure 4 legend. Estimated smooth mental health trends of teachers between 2005 to 2022 under different explanatory models.  
 
-The left panel of Figure 4 ($f(year)$) shows the total smooth trend in teachers' mental health, unadjusted for any psychosocial job characteristics, and previously shown in Figure 1 which declined sharply after 2011. The right panel ($f(year) + f(demand)$) shows that once the impact of job demands is explained, the negative decline in mental health is completely reversed and mental health was predicted to rise over the period. The middle panels ($f(year) + f(strain)$ and $f(year) + f(control)$) shows the impact of job strain and job control on the decline is minimal at best, as the mental health trend declines at a similar rate with or without these components in the model. Overall this result represents model-derived evidence the decline in teachers' mental health is (entirely?) explained by changes in the effect of job demands on teachers, even after accounting for any changes in the prevalence or sensitivity to this risk factor over time.    
+<br>
 
-Testing the non-linear changes revealed there was no evidence the increase in mental health after including job demand was non-linear ($F_{3.29} = 1.65$, $p = .16$), however the linear change was positive and significant ($t_{415} = 67.47$, $p < .001$). By comparison the non-linear and linear changes in mental health remained significant after job control and job security were included (all $ps < .001$).  
+Figure 4 above shows that teachers’ total mental health trend showed a rapid decline over time, except after the effect of job demands was explained (i.e., added to the model as an explanatory variable). The left panel of Figure 4 ($f(year)$) shows the total smooth trend in teachers' mental health, unadjusted for any psychosocial job characteristics, and previously shown in Figure 1 which declined sharply after 2011. The right panel ($f(year) + f(demand)$) shows that once the impact of job demands is explained, the negative decline in mental health is completely reversed and mental health was predicted to rise over the period. The middle panels ($f(year) + f(strain)$ and $f(year) + f(control)$) shows the impact of job strain and job control on the decline is minimal at best, as the mental health trend declines at a similar rate with or without these components in the model. Testing the non-linear changes revealed there was no evidence the increase in mental health after including job demand was non-linear ($F_{3.29} = 1.65$, $p = .16$), however the linear change was positive and significant ($t_{415} = 67.47$, $p < .001$). By comparison the non-linear and linear changes in mental health remained significant after job control and job security were included (all $ps < .001$).  
+
+In combination with the steady prevalence of high job demands (Figure 2), this result represents model-derived evidence the decline in teachers' mental health is best explained by changes in sensitivity to job demands among teachers rather than changes in the prevalence of risk factors.    
+
+
 
 <br>
 
@@ -616,26 +633,31 @@ Testing the non-linear changes revealed there was no evidence the increase in me
 
 _Brief discussion points for consideration_  
 
-Main point: The mental health of teachers has rapidly declined since 2011 and this seems to be explained by increasing senstivity to job demands in the last ten years rather than a change in prevalence of this risk factor.  
+Main point: The mental health of teachers has rapidly declined since 2011 and the prevalence of job strain (high job demands co-occuring with low job control) has also increased; but it is the increasing sensitivity to job demands which provides the best explanation of declining teacher mental health in the last decade.  
 
-- The decline in mental health of teachers is not due to changes in composition of the workforce (unlike nurses and accountants)
-- The prevalence of high job demands has not substantially changed, however the importance of job demands for the mental health of teachers has increased rapidly since 2011
+- The decline in mental health of teachers is not due to changes in composition of the workforce (unlike nurses)
+- The prevalence of high job demands has not substantially changed, however the senstivity of teachers mental health to job demands has increased rapidly since 2011
 - Residual analysis shows the negative trend in mental health reverses when the effect of job demands are explained
-- The psychosocial job components may explain almost as much as 20 percent of variation ($R^2$) in teachers mental health today 
+- Results in the appendix show the effects on teacher mental health are widespread, appearing in both primary and secondary teachers, and in cities and remote schools (less apparent in regional schools). State-level effects are not apparent.  
 
-In general, we find converging evidence that increasing sensitivity to job demands, rather than increasing prevalence of high job demands, has driven poorer mental health among teachers in the last decade.   
 
-The effects on teacher mental health are widespread, appearing in both primary and secondary teachers, and in cities and remote schools (less apparent in regional schools). 
-_Implications_. As much as 20 percent of the variation in teachers' mental health may be addressed by efforts to improve teacher resilience to high job demands. This is because it was the changes in teacher sensitivity to job demands rather than changes in prevalence of high job demands which occurred alongside the declines in mental health. By contrast, reducing the prevalence of high job demands, or improving job control, is unlikely to be an effective strategy for treating vulnerability.  
+_Limitations_. An important limitation is the role of moderating variables on the relationship between job demands and mental health. Job resources such as management and co-worker support is an important psychosocial moderator of the negative effects of job strain, and may play a role here too. HILDA does not contain a measure of _job resources_, and so the increased sensitivity to job demands reported here may reflect a recent loss or decline in social support from colleagues or management among the teaching profession. If this was to occur, then teachers may become more vulnerable to the same level of job demands without necessarily implying any reduction in personal resilience.
 
-_Weaknesses_. Despite the longitudinal data and our (make-shift) decomposition analysis, our methods are ultimately based on observational data and so the results are correlational and conclusions are descriptive. However it is obviously impossible to examine our research question with an experimental design, and so while policy development must depend on studies such as ours, it should be developed with caution. HILDA also misses an important moderator of job strain which is _job resources_, such as support from colleagues/management and other psychosocial support, which may govern whether interventions are successful but we cannot draw any conclusions here.  
+```{r eval=F}
+# could try including 
+# jbmsall: overall job satisfaction
+# jbmswrk: the work itself satisfaction
+# 
+```
 
-_Strengths_. Many surveys of occupational wellbeing, or items focused on work-related wellbeing tend to produce biased estimates due to self-selection of employees unhappy with their job and seeking to express their concerns or grievances in a single-issue survey response. Even large supposedly ‘representative’ samples can over-represent unhappy respondents by more than 2.5 times due to such self-selection incentives into work-related surveys [@chauvenet2020; @goodwin2013; @harvey2021]. We used HILDA which does not suffer this problem due its wide topic coverage and probabilistic sampling.  
+
+_Strengths_. Many surveys of occupational wellbeing, or items focused on work-related wellbeing tend to produce biased estimates due to self-selection of employees unhappy with their job and seeking to express their concerns or grievances in a single-issue survey response. Even large supposedly ‘representative’ samples can over-represent unhappy respondents by more than 2.5 times due to such self-selection incentives into work-related surveys [@chauvenet2020; @goodwin2013]. We used HILDA which does not suffer this problem due its wide topic coverage and probabilistic sampling.  
 
 HILDA also incorporates a comprehensive set of questions about other aspects of subjective wellbeing, including life satisfaction. In contrast to mental health, teachers generally report higher levels of life satisfaction and self-worth than other occupations [@hoang2023; @jerrim2020]. Both mental health and life satisfaction are important but distinct components of subjective wellbeing, and the comprehensive instruments in HILDA allowed us to distinguish mental health from these other more cognitive/evaluative dimensions which can depend on social level or stage or life [@diener2017; @diener2018; @kettlewell2020]. Many conflicting findings in the literature may be a result of comparing or confounding these different constructs.    
 
 _Importance_. Skaalvik and Skaalvik (2018) argue that teacher subjective wellbeing, which may be considered a type of job resource, predicts higher job engagement and satisfaction and lower motivation to leave the profession [@skaalvik2018]. Multiple studies have found positive relationships between teacher subjective wellbeing and student achievement, albeit mostly correlational [@mccallum2017; @braun2020; @dreer2023]; while others have linked teacher subjective wellbeing with student physical and mental wellbeing [@braun2020; @pap2023], thus expanding the role of teachers beyond merely developing knowledge to contributing to the development of student social and emotional wellbeing, including mental health [@jennings2009].  
 
+_Implications_. As much as 20 percent of the variation in teachers' mental health may be addressed by efforts to improve teacher resilience to high job demands. This is because it was the changes in teacher sensitivity to job demands rather than changes in prevalence of high job demands which occurred alongside the declines in mental health. By contrast, reducing the prevalence of high job demands, or improving job control, is unlikely to be an effective strategy for treating vulnerability.  
 
 
 
@@ -742,13 +764,13 @@ Where $\text{MHi-5}_{it}$ represents the MHi-5 score for each person in each yea
 <br>
 
 ##### Figure A1. Proportion of variance in mental health explained by all risk factors (r-squared)
-```{r r_squared, fig.dim=c(9, 6)}
+```{r r_squared, fig.dim=c(9, 5)}
 lm_fits %>%
   transmute(
     term = "r-squared",
     r.squared = map_dbl(ghmh.fit, ~glance(.) %>% pull(r.squared))) %>%
   ggplot(aes(x = year, y = r.squared)) +
-    geom_line() +
+    geom_line(linetype = 2) +
     geom_point() +
     scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
     labs(y = "", x = "") +
@@ -936,7 +958,7 @@ df %>%
 
 #### Table A3. Job security items
 
-```{r eval=F}
+```{r appendix_table_3, eval=F}
 readr::read_delim(
 "Code|Description|Waves
 jompf|I get paid fairly for the things I do in my job|1 to 22
@@ -959,7 +981,7 @@ delim = "|") %>%
 <br>
 
 #### Table A4. Primary & Secondary teacher differences in 2005 & 2022
-```{r eval=F}
+```{r appendix_table_4, eval=F}
 t1 <- teachers %>%
   filter(year == 2005) %>%
   mutate(income = hh_disp_inc_eq/1000) %>%
@@ -1041,7 +1063,7 @@ Primary school teachers tended to be more female, younger, and less postgraduate
 
 
 #### Table A5. Regional differences in 2022
-```{r eval=F}
+```{r appendix_table_5, eval=F}
 t1 <- teachers %>% 
   filter(profession == "Primary", year == 2022) %>%
   mutate(income = hh_disp_inc_eq/1000) %>%
