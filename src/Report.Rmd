@@ -130,7 +130,7 @@ occupation_key <- params$key
 ```{r import_data}
 occupations <- read_rds("../data/occupations.rds") %>% 
   filter(occupation %in% names(occupation_key)) %>%
-  filter(wave %in% letters[5:20]) %>%
+  filter(wave %in% letters[5:22]) %>%
   mutate(
     remoteness = fct_collapse(hhsra, 
                               `Remote` = "Outer regional", 
@@ -221,7 +221,7 @@ create_table <- function(.df) {
 }
 
 tbl <- occupations %>%
-  filter(year %in% c(2005, 2020)) %>%
+  filter(year %in% c(2005, 2022)) %>%
   group_by(profession) %>%
   nest() %>%
   mutate(tb = map(data, ~create_table(.x)))
