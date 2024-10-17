@@ -45,11 +45,6 @@ theme_set(
         # axis.text.x = element_text(vjust = .8, hjust = 0.8, angle = 30)
         )
 )
-
-# could try including 
-# jbmsall: overall job satisfaction
-# jbmswrk: the work itself satisfaction
-# 
 ```
 
 
@@ -191,7 +186,7 @@ occupation_key = c(
 # Regions were collapsed according to this report:
 # https://www.aihw.gov.au/reports/rural-remote-australians/rural-and-remote-health
 
-occupations <- read_rds("../data/occupations.rds") %>% 
+occupations <- read_rds("../data/teachers & nurses.rds") %>% 
   filter(occupation %in% names(occupation_key)) %>%
   filter(wave %in% letters[5:22]) %>%
   mutate(

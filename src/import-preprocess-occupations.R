@@ -109,6 +109,13 @@ regions <- gather_hilda(hilda, c(
 
 
 #### Demographics ####
+# could try including 
+# jbmsall: overall job satisfaction
+# jbmswrk: the work itself satisfaction
+# lssuplt: 'I have no one to lean on in times of trouble'
+# lssupsh: 'Wehn I need someone to help me out, I can usually find someone'
+# 
+# 
 edu_key = c(`1` = "Postgraduate", # "Masters or doctorate",
             `2` = "Graduate diploma",
             `3` = "Bachelors degree",
