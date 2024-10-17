@@ -1,6 +1,46 @@
-home <- "~/Dropbox (Sydney Uni)/modern-teachers"
+# This is a run file for generating the outputs for:
+# 
+# The growing effect of job demands on teacher mental health: results from a 
+# longitudinal national household panel survey
 
-#### Render report ####
+# the current directory of this file
+home <- dirname(rstudioapi::getSourceEditorContext()$path)
+
+# JOEM submission ####
+# 
+#### Render main docx
+rmarkdown::render(
+  paste0(home, "/src/Word JOEM.Rmd"),
+  output_file = "MORRIS.docx",
+  output_dir = paste0(home, "/JOEM/")
+)
+
+#### Render figures.pdf
+rmarkdown::render(
+  paste0(home, "/src/Figures JOEM.Rmd"),
+  output_file = "Figures.pdf",
+  output_dir = paste0(home, "/JOEM/")
+)
+
+#### Render appendix.pdf
+rmarkdown::render(
+  paste0(home, "/src/Supplemental JOEM.Rmd"),
+  output_file = "Supplemental MORRIS.pdf",
+  output_dir = paste0(home, "/JOEM/")
+)
+
+# LCC working paper series ####
+# 
+#### Render main pdf for LCC Working paper series
+rmarkdown::render(
+  paste0(home, "/src/Word JOEM.Rmd"),
+  output_format = rmarkdown::pdf_document(latex_engine = "xelatex"),
+  output_file = "Modern teachers.pdf",
+  output_dir = paste0(home, "/LCC working paper/")
+)
+
+
+# Github-pages ####
 occupation_key = c(
   # `2310` = "College",
   `2320` = "Secondary",
@@ -41,8 +81,3 @@ rmarkdown::render(
 
 
 
-#### Render docx ####
-rmarkdown::render(
-  paste0(home, "/src/Word.Rmd"),
-  output_file = "modern-teachers 240530.docx",
-  output_dir = paste0(home, "/docs"))
