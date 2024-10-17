@@ -12,6 +12,8 @@ here](https://datarichard.github.io/modern-teachers/)
 
 \|– README this file  
 \|  
+\|– modern-teachers.R run file  
+\|  
 \|– data/  
 \|   *data required for project (inputs)*  
 \|  
