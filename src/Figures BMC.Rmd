@@ -254,7 +254,9 @@ ggplot(fig2, aes(x = x, y = fit)) +
 <br>
 
 #### Figure 2 legend.  
-Zero-centered partial effects of year on mental health from each model. Model I is the unadjusted trend over time. Model II is the trend adjusted for non-work related factors (age, sex, length of job tenure). Model III is adjusted for the same non-work related factors as well as job control. Model IV is adjusted for job demands (and the non-work related factors). Shaded areas represent 95 percent confidence intervals.   
+Zero-centered partial effects of year (±95%CI) on mental health from each model. Model I is the unadjusted trend over time. Model II is the trend adjusted for non-work related factors (age, sex, length of job tenure). Model III is adjusted for the same non-work related factors as well as job control. Model IV is adjusted for job demands (and the non-work related factors). Shaded areas represent 95 percent confidence intervals.   
+
+
 
 \newpage
 
@@ -327,4 +329,4 @@ ggplot(job_smooths, aes(x = x + 2000, y = fit)) +
 <br>
 
 #### Figure 3 legend.  
-Partial effects of each job component from penalized (smooths) and unpenalized (points) models of teacher mental health, representing sensitivity (in absolute MHI-5 units) of mental health to psychosocial stressors between 2005 and 2022. Shaded regions and vertical lines represent 95 percent confidence intervals.   
+Penalized (smooth shaded region) and unpenalized (points and vertical lines) zero-centered partial-effects (±95%CI) of each job component on teacher mental health, representing sensitivity (in absolute MHI-5 units) of mental health to psychosocial stressors between 2005 and 2022. Where each 95% confidence interval excludes zero (shaded or error-bar) indicates where teachers became more sensitive to that component over time or in that year.  

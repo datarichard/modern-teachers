@@ -57,15 +57,6 @@ theme_set(
 ```
 
 
-<br>
-
-<br>
-
-**This file includes:**  
-
-- Appendices A-C
-- Figures B1-C1
-- Tables A1-C1  
 
 \newpage
 
@@ -123,7 +114,7 @@ lm_fits <- model.df %>%
 ```
 
 
-# Appendix A. Variable definitions  
+# Supplemental A. Variable definitions  
 
 
 Many surveys of occupational wellbeing, or items focused on work-related wellbeing tend to produce biased estimates due to self-selection of employees unhappy with their job and seeking to express their concerns or grievances in a single-issue survey response. Even large supposedly ‘representative’ samples can overrepresent unhappy respondents by more than 2.5 times due to such self-selection incentives into work-related surveys [@chauvenet2020; @goodwin2013]. We used HILDA which does not suffer this problem due its wide topic coverage and probabilistic sampling.  
@@ -191,12 +182,10 @@ delim = "|") %>%
 
 $\\$
 
+Others have identified job insecurity as an important risk factor and linked with psychological disstress [@de2003; @richter2015], however it was not prevalent in our teacher sample and so not featured in this report.  
 
-Others have identified job insecurity as an important risk factor and linked with psychological disstress (De Witte & Naswall 2003), however it was not prevalent in our teacher sample and so not featured in this report.  
-
+```{r table_a3, eval=F}
 #### Table A3. Job security items
-
-```{r table_a3}
 readr::read_delim(
 "Code|Description|Waves
 jompf|I get paid fairly for the things I do in my job|1 to 22
@@ -217,7 +206,7 @@ delim = "|") %>%
 
 \newpage
 
-# Appendix B. Model definitions and R-squared  
+# Supplemental B. Model definitions and R-squared  
 
 Longitudinal models of annual change in MHI-5 scores (mental health) were constructed using the set of MHI-5 scores from each individual. MHI-5 scores were person-mean centered by subtracting the individual's mean MHI-5 score from each set to form the response variable ($y_{it}$), and so estimate the _within-subject effects_ of time. The person-mean MHI-5 score was also included as a fixed effect ($\alpha_i$), to address any time-invariant heterogeneity between people.    
 
@@ -297,7 +286,7 @@ The variance explained by OLS regression of job components on mental health each
 
 \newpage
 
-# Appendix C: State-specific effects  
+# Supplemental C: State-specific effects  
 
 In Australia, state and territory governments are responsible for running schools and setting local policy while the federal government provides the national strategy. For this reason, we considered whether including state effects in the trend models was warranted. State effects were included as separate penalized trends and the variation of each trend was estimated to determine whether it was significantly different from the overall trend. This is similar to deciding whether to include random effects in a mixed model by examining the variation around the random effect. The estimated smooth trends in mental health and the psychosocial job characteristics of teachers for each state and territory are shown below.  
 
@@ -438,171 +427,6 @@ occupations %>%
 # p-value = .06 for TAS, BIC difference was 89.28 favouring a non-specific 
 # model)
 ```
-
-\newpage
-
-# Appendix D: Other demographic comparisons (not run)
-
-#### Table D1. Primary & Secondary teacher differences in 2005 & 2022
-```{r appendix_table_4, eval=F}
-t1 <- teachers %>%
-  filter(year == 2005) %>%
-  mutate(income = hh_disp_inc_eq/1000) %>%
-  mutate(Total = 1) %>%
-  select(xwaveid, profession, 
-         Total,
-         Female, 
-         Age = age, 
-         Coupled = coupled, 
-         `New parent` = new_parent, # child under 4
-         Edu = edu, 
-         `Tenure (years)` = jbempt,
-         Region = remoteness,
-         `Real household income ($000s)` = income, # OECD adjusted
-         `Mental health` = ghmh,
-         `Life satisfaction` = losat
-  ) %>%
-  distinct() %>%
-  select(-xwaveid) %>%
-  tbl_summary(
-    by = profession,
-    statistic = Total ~ "N = {N}",
-    type = list(`Life satisfaction` ~ "continuous"),
-    missing = "no"
-  ) %>%
-  modify_header(all_stat_cols() ~ "**{level}**") %>%
-  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
-        include = -Total)
-
-t2 <- teachers %>% 
-  filter(year == 2022) %>%
-  mutate(income = hh_disp_inc_eq/1000) %>%
-  mutate(Total = 1) %>%
-  select(xwaveid, profession, 
-         Total,
-         Female, 
-         Age = age, 
-         Coupled = coupled, 
-         `New parent` = new_parent, # child under 4
-         Edu = edu, 
-         `Tenure (years)` = jbempt,
-         Region = remoteness,
-         `Real household income ($000s)` = income, # OECD adjusted
-         `Mental health` = ghmh,
-         `Life satisfaction` = losat
-  ) %>%
-  distinct() %>%
-  select(-xwaveid) %>%
-  tbl_summary(
-    by = profession,
-    statistic = Total ~ "N = {N}",
-    type = list(`Life satisfaction` ~ "continuous"),
-    missing = "no"
-  ) %>%
-  modify_header(all_stat_cols() ~ "**{level}**") %>%
-  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
-        include = -Total)
-
-tbl_stack(list(t1, t2),
-          group_header = c("2005", "2022")) %>%
-  as_flex_table() %>%
-  fontsize(size = 9, part = "all") %>%
-  align(j = 3:5, align = "right", part = "all") %>%
-  hrule(rule = "exact", part = "all") %>%
-  height_all(height = 0.2) %>% 
-  width(j = 1, width = 0.9) %>%
-  width(j = 2, width = 2.2) %>%
-  width(j = 3:4, width = 1.2) %>%
-  width(j = 5, width = 0.75)
-```
-
-<br>
-
-Primary school teachers tended to be more female, younger, and less postgraduate qualifications than secondary teachers. This was consistent across both 2005 and 2022.  
-
-<br>
-
-<br>
-
-
-#### Table D2. Regional differences in 2022
-```{r appendix_table_5, eval=F}
-t1 <- teachers %>% 
-  filter(profession == "Primary", year == 2022) %>%
-  mutate(income = hh_disp_inc_eq/1000) %>%
-  mutate(Total = 1) %>%
-  select(xwaveid,  
-         Total,
-         Female, 
-         Age = age, 
-         Coupled = coupled, 
-         `New parent` = new_parent, # child under 4
-         Edu = edu, 
-         `Tenure (years)` = jbempt,
-         Region = remoteness,
-         `Real household income ($000s)` = income, # OECD adjusted
-         `Mental health` = ghmh,
-         `Life satisfaction` = losat
-  ) %>%
-  distinct() %>%
-  select(-xwaveid) %>%
-  tbl_summary(
-    by = Region,
-    statistic = Total ~ "N = {N}",
-    type = list(`Life satisfaction` ~ "continuous"),
-    missing = "no"
-  ) %>%
-  modify_header(all_stat_cols() ~ "**{level}**") %>%
-  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
-        include = -Total)
-
-t2 <- teachers %>% 
-  filter(profession == "Secondary", year == 2022) %>%
-  mutate(income = hh_disp_inc_eq/1000) %>%
-  mutate(Total = 1) %>%
-  select(xwaveid,  
-         Total,
-         Female, 
-         Age = age, 
-         Coupled = coupled, 
-         `New parent` = new_parent, # child under 4
-         Edu = edu, 
-         `Tenure (years)` = jbempt,
-         Region = remoteness,
-         `Real household income ($000s)` = income, # OECD adjusted
-         `Mental health` = ghmh,
-         `Life satisfaction` = losat
-  ) %>%
-  distinct() %>%
-  select(-xwaveid) %>%
-  tbl_summary(
-    by = Region,
-    statistic = Total ~ "N = {N}",
-    type = list(`Life satisfaction` ~ "continuous"),
-    missing = "no"
-  ) %>%
-  modify_header(all_stat_cols() ~ "**{level}**") %>%
-  add_p(test.args = all_tests("fisher.test") ~ list(simulate.p.value=T),
-        include = -Total)
-
-tbl_stack(list(t1, t2),
-          group_header = c("Primary", "Secondary")) %>%
-  as_flex_table() %>%
-  fontsize(size = 9, part = "all") %>%
-  align(j = 3:5, align = "right", part = "all") %>%
-  hrule(rule = "exact", part = "all") %>%
-  height_all(height = 0.2) %>% 
-  width(j = 1, width = 0.75) %>%
-  width(j = 2, width = 1.9) %>%
-  width(j = 3:5, width = 1.2) %>%
-  width(j = 6, width = 0.75)
-```
-
-
-<br>
-
-Primary school teachers in the city were more likely to have a postgraduate degree than regional or remote primary teachers in 2022. No other differences were significant. 
-
 
 \newpage
 

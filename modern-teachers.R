@@ -6,27 +6,27 @@
 # the current directory of this file
 home <- dirname(rstudioapi::getSourceEditorContext()$path)
 
-# JOEM submission ####
+# BMC submission ####
 # 
 #### Render main docx
 rmarkdown::render(
-  paste0(home, "/src/Word JOEM.Rmd"),
-  output_file = "MORRIS.docx",
-  output_dir = paste0(home, "/JOEM/")
+  paste0(home, "/src/Word BMC.Rmd"),
+  output_file = "main.docx",
+  output_dir = paste0(home, "/BMCPH/")
 )
 
 #### Render figures.pdf
 rmarkdown::render(
-  paste0(home, "/src/Figures JOEM.Rmd"),
+  paste0(home, "/src/Figures BMC.Rmd"),
   output_file = "Figures.pdf",
-  output_dir = paste0(home, "/JOEM/")
+  output_dir = paste0(home, "/BMCPH/")
 )
 
 #### Render appendix.pdf
 rmarkdown::render(
-  paste0(home, "/src/Supplemental JOEM.Rmd"),
-  output_file = "Supplemental MORRIS.pdf",
-  output_dir = paste0(home, "/JOEM/")
+  paste0(home, "/src/Supplemental BMC.Rmd"),
+  output_file = "Supplemental.pdf",
+  output_dir = paste0(home, "/BMCPH/")
 )
 
 # LCC working paper series ####

@@ -23,7 +23,7 @@ for (pathtofile in path_to_hilda) {
 }
 
 # Helper functions
-source('~/Dropbox (Sydney Uni)/HILDA/src/gather_hilda.R')
+source('~/Sydney Uni Dropbox/Richard Morris/HILDA/src/gather_hilda.R')
 source("~/Documents/R/helpers.R")
 
 
