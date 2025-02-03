@@ -1,0 +1,332 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.align = "center"
+                      )
+
+library(tidyverse)
+library(mgcv)
+library(broom)
+library(patchwork)
+
+source("~/Documents/R/helpers.R")
+
+gtsummary::theme_gtsummary_compact(font_size = 9)
+
+theme_set(
+  theme_minimal(base_size=18) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        # panel.grid.major.y = element_line(size = 1),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.line.x = element_line(colour = "black"),
+        axis.ticks.x = element_line(colour = "black"),
+        axis.ticks.length.x = unit(-0.25, "cm"),
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0),
+        axis.title.x = element_text(size = 14, vjust = -1),
+        axis.title.y = element_text(size = 14)
+        # axis.text.x = element_text(vjust = .8, hjust = 0.8, angle = 30)
+        )
+)
+```
+
+```{r import_data}
+occupation_key = c(
+  `2320` = "Teachers", # Secondary
+  `2331` = "Teachers", # Primary
+  `2230` = "Nurses",
+  # `2411` = "Accountants",
+  .default = NA_character_
+)
+
+# Regions were collapsed according to this report:
+# https://www.aihw.gov.au/reports/rural-remote-australians/rural-and-remote-health
+
+occupations <- read_rds("../data/teachers & nurses.rds") %>% 
+  filter(occupation %in% names(occupation_key)) %>%
+  filter(wave %in% letters[5:22]) %>%
+  mutate(
+    remoteness = fct_collapse(hhsra, 
+                              `Remote` = "Outer regional", 
+                              `Remote` = "Remote", 
+                              `Remote` =  "Very remote"),
+    remoteness = fct_recode(remoteness, `City` = "Major city", 
+                                        `Regional` = "Inner regional"),
+    remoteness = fct_relevel(remoteness, "City"),
+    profession = recode_factor(occupation, !!!occupation_key),
+    profession = fct_relevel(profession, "Teachers"),
+    sex = as.factor(if_else(Female, "female", "male"))
+  ) %>% 
+  filter(!is.na(profession)) # exclude any non-teaching years
+```
+
+```{r fit_ghmh}
+fit_ghmh <- function(.df, .prof = "Teachers", .f) {
+  
+  # select the data we need
+  df <- filter(.df, profession == .prof) 
+  
+  
+  # Estimate the linear and non-linear trends of year (with controls)
+  fit <- gam(formula = .f, 
+                data = df)
+  
+  return(fit)
+  
+}
+```
+
+```{r smooth_data}
+# Function to extract the smooth trends
+smooth_data <- function(.fit, i = 1) {
+  
+  # seWithMean = T: The component smooths are shown with confidence intervals 
+  # that include the uncertainty about the overall mean as well as the centred
+  # smooth itself (as suggested by Marra & Wood 2012) 
+  plot_obj <- plot(.fit, seWithMean = T, pages=1)
+  
+  as.data.frame(plot_obj[[i]][c("x", "se", "fit")]) %>%
+    as_tibble()
+  
+}
+```
+
+### Figure 1. Yearly mental health and prevalence of psychosocial risk factors from 2005 to 2022
+```{r plot_prevalence, fig.dim = c(9, 9)}
+ctrl_t <- 3.25 # with(read_rds("../data/occupations.rds"), summary(job_control))
+dmnd_t <- 4.556 # with(read_rds("../data/occupations.rds"), summary(job_demand))
+
+
+# summarise mean and ci
+percent_ci <- function(.x) {
+  # must pass a numeric vector!
+  
+  .x <- stats::na.omit(.x)
+  x = sum(.x)
+  n = sum(!is.na(.x))
+  
+  prop.test(x = x, n = n) %>%
+    broom::tidy() %>%
+    select(y = estimate, ymin = conf.low, ymax = conf.high) %>%
+    mutate(across(everything(), ~. *100)) %>%
+    mutate(n = n)
+}
+
+bind_rows(
+  `MHI-5 score (0-100)` = occupations %>%
+    group_by(profession, year) %>%
+    summarise(
+      result = mean_se(ghmh, mult = 1.96),
+      .groups = "drop"
+    ) %>%
+    unnest(result),
+  
+  `low control (%)` = occupations %>%
+    mutate(low_control = job_control < ctrl_t) %>%
+    group_by(profession, year) %>%
+    summarise(
+      result = percent_ci(low_control),
+      .groups = "drop"
+    ) %>%
+    unnest(result),
+  
+  `high demand (%)` = occupations %>%
+    mutate(high_demand = job_demand > dmnd_t) %>%
+    group_by(profession, year) %>%
+    summarise(
+      result = percent_ci(high_demand),
+      .groups = "drop"
+    ) %>%
+    unnest(result),
+  
+  .id = "outcome"
+) %>%
+  mutate(outcome = fct_relevel(outcome, 
+          "MHI-5 score (0-100)", "low control (%)")) -> fig1
+
+
+ggplot(fig1, aes(x = year, y = y)) +
+  geom_pointrange(aes(ymin = ymin, ymax = ymax)) +
+  # geom_smooth(se=F, linetype = "dashed", linewidth = .5, colour = "black") +
+  facet_grid(outcome ~ profession, scales = "free_y") +
+  labs(y = "", x = "
+       Survey year") +
+  scale_y_continuous(labels = scales::number_format(accuracy = 1))
+```
+
+<br>
+
+#### Figure 1 legend.  
+Mean MHI-5 scores (0-100) and prevalence (%) of people reporting _low_ job control and _high_ job demand in each year (where _high_ and _low_ are defined by the job component score thresholds between the most extreme quartile of the employed population). Vertical lines represent 95 percent confidence intervals.  
+
+
+\newpage
+
+### Figure 2. Mental health trend analysis partial effects 
+```{r Figure_2, include=F}
+model.df <- occupations %>%
+  mutate(rjob_control = 7 - job_control, # reversed (0 = complete job control)
+         ajob_demand = job_demand - 1,   # adjusted (0 = no job demands)
+         cage = c(scale(age, scale=F)),
+         cjbempt = c(scale(jbempt, scale=F)))
+
+# Model definitions ####
+# Using a continuous by variable allows the smooth for year to interact with the
+# parametric job term. Such models are sometimes called varying coefficient 
+# models. The idea is that the linear regression coefficient for year is varying
+# smoothly with job (or vice versa).
+# 
+# Partial effects control the included variables at zero, so including reversed
+# job control or reversed job demands estimates the effect on mental health when
+# job control is 
+# 
+# (Must include jbempt, uncentered so partial effects work below)
+unadj_f <- formula(ghmh ~ s(year))
+adjst_f <- formula(ghmh ~ s(year) + 
+                     cage + cage:year + sex + sex:year +
+                     jbempt + jbempt:year)
+cntrl_f <- formula(ghmh ~ s(year) + 
+                     cage + cage:year + sex + sex:year +
+                     jbempt + jbempt:year +
+                     s(year, by = rjob_control) + rjob_control)
+demnd_f <- formula(ghmh ~ s(year) + cage + cage:year + sex + sex:year +
+                     jbempt + jbempt:year +
+                     s(year, by = ajob_demand) + ajob_demand)
+
+
+fit_t_unadj <- fit_ghmh(model.df, .prof = "Teachers", .f = unadj_f)
+fit_t_adjst <- fit_ghmh(model.df, .prof = "Teachers", .f = adjst_f)
+fit_t_cntrl <- fit_ghmh(model.df, .prof = "Teachers", .f = cntrl_f)
+fit_t_demnd <- fit_ghmh(model.df, .prof = "Teachers", .f = demnd_f)
+fit_n_unadj <- fit_ghmh(model.df, .prof = "Nurses",   .f = unadj_f)
+fit_n_adjst <- fit_ghmh(model.df, .prof = "Nurses",   .f = adjst_f)
+fit_n_cntrl <- fit_ghmh(model.df, .prof = "Nurses",   .f = cntrl_f)
+fit_n_demnd <- fit_ghmh(model.df, .prof = "Nurses",   .f = demnd_f)
+
+# Partial effect plots ####
+# Plot the zero-centred, partial effect of year (i.e., the partial-effect sets
+# all other terms to zero)
+# 
+# https://ecogambler.netlify.app/blog/interpreting-gams/
+#
+# main plot
+df_t <- bind_rows(
+  `Model I` = smooth_data(fit_t_unadj),
+  `Model II` = smooth_data(fit_t_adjst),
+  `Model III` = smooth_data(fit_t_cntrl),
+  `Model IV` = smooth_data(fit_t_demnd),
+  .id = "model"
+) %>%
+  mutate(profession = "Teachers")
+
+df_n <- bind_rows(
+  `Model I` = smooth_data(fit_n_unadj),
+  `Model II` = smooth_data(fit_n_adjst),
+  `Model III` = smooth_data(fit_n_cntrl),
+  `Model IV` = smooth_data(fit_n_demnd),
+  .id = "model"
+) %>%
+  mutate(profession = "Nurses")
+```
+```{r plot_trend_analysis, fig.dim=c(9,6)}
+fig2 <- bind_rows(df_t, df_n) %>%
+  mutate(profession = fct_relevel(profession, "Teachers"))
+
+ggplot(fig2, aes(x = x, y = fit)) +
+  geom_hline(aes(yintercept = 0), color = "grey50", linetype = "dashed") +
+  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
+              alpha = 0.2) +
+  geom_line(aes()) +
+  # facet_grid(model ~ profession) +
+  facet_grid(profession ~ model) +
+  labs(y = "Centered MHI-5 trend (±95%CI)", x = "
+       Survey year") +
+  theme(axis.title = element_text(size = 14))
+```
+
+<br>
+
+#### Figure 2 legend.  
+Zero-centered partial effects of year (±95%CI) on mental health from each model. Model I is the unadjusted trend over time. Model II is the trend adjusted for non-work related factors (age, sex, length of job tenure). Model III is adjusted for the same non-work related factors as well as job control. Model IV is adjusted for job demands (and the non-work related factors). Shaded areas represent 95 percent confidence intervals.   
+
+
+
+\newpage
+
+### Figure 3. Sensitivity of teacher mental health to job demands and job control  
+```{r ghmh_sensitivity, include=F}
+model.df <- occupations %>%
+  filter(profession == "Teachers") %>%
+  transmute(
+    xwaveid,
+    year = year - 2000,
+    ghmh,
+    job_control,                  # 0 = no job control
+    rjob_demand = 8 - job_demand, # reverse job demands so effects are positive
+    sex,
+    cage = c(scale(age, scale=F)),
+    cjbempt = c(scale(jbempt, scale=F)))
+  
+# Both stressors are included in the same model .: relative importance
+fit_year_psc_int <- gam(ghmh ~ 1 + job_control + rjob_demand +  
+                          s(year) + s(year, by = rjob_demand) + 
+                          s(year, by = job_control),
+                        data = model.df)
+
+job_smooths <- bind_rows(
+  `Job demand` = smooth_data(fit_year_psc_int, 2),
+  `Job control` = smooth_data(fit_year_psc_int, 3),
+  .id = "term"
+) 
+
+lm_fits <- model.df %>%
+  group_by(year) %>%
+  nest() %>%
+  mutate(
+    ghmh.fit = map(data, ~lm(
+      formula = ghmh ~ 1 + job_control + rjob_demand, 
+      data = .)
+    ))
+
+lm_betas <- lm_fits %>%
+  transmute(
+    betas = map(ghmh.fit, tidy)) %>%
+  unnest(betas)
+
+job_betas <- lm_betas %>%
+  filter(term %notin% c("(Intercept)", "age", "jbempt")) %>%
+  mutate(
+    # fix the coefficient names
+    term = str_replace(term, "_", " "),
+    term = str_remove(term, "^r"),
+    term = str_to_sentence(term),
+    # center the OLS estimates
+    estimate = if_else(term == "Job demand", estimate - 1.4, estimate - 0.6),
+    std.error = std.error * 1.96
+  ) %>%
+  select(term, x = year, se = std.error, fit = estimate) %>%
+  ungroup()
+```
+```{r plot_sensitivity, fig.dim=c(9,6)}
+ggplot(job_smooths, aes(x = x + 2000, y = fit)) +
+  geom_pointrange(data = job_betas, aes(ymin = fit - se, ymax = fit + se),
+                  color = "grey30") +
+  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
+              alpha = 0.2) +
+  geom_line() +
+  facet_wrap(~term) +
+  labs(x = "
+       Survey year", y = "Absolute MHI-5 units (±95%CI)") 
+```
+
+<br>
+
+#### Figure 3 legend.  
+Penalized (smooth shaded region) and unpenalized (points and vertical lines) zero-centered partial-effects (±95%CI) of each job component on teacher mental health, representing sensitivity (in absolute MHI-5 units) of mental health to psychosocial stressors between 2005 and 2022. Where each 95% confidence interval excludes zero (shaded or error-bar) indicates where teachers became more sensitive to that component over time or in that year.  

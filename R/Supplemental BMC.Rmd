@@ -1,0 +1,436 @@
+---
+title: "The growing effect of job demands on teacher mental health: results from a longitudinal national household panel survey"
+author: "SUPPLEMENTAL MATERIAL"
+date: "`r format(Sys.Date(), '%b %d, %Y')`"
+output: 
+  pdf_document: 
+    latex_engine: xelatex
+bibliography: references.bib
+csl: bmj.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      ft.align = "left",
+                      fig.align = "center"
+                      )
+
+library(tidyverse)
+library(mgcv)
+library(broom)
+library(patchwork)
+library(gtsummary)
+library(flextable)
+
+source("~/Documents/R/helpers.R")
+
+# gtsummary::theme_gtsummary_compact(font_size = 9)
+
+set_flextable_defaults(
+  font.family = "Times New Roman",
+  font.size = 10,
+  border.width = 0.25
+  )
+
+
+theme_set(
+  theme_minimal(base_size=18) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        # panel.grid.major.y = element_line(size = 1),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.line.x = element_line(colour = "black"),
+        axis.ticks.x = element_line(colour = "black"),
+        axis.ticks.length.x = unit(-0.25, "cm"),
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0),
+        axis.title.x = element_text(size = 14, vjust = -1),
+        axis.title.y = element_text(size = 14)
+        # axis.text.x = element_text(vjust = .8, hjust = 0.8, angle = 30)
+        )
+)
+```
+
+
+
+\newpage
+
+```{r import_data}
+occupation_key = c(
+  `2320` = "Teachers", # Secondary
+  `2331` = "Teachers", # Primary
+  `2230` = "Nurses",
+  # `2411` = "Accountants",
+  .default = NA_character_
+)
+
+# Regions were collapsed according to this report:
+# https://www.aihw.gov.au/reports/rural-remote-australians/rural-and-remote-health
+
+occupations <- read_rds("../data/teachers & nurses.rds") %>% 
+  filter(occupation %in% names(occupation_key)) %>%
+  filter(wave %in% letters[5:22]) %>%
+  mutate(
+    remoteness = fct_collapse(hhsra, 
+                              `Remote` = "Outer regional", 
+                              `Remote` = "Remote", 
+                              `Remote` =  "Very remote"),
+    remoteness = fct_recode(remoteness, `City` = "Major city", 
+                                        `Regional` = "Inner regional"),
+    remoteness = fct_relevel(remoteness, "City"),
+    profession = recode_factor(occupation, !!!occupation_key),
+    profession = fct_relevel(profession, "Teachers"),
+    sex = as.factor(if_else(Female, "female", "male"))
+  ) %>% 
+  filter(!is.na(profession)) # exclude any non-teaching years
+```
+
+```{r ghmh_sensitivity, include=F}
+model.df <- occupations %>%
+  filter(profession == "Teachers") %>%
+  transmute(
+    xwaveid,
+    year = year - 2000,
+    ghmh,
+    job_control,                  # 0 = no job control
+    rjob_demand = 8 - job_demand, # reverse job demands so effects are positive
+    sex,
+    cage = c(scale(age, scale=F)),
+    cjbempt = c(scale(jbempt, scale=F)))
+  
+lm_fits <- model.df %>%
+  group_by(year) %>%
+  nest() %>%
+  mutate(
+    ghmh.fit = map(data, ~lm(
+      formula = ghmh ~ 1 + job_control + rjob_demand, 
+      data = .)
+    ))
+```
+
+
+# Supplemental A. Variable definitions  
+
+
+Many surveys of occupational wellbeing, or items focused on work-related wellbeing tend to produce biased estimates due to self-selection of employees unhappy with their job and seeking to express their concerns or grievances in a single-issue survey response. Even large supposedly ‘representative’ samples can overrepresent unhappy respondents by more than 2.5 times due to such self-selection incentives into work-related surveys [@chauvenet2020; @goodwin2013]. We used HILDA which does not suffer this problem due its wide topic coverage and probabilistic sampling.  
+
+HILDA also incorporates a comprehensive set of questions about other aspects of subjective wellbeing, including life satisfaction. In contrast to mental health, teachers generally report higher levels of life satisfaction and self-worth than other occupations [@hoang2023; @jerrim2020]. Both mental health and life satisfaction are important but distinct components of subjective wellbeing, and the comprehensive instruments in HILDA allowed us to distinguish mental health from these other more cognitive/evaluative dimensions which can depend on social level or stage or life [@diener2017; @diener2018; @kettlewell2020]. Many conflicting findings in the literature may be a result of comparing or confounding these different constructs.    
+
+$\\$
+
+The job demands component score, where higher scores represent the increasing severity of the psychosocial stressor, was constructed from the average of responses to the nine items below.  
+
+#### Table A1. Job demands & complexity items 
+
+```{r table_a1}
+readr::read_delim("
+Code|Description|Waves
+jomms|My job is more stressful than I had ever imagined|1 to 22
+jompi|I fear that the amount of stress in my job will make me ill|1 to 22
+jomcd|My job is complex and difficult|1 to 22
+jomns|My job often required me to learn new skills|1 to 22
+jomus|I use my skills in current job|1 to 22
+jomini|My job requires me to take initiative|5 to 22
+jomfast|I have to work fast in my job|5 to 22
+jomwi|I have to work very intensely in my job|5 to 22
+jomtime|I don’t have enough time to do everything in my job|5 to 22", 
+delim = "|") %>%
+  flextable() %>%
+    autofit()
+  # fontsize(size = 9, part = "all") %>%
+  # flextable::theme_alafoli() %>%
+  # hrule(rule = "exact", part = "all") %>%
+  # height_all(height = 0.2) %>% 
+  # width(j = 1, width = 0.63) %>%
+  # width(j = 2, width = 3.64) %>%
+  # width(j = 3, width = 0.6) 
+```
+
+$\\$
+
+The job control component score, where lower scores represent the absence of job control and so more exposure to the psychosocial stressor, was constructed from the average of responses to the eight items below.  
+  
+#### Table A2. Job control items    
+
+```{r table_a2}
+readr::read_delim(
+"Code|Description|Waves
+jomfd|I have freedom to decide how I do my own work|1 to 22
+jomls|I have a lot of say about what happens in my job|1 to 22
+jomfw|I have freedom to decide when I do my work|1 to 22
+jomdw|I have a lot of choice in deciding what I do at work|5 to 22
+jomflex|My working times can be flexible|5 to 22
+jombrk|I can decide when to take a break|5 to 22
+jomrpt|My job requires me to do the same things over and over again|5 to 22
+jomvar`|My job provides me with a variety of interesting things to do|5 to 22",
+delim = "|") %>%
+  flextable() %>%
+    autofit()
+  # fontsize(size = 9, part = "all") %>%
+  # flextable::theme_alafoli() %>%
+  # hrule(rule = "exact", part = "all") %>%
+  # height_all(height = 0.2) %>% 
+  # width(j = 1, width = 0.63) %>%
+  # width(j = 2, width = 3.64) %>%
+  # width(j = 3, width = 0.6) 
+```
+
+$\\$
+
+Others have identified job insecurity as an important risk factor and linked with psychological disstress [@de2003; @richter2015], however it was not prevalent in our teacher sample and so not featured in this report.  
+
+```{r table_a3, eval=F}
+#### Table A3. Job security items
+readr::read_delim(
+"Code|Description|Waves
+jompf|I get paid fairly for the things I do in my job|1 to 22
+jomsf|I have a secure future in my job|1 to 22
+jomcsb|Company I work for will still be in business in 5 years|1 to 22
+jomwf|I worry about the future of my job|1 to 22",
+delim = "|") %>%
+  flextable() %>%
+    autofit()
+  # fontsize(size = 9, part = "all") %>%
+  # flextable::theme_alafoli() %>%
+  # hrule(rule = "exact", part = "all") %>%
+  # height_all(height = 0.2) %>% 
+  # width(j = 1, width = 0.63) %>%
+  # width(j = 2, width = 3.64) %>%
+  # width(j = 3, width = 0.6) 
+```
+
+\newpage
+
+# Supplemental B. Model definitions and R-squared  
+
+Longitudinal models of annual change in MHI-5 scores (mental health) were constructed using the set of MHI-5 scores from each individual. MHI-5 scores were person-mean centered by subtracting the individual's mean MHI-5 score from each set to form the response variable ($y_{it}$), and so estimate the _within-subject effects_ of time. The person-mean MHI-5 score was also included as a fixed effect ($\alpha_i$), to address any time-invariant heterogeneity between people.    
+
+Models I to IV of MHI-5 scores included year as linear term as well as a penalised smooth additive term, where $y_{it}$ represents the person-centered MHi-5 score for each person in each year, $f(\text{year}_t)$ is a smooth term to capture the average of the yearly changes in MHi-5 scores using cubic splines.  
+
+$\\$
+
+Model I:  
+
+$$
+y_{it} \sim \alpha_i + \beta_1 \text{year}_t + f(\text{year}_t) + \epsilon
+$$  
+
+$\\ \\$
+
+Model II added terms for age, sex and job tenure, as well their linear interactions with time:  
+
+$$
+y_{it} \sim \alpha_i + \beta_1 \text{year}_t + f(\text{year}_t) + \beta_2 \text{sex}_i + \beta_3 \text{age}_{it} + \beta_4 \text{tenure}_{it} + \beta_4 \text{age}_{it} \cdot \text{year}_t + \beta_6 \text{tenure}_{it} \cdot \text{year}_t + \epsilon
+$$  
+
+$\\ \\$
+
+Model III added linear and parametric terms for job control, where $f(\text{year}_t) \cdot \text{job component}_{it}$ represents the parametric interaction between the smooth effect of year and job component score:  
+
+$$
+y_{it} \sim \alpha_i + \beta_1 \text{year}_t + f_1(\text{year}_t) + f_2(\text{year}_t) \cdot \text{job control}_{it} + \beta_2 \text{sex}_i + \beta_3 \text{age}_{it} + \beta_4 \text{tenure}_{it} + \beta_4 \text{age}_{it} \cdot \text{year}_t + \beta_6 \text{tenure}_{it} \cdot \text{year}_t + \epsilon
+$$  
+
+$\\ \\$
+
+Model IV included linear and parametric terms for job demand:  
+
+$$
+y_{it} \sim \alpha_i + \beta_1 \text{year}_t + f_1(\text{year}_t) + f_2(\text{year}_t) \cdot \text{job demand}_{it} + \beta_2 \text{sex}_i + \beta_3 \text{age}_{it} + \beta_4 \text{tenure}_{it} + \beta_4 \text{age}_{it} \cdot \text{year}_t + \beta_6 \text{tenure}_{it} \cdot \text{year}_t + \epsilon
+$$  
+
+$\\ \\$
+
+
+For the sensitivity to workplace risk-factors analysis, a single model regressing mental health (MHi-5 scores) onto each job component (job demand, job control) was estimated:  
+
+$$
+y_{it} \sim \alpha_i + f_1(\text{year}_t) + f_2(\text{year}_t) \cdot \text{job control}_{it} + f_3(\text{year}_t) \cdot \text{job demand}_{it} + \epsilon
+$$  
+
+
+
+
+Where $y_{it}$ represents the person-centered MHi-5 score for each person in each year, $f(\text{year}_t)$ is a smooth term to capture the yearly changes in the average MHi-5 level using cubic splines, and $f(\text{year}_t) \cdot \text{job component}_{it}$ is another non-linear term representing smooth changes in the slope between the standardized job component scores and MHi-5 scores in each year over time.  
+
+
+<br>
+
+<br>
+
+##### Figure B1. Proportion of variance explained in teacher mental health (R-squared) by job control (filled) and job demands (empty)
+```{r r_squared, fig.dim=c(9, 5)}
+lm_fits %>%
+  transmute(
+    con.fit = map(data, ~lm(ghmh ~ 1 + job_control, data = .)),
+    control.r = map_dbl(con.fit, ~glance(.) %>% pull(r.squared)),
+    r.squared = map_dbl(ghmh.fit, ~glance(.) %>% pull(r.squared))) %>%
+  ggplot(aes(x = year + 2000)) +
+    geom_line(aes(y = r.squared), linetype = 2) +
+    geom_line(aes(y = control.r), linewidth = .25, color = "grey10") +
+    geom_point(aes(y = r.squared), size = 5, shape = 21, fill = "white") +
+    geom_point(aes(y = control.r), size = 4, shape = 21, fill = "grey50") +
+    labs(y = "", x = "
+         Survey year") +
+    theme(legend.position = "none",
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+```
+
+##### Figure B1 legend.
+The variance explained by OLS regression of job components on mental health each year. The variance explained by job demands (empty circles) increased over time faster than the variance explained by job control (filled circles).  
+
+\newpage
+
+# Supplemental C: State-specific effects  
+
+In Australia, state and territory governments are responsible for running schools and setting local policy while the federal government provides the national strategy. For this reason, we considered whether including state effects in the trend models was warranted. State effects were included as separate penalized trends and the variation of each trend was estimated to determine whether it was significantly different from the overall trend. This is similar to deciding whether to include random effects in a mixed model by examining the variation around the random effect. The estimated smooth trends in mental health and the psychosocial job characteristics of teachers for each state and territory are shown below.  
+
+<br>
+
+##### Figure C1. Estimated State-specific trends (±95%CI) in teacher mental health
+```{r state_specfic_ghmh}
+to_fit <- occupations %>%
+  filter(profession == "Teachers") %>% # Teachers Nurses Accountants
+  select(xwaveid, year, hhstate, ghmh) %>%
+  mutate(
+    ohhstate = ordered(hhstate, 
+      levels = c("NSW", "VIC", "QLD", "WA", "SA", "TAS", "NT", "ACT")),
+    hhstate = factor(hhstate)
+    ) %>%
+  na.omit() 
+
+states <- gam(ghmh ~ 1 + hhstate + s(year, fx=T) + 
+                s(year, by = hhstate), 
+              method = "REML",
+              data = to_fit)
+
+no_states <- gam(ghmh ~ 1 + hhstate + s(year, fx=T),
+                 method = "REML",
+                 data = to_fit)
+
+# Positive difference is advantage for no_states 
+AIC_dif = round(glance(states)$AIC - glance(no_states)$AIC, 1)
+BIC_dif = round(glance(states)$BIC - glance(no_states)$BIC, 1)
+```
+
+```{r state_specific_plot, fig.dim = c(10, 7), eval=T}
+ggplot(to_fit, aes(x = year, y = ghmh)) +
+  stat_smooth(method = "gam", size = .3, color = "black") +
+  scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+  facet_wrap(~ohhstate, nrow = 2) +
+  labs(x = "", y = "MHI-5 score (1-100)") +
+  scale_color_grey(start = 0, end = .8) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(vjust = -1, hjust = 0.5, angle = 0))
+```
+
+##### Figure C1 legend.
+Smooth trends in mental health for each state.  
+
+$\\$
+
+The state model estimated no positive mental health trends among the states, and a declining trend for six states, except for Tasmania (TAS) and the Australian Capital Territory (ACT), which represented less than 5 percent of our sample of teachers (*n* = 54). Table below shows the results of a likelihood ratio test against a null distribution of zero variance for each state, which reveals there was little evidence of any state or territory specific trends (smallest _p_-value = .061 for WA).  
+
+#### Table C1. Likelihood Ratio Test results for state-specific trends in teacher mental health ($H_0 = 0$ variance)
+```{r state_specific_pvalues}
+states <- gam(ghmh ~ 1 + hhstate + s(year, fx=T) + 
+                s(year, by = hhstate), 
+              data = to_fit)
+
+tidy(states) %>%
+  filter(term %notin% "s(year)") %>%
+  mutate(term = str_remove_all(term, c("s\\(year\\)\\:hhstate"))) %>%
+  rename(`State/territory` = term, df = ref.df) %>%
+  flextable() %>%
+    colformat_double(digits = 2) %>%
+    colformat_double(j = "p.value", digits = 3) %>%
+    add_footer_lines("*edf: estimated degrees of freedom") %>%
+    autofit()
+```
+
+
+The results of a model comparison between a State-specific model and a non-specific model confirmed there was not sufficient evidence to warrant including State-specfic effects as an explanation [@shmueli2010]. The BIC difference between the two models was `r BIC_dif`, which is a large difference favouring the non-specific model [@raftery1995] and consistent with the non-specific model. The AIC difference between the two models was `r AIC_dif`, which is a small difference and equivalent to a non-significant difference between models [@raftery1995].  
+
+$\\$
+
+```{r state_specific_jobs, eval=F}
+fits <- occupations %>%
+  filter(profession == "Teachers") %>% 
+  select(xwaveid, year, hhstate, job_demand, job_control) %>% 
+  mutate(
+    ohhstate = ordered(hhstate, 
+      levels = c("NSW", "VIC", "QLD", "WA", "SA", "TAS", "NT", "ACT")),
+    hhstate = factor(hhstate)
+    ) %>%
+  gather("job", "y", job_demand:job_control) %>%
+  na.omit() %>%
+  group_by(job) %>%
+  nest() %>%
+  transmute(
+    state_specific = map(data, ~{
+      gam(y ~ 1 + hhstate + s(year) + s(year, by = hhstate), 
+          data = .x,
+          method = "REML")}),
+    nonspecific = map(data, ~{
+      gam(y ~ 1 + hhstate + s(year),
+           data = .x,
+           method = "REML")
+    })
+  )
+
+fits %>%
+  transmute(results = map(state_specific, tidy)) %>%
+  unnest(results)
+
+# smaller BIC is better model
+fits %>%
+  transmute(results = map2(state_specific, nonspecific, .f = BIC)) %>%
+  unnest(results) %>%
+  mutate(model = c("state_specific", "nonspecific")) %>%
+  select(-df) %>%
+  spread(model, BIC)
+
+
+psychosocial = c("job_control", "job_demand", "job_security")
+
+occupations %>%
+  filter(profession == "Teachers") %>% # Teachers Nurses Accountants
+  select(xwaveid, year, hhstate, all_of(psychosocial)) %>%
+  gather("outcome", "val", !!!psychosocial) %>%
+  mutate(outcome = str_replace(outcome, "_", " "),
+         outcome = str_to_title(outcome),
+         outcome = fct_relevel(outcome, "Job Demand"),
+         hhstate = fct_relevel(hhstate, "NSW", "VIC", "QLD", "WA", "SA")) %>%
+  na.omit() %>%
+  ggplot(aes(x = year, y = val, color = outcome)) +
+    stat_summary(fun.data = mean_se) +
+    stat_smooth(formula = 'y ~ x', method = "loess", se=F, span=1.5,
+                geom = "line", size = .75) +
+    scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+    facet_wrap(~hhstate, nrow = 2, scales = "free_y") +
+    labs(x = "", y = "") +
+    scale_color_grey(start = 0, end = .8) +
+    theme(legend.position = "bottom")
+
+# We also performed a similar analysis for state-specific effects in trends in 
+# each of the psychosocial job components. There was marginal evidence of a 
+# state-specific trend in job control in VIC (p = .05), however no other
+# state-specific trends were significantly different from zero variance and the
+# BIC difference was 58.82 favouring a non-specific model. There was no evidence
+# for state-specific trends in job demands (smallest p-value = .401 for NSW, BIC
+# difference was 57.96 favoring a non-specific model) nor job security (smallest
+# p-value = .06 for TAS, BIC difference was 89.28 favouring a non-specific 
+# model)
+```
+
+\newpage
+
+# References  
+
+
+
