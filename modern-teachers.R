@@ -6,6 +6,31 @@
 # the current directory of this file
 home <- dirname(rstudioapi::getSourceEditorContext()$path)
 
+
+# BMC resubmission (R1) ####
+# 
+# Render main docx
+rmarkdown::render(
+  paste0(home, "/R/Word BMC-R1.Rmd"),
+  output_file = "main.docx",
+  output_dir = paste0(home, "/BMCPH-R1/")
+)
+
+#### Render figures.pdf
+rmarkdown::render(
+  paste0(home, "/R/Figures BMC-R1.Rmd"),
+  output_file = "Figures.pdf",
+  output_dir = paste0(home, "/BMCPH-R1/")
+)
+
+#### Render appendix.pdf
+rmarkdown::render(
+  paste0(home, "/R/Supplemental BMC-R1.Rmd"),
+  output_file = "Supplemental.pdf",
+  output_dir = paste0(home, "/BMCPH-R1/")
+)
+
+
 # BMC submission ####
 # 
 #### Render main docx

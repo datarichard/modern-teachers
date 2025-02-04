@@ -76,7 +76,7 @@ The Accessibility/Remoteness Index of Australia (ARIA+) is provided in HILDA (`h
 
 ### Psychosocial characteristics of work  
 
-The psychosocial characteristics of work as defined by @butterworth2010deriving, included three psychosocial job components (factors) from 12 items in all waves as well as an additional nine items available from Wave 5 (2005). We used all available items in each wave and constructed scores for each component by calculating the average of item responses (after reverse scoring the negatively worded items). Each component and the corresponding items are shown below. Item scores range from 1 to 7.   
+The psychosocial characteristics of work as defined by @butterworth2010, included three psychosocial job components (factors) from 12 items in all waves as well as an additional nine items available from Wave 5 (2005). We used all available items in each wave and constructed scores for each component by calculating the average of item responses (after reverse scoring the negatively worded items). Each component and the corresponding items are shown below. Item scores range from 1 to 7.   
 
 <br>
 
@@ -278,8 +278,7 @@ ggplot(to_plot, aes(x = year, y = val, color = outcome)) +
   labs(x = "", y = "") +
   theme(legend.position = "bottom",
         legend.title = element_blank()) +
-  scale_color_grey(start = 0.8, end = 0.2) +
-  theme(legend.position = "bottom")
+  scale_color_grey(start = 0.8, end = 0.2) 
 ```
 
 
@@ -287,14 +286,63 @@ ggplot(to_plot, aes(x = year, y = val, color = outcome)) +
 
 <br>
 
+##### Figure 2. Mean ±SE mental health by region and profession over time  
+```{r figure_2, fig.dim=c(9,9)}
+to_plot <- occupations %>%
+  select(xwaveid, year, profession, `Mental health` = ghmh, remoteness) %>% 
+  filter(!is.na(`Mental health`))
+
+ggplot(to_plot, aes(x = year, y = `Mental health`, color = remoteness)) +
+  stat_summary(fun.data = mean_se) +
+  geom_smooth(se = F, size = .75, method = 'gam', 
+              formula = y ~ s(x, bs = "cs")) +
+  scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+  facet_grid(profession~remoteness) +
+  labs(x = "", y = "") +
+  theme(legend.position = "bottom",
+        legend.title = element_blank()) +
+  scale_color_grey(start = 0.8, end = 0.2) 
+```
+
+
+<br>
+
+<br>
+
+##### Figure 3. Mean ±SE mental health by school over time  
+```{r figure_3, fig.dim=c(9,6)}
+to_plot <- occupations %>%
+  filter(profession == "Teachers") %>% 
+  select(xwaveid, year, occupation, `Mental health` = ghmh) %>% 
+  mutate(school = recode_factor(occupation, 
+                    `2331` = "Primary", `2320` = "Secondary")) %>%
+  filter(!is.na(`Mental health`)) 
+
+ggplot(to_plot, aes(x = year, y = `Mental health`, color = school)) +
+  stat_summary(fun.data = mean_se) +
+  geom_smooth(se = F, size = .75, method = 'gam', 
+              formula = y ~ s(x, bs = "cs")) +
+  scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+  facet_wrap(~school) +
+  labs(x = "", y = "") +
+  scale_color_grey(start = 0.8, end = 0.2) +
+  theme(legend.position = "none")
+```
+
+<br>
+
+<br>
+
+
+
 ## Psychosocial characteristics of work  
 
 Job demands, job control and job security components were calculated from the averages of the items in each respective table (shown above).    
 
 <br>
 
-##### Figure 2. Mean ±SE psychosocial job components by profession over time
-```{r figure_2, fig.dim=c(9,9)}
+##### Figure 4. Mean ±SE psychosocial job components by profession over time
+```{r figure_4, fig.dim=c(9,9)}
 psychosocial = c("job_control", "job_demand", "job_security")
 
 occupations %>%
@@ -310,233 +358,42 @@ occupations %>%
     scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
     facet_grid(outcome~profession, scales = "free_y") +
     labs(x = "", y = "") +
-    scale_color_grey(start = 0, end = .8) +
-    theme(panel.background = element_rect(fill = "grey95", color = "white"),
-        panel.grid.major.y = element_line(color = "white"))
+    scale_color_grey(start = 0, end = .8) 
 ```
 
 <br>
 
 <br>
 
-## Job strain  
+##### Figure 5. Mean ±SE psychosocial job components by school over time
+```{r figure_5, fig.dim=c(9,9)}
+psychosocial = c("job_control", "job_demand", "job_security")
 
-Job strain represents the co-occurrence of high job demands and low job control. Thresholds for high and low scores were determined by quartile of each component in the entire employed sample of HILDA (all twenty waves). Thus a common threshold value was used for all professions.  
-
-The universal threshold for low job control was a score < 3.25, and the universal threshold for high job demand was a score > 4.55.  
-
-<br>
-
-##### Figure 3. The proportion of professionals suffering job strain over time
-```{r figure_3, fig.dim=c(9,6)}
-ctrl_t <- 3.25 # with(read_rds("../data/occupations.rds"), summary(job_control))
-dmnd_t <- 4.556 # with(read_rds("../data/occupations.rds"), summary(job_demand))
-
-df <- occupations %>%
-  # select(xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
-  mutate(
-    job_strain = case_when(
-      job_control < ctrl_t & job_demand > dmnd_t ~ "Job strain",
-      job_control < ctrl_t ~ "Low control",
-      job_demand > dmnd_t ~ "High demand",
-      TRUE ~ "Low strain"),
-    job_strain = fct_relevel(job_strain, "Job strain")
-  )
-
-# Proportion of professionals who meet criteria for job strain in each year
-df %>%
-  percent(profession, year, job_strain) %>%
-  mutate(job_strain = fct_rev(job_strain)) %>%
-  ggplot(aes(x = year, y = proportion, fill = job_strain)) +
-    geom_area(alpha = 0.9, size = .5, color = "white") +
-    scale_x_continuous(expand = c(0.01, 0.1), 
-                       breaks = c(2001, 2005, 2010, 2015, 2020)) +
-    scale_y_continuous(expand = c(0.01, 0.01),
-                       breaks = c(0.25, 0.50, 0.75, 1.0)) +
-    scale_fill_grey(start = .97, end = 0.2) +
-    facet_wrap(~profession) +
-    theme_void() +
-    theme(legend.title = element_blank(),
-          legend.position = "bottom",
-          axis.text = element_text(color = "black"))
-```
-
-
-<br>
-
-<br>
-
-# Model results  
-
-We modelled mental health (MHi-5 scores) as a function of time ($f(year)$) to determine whether the mental health trend was decreasing for each profession. We also tested whether trends in psychosocial job components ($f(job \ demands) + f(job \ control) + f(job \ security)$) explained the trends in mental health. Predicted mental health trends were compared before and after adding the psychosocial job trends as explanatory variables. Any changes in the mental health trend after adding the explanatory variables represent the residual trend once the psychosocial job trends are accounted for, and thus indicates their impact on changes in mental health over the period.    
-
-Models regressing mental health (MHi-5 scores) in each profession onto each psychosocial job component (job demand, job control, job security) were estimated, using non-linear, smooth interaction terms representing the temporal trend of each component in a generalized additive model (GAM):  
-
-$$
-\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job control}_{it}) + \epsilon
-$$  
-
-$$
-\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job demand}_{it}) + \epsilon
-$$  
-
-$$
-\text{MHi-5}_{it} \sim \beta_0 + f(\text{year}_t) + f(\text{year}_t, \ \text{job security}_{it}) + \epsilon
-$$  
-
-
-Where $i$ is the individual and $t$ is the year, and each smooth term $f$ represents the temporal interaction between each job component and time.  
-
-<br>
-
-
-
-<br>
-
-##### Figure 4. Predicted mental health trends over years (top row), and residual mental health trends after removing the effects of psychosocial job components
-```{r include=F}
-library(mgcv)
-
-smooth_data <- function(.fit, i = 1) {
-  
-  plot_obj <- plot(.fit, seWithMean = T, pages=1)
-  
-  as.data.frame(plot_obj[[i]][c("x", "se", "fit")]) %>%
-    as_tibble()
-  
-}
-
-fits <- occupations %>%
-  select(profession, xwaveid, year, ghmh, job_control, job_demand, job_security) %>%
-  group_by(profession) %>%
-  nest() %>%
-  mutate(
-    fit_year = map(data, ~gam(ghmh ~ 1 + s(year), data = .x)),
-    fit_yr_dmnd = map(data, ~gam(ghmh ~ 1 + s(year) + s(year, by = job_demand),
-                                     data = .x)),
-    fit_yr_cntl = map(data, ~gam(ghmh ~ 1 + s(year) + s(year, by = job_control),
-                                     data = .x)),
-    fit_yr_scty = map(data, ~gam(ghmh ~ 1 + s(year) + s(year, by = job_security),
-                                     data = .x)))
-  
-smooths <- fits %>%
-  transmute(
-    smooth_year = map(fit_year, ~smooth_data(.x)),
-    smooth_yr_dmnd = map(fit_yr_dmnd, ~smooth_data(.x)),
-    smooth_yr_cntl = map(fit_yr_cntl, ~smooth_data(.x)),
-    smooth_yr_scty = map(fit_yr_scty, ~smooth_data(.x))
-  )
-
-
-smooth_year <- smooths %>%
-  select(profession, smooth_year) %>%
-  unnest(smooth_year)
-
-smooth_yr_dmnd <- smooths %>%
-  select(profession, smooth_yr_dmnd) %>%
-  unnest(smooth_yr_dmnd)
-
-smooth_yr_cntl <- smooths %>%
-  select(profession, smooth_yr_cntl) %>%
-  unnest(smooth_yr_cntl)
-
-smooth_yr_scty <- smooths %>%
-  select(profession, smooth_yr_scty) %>%
-  unnest(smooth_yr_scty)
-
-year_smooths <- bind_rows(
-  `f(Year)` = smooth_year,
-  `f(Year) + f(Job demand)` = smooth_yr_dmnd,
-  `f(Year) + f(Job control)` = smooth_yr_cntl,
-  `f(Year) + f(Job security)` = smooth_yr_scty,
-  .id = "model"
-) 
-```
-
-```{r figure_4, fig.dim = c(9, 11)}
-ggplot(year_smooths, aes(x = x - 2000, y = fit)) +
-  geom_hline(aes(yintercept = 0), color = "grey50", linetype = "dashed") +
-  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
-              alpha = 0.2) +
-  geom_line(aes()) +
-  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
-  facet_grid(model~profession, scales = "free_y") +
-  labs(x = "", y = "") +
-  theme(legend.position = "none")
-```
-
-
-<br>
-
-<br>
-
-The importance of each psychosocial job component was estimated in a model regressing mental health (MHi-5 scores) on the three psychosocial job components (job demand, job control, job security) using non-linear interaction terms in a generalized additive model (GAM):   
-
-$$
-\text{MHi-5}_{it} \sim \beta_0 + f_0(\text{year}) + f_1(\text{year}_t, \ \text{job demand}_{it}) + f_2(\text{year}_t, \ \text{job control}_{it}) + f_3(\text{year}_t, \ \text{job security}_{it}) + \epsilon
-$$
-
-Where $i$ is the individual and $t$ is the year, and each smooth term $f$ represents the temporal interaction between each job component and time.  
-
-The resulting smooths for each component represent the conditional importance of each for mental health over time.  
-
-<br>
-
-
-##### Figure 5. Smooth effect of each psyschosocial job component on mental health  
-```{r prep_5, include=F}
-library(mgcv)
-
-smooth_data <- function(.fit, i = 1) {
-  
-  plot_obj <- plot(.fit, seWithMean = T, pages=1)
-  
-  as.data.frame(plot_obj[[i]][c("x", "se", "fit")]) %>%
-    as_tibble()
-  
-}
-
-results <- occupations %>%
-  group_by(profession) %>%
-  nest() %>%
-  mutate(
-    fit = map(data, ~gam(ghmh ~ 1 + job_control + job_demand + job_security + 
-                           s(year) + s(year, by = job_demand) + 
-                           s(year, by = job_control) + 
-                           s(year, by = job_security), 
-                         data = .x)),
-    demand_smooths = map(fit, ~smooth_data(.x, 2)),
-    control_smooths = map(fit,  ~smooth_data(.x, 3)),
-    security_smooths = map(fit,  ~smooth_data(.x, 4))
-  )
-
-job_smooths <- bind_rows(
-  `Job demand` = select(results, profession, demand_smooths) %>%
-    unnest(demand_smooths),
-  `Job control` = select(results, profession, control_smooths) %>%
-    unnest(control_smooths),
-  `Job security` = select(results, profession, security_smooths) %>%
-    unnest(security_smooths),
-  .id = "term"
-)
-```
-
-```{r figure_5, fig.dim = c(9, 9)}
-ggplot(job_smooths, aes(x = x - 2000, y = fit)) +
-  geom_hline(aes(yintercept = 0), color = "white", size = 1) +
-  geom_ribbon(aes(ymin = fit - se, ymax = fit + se),
-              fill = "grey80") +
-  geom_line() +
-  scale_x_continuous(breaks = c(1, 5, 10, 15, 20)) +
-  facet_grid(term ~ profession, scales = "free_y") +
-  labs(x = "", y = "") +
-  theme(panel.background = element_rect(fill = "grey95", color = "white"),
-        panel.grid.major.y = element_line(color = "white"))
+occupations %>%
+  filter(profession == "Teachers") %>%
+  select(xwaveid, year, occupation, all_of(psychosocial)) %>%
+  gather("outcome", "val", !!!psychosocial) %>%
+  mutate(outcome = str_replace(outcome, "_", " "),
+         outcome = str_to_title(outcome)) %>%
+  mutate(school = recode_factor(occupation, 
+                    `2331` = "Primary", `2320` = "Secondary")) %>%
+  filter(!is.na(val)) %>% 
+  ggplot(aes(x = year, y = val)) +
+    stat_summary(fun.data = mean_se) +
+    stat_smooth(formula = y ~ s(x, bs = "cs", k=3), method = "gam", 
+                geom = "line", size = .5) +
+    scale_x_continuous(breaks = c(2001, 2005, 2010, 2015, 2020)) +
+    facet_grid(outcome~school, scales = "free_y") +
+    labs(x = "", y = "") +
+    scale_color_grey(start = 0, end = .8)
+    
 ```
 
 <br>
 
 <br>
+
+
 
 # References  
 
