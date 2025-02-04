@@ -99,7 +99,7 @@ occupation_key = c(
 
 
 rmarkdown::render(
-  paste0(home, "/src/Report.Rmd"),
+  paste0(home, "/R/Report.Rmd"),
   params = list(key = occupation_key),
   output_file = "index.html",
   output_dir = paste0(home, "/docs"))

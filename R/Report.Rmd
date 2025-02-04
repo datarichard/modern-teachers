@@ -310,7 +310,7 @@ ggplot(to_plot, aes(x = year, y = `Mental health`, color = remoteness)) +
 <br>
 
 ##### Figure 3. Mean ±SE mental health by school over time  
-```{r figure_3, fig.dim=c(9,6)}
+```{r figure_3, fig.dim=c(7,6)}
 to_plot <- occupations %>%
   filter(profession == "Teachers") %>% 
   select(xwaveid, year, occupation, `Mental health` = ghmh) %>% 
@@ -366,7 +366,7 @@ occupations %>%
 <br>
 
 ##### Figure 5. Mean ±SE psychosocial job components by school over time
-```{r figure_5, fig.dim=c(9,9)}
+```{r figure_5, fig.dim=c(7,9)}
 psychosocial = c("job_control", "job_demand", "job_security")
 
 occupations %>%
