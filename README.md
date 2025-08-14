@@ -1,7 +1,9 @@
 modern-teachers
 ================
 
-[Latest report available
+[Open access version available here](https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-025-22372-5)  
+
+[Supplementary report available
 here](https://datarichard.github.io/modern-teachers/)
 
 <br>
